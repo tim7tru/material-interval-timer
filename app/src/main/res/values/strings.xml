@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Material Interval Timer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="favorite">Favourite</string>
+    <string name="favoriteDescription">Favorite this timer</string>
+
+    <string name="soundOn">Sound On</string>
+    <string name="soundOnDescription">Sound On</string>
+
+    <string name="soundOff">Sound Off</string>
+    <string name="soundOffDescription">Sound Off</string>
+
+    <string name="tagAppBarFrag">AppBarFrag</string>
+
+    <string name="intervalIconDesc">Interval Icon</string>
+
+    <string name="timerCardTotalTime">Total time:</string>
+    <string name="timerCardTotalCycles">Total cycles:</string>
+    <string name="timerCardTasksInCycle">Tasks in cycle:</string>
+    <string name="timerCardLastUsed">Last used:</string>
+    <string name="ellipses">...</string>
+    <string name="intervalIcon">Interval icon</string>
+    <string name="intervals">Intervals</string>
+    <string name="add">Add</string>
+    <string name="newTimer">Create timer</string>
+    <string name="options">Options</string>
+    <string name="required">Required</string>
+    <string name="noTitleError">Please enter a title for your interval</string>
+
+    <string name="optional">Optional</string>
+    <string name="intervalSound">Interval sound</string>
+    <string name="title">Title</string>
+    <string name="nameThisTimer">Name this timer</string>
+    <string name="nameThisInterval">Name this interval</string>
+    <string name="home">Home</string>
+    <string name="timer">Timer</string>
+    <string name="settings">Settings</string>
+    <string name="favourites">Favourites</string>
+
+    <string name="enableIcon">Enable icon</string>
+    <string name="startTimer">Start timer</string>
+    <string name="delete">Delete timer</string>
+    <string name="next">Next</string>
+
+    <string name="noTasks">You currently have no intervals loaded.</string>
+    <string name="recentTimers">Recent timers</string>
+    <string name="favouriteTimers">Favourite timers</string>
+
+    <string name="recents">Recents</string>
+    <string name="about">About</string>
+    <string name="none">None</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+
+    <string name="addInterval">Add Interval</string>
+    <string name="emptyTime">00h 00m 00s</string>
+    <string name="timerTimeFormat">%s:%s:%s</string>
+    <string name="timeFormat">%sh %sm %ss</string>
+    <string name="createInterval">Create interval</string>
+    <string name="repeat">Repeat</string>
+    <string name="saveTimer">Save timer</string>
+
+    <string name="fitnessTag">Fitness</string>
+    <string name="personTag">Person</string>
+    <string name="speedTag">Speed</string>
+    <string name="cafeTag">Cafe</string>
+    <string name="androidTag">Android</string>
+    <string name="musicTag">Music</string>
+    <string name="worldTag">World</string>
+    <string name="emailTag">Email</string>
+    <string name="ecoTag">Eco</string>
+    <string name="phoneTag">Phone</string>
+    <string name="playTag">Play</string>
+    <string name="pauseTag">Pause</string>
+
+    <string name="currentIntervalTitle">Current interval</string>
+    <string name="upNextIntervalTitle">Up next</string>
+    <string name="emptyIntervalListError">Please add at least 1 interval</string>
+</resources>

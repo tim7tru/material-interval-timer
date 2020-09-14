@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.timmytruong.materialintervaltimer.ui.timer.TimerFragment"
+        android:label="@string/timer">
+
+        <argument
+            android:name="timerId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_timerFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favouritesFragment"
+        android:name="com.timmytruong.materialintervaltimer.ui.fragments.FavouritesFragment"
+        android:label="@string/favourites" >
+        <action
+            android:id="@+id/action_favouritesFragment_to_timerFragment"
+            app:destination="@id/timerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.timmytruong.materialintervaltimer.ui.home.fragments.HomeFragment"
+        android:label="@string/home">
+        <action
+            android:id="@+id/action_homeFragment_to_createTimerFragment"
+            app:destination="@id/createTimerNavGraph"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"
+            app:launchSingleTop="true">
+            <argument
+                android:name="clearViewModel"
+                app:argType="boolean"
+                android:defaultValue="true"/>
+        </action>
+        <action
+            android:id="@+id/action_homeFragment_to_timerFragment"
+            app:destination="@id/timerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_timerActionBottomSheet"
+            app:destination="@id/timerActionBottomSheet" />
+        <action
+            android:id="@+id/action_homeFragment_to_favouritesFragment"
+            app:destination="@id/favouritesFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/timerActionBottomSheet"
+        android:name="com.timmytruong.materialintervaltimer.ui.home.fragments.TimerActionBottomSheet"
+        android:label="TimerActionBottomSheet" >
+        <action
+            android:id="@+id/action_timerActionBottomSheet_to_timerFragment"
+            app:destination="@id/timerFragment" />
+    </dialog>
+
+    <navigation android:id="@+id/createTimerNavGraph"
+        app:startDestination="@id/createTimerFragment">
+        <fragment
+            android:id="@+id/createIntervalTimeFragment"
+            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.CreateIntervalTimeFragment"
+            android:label="@string/createInterval">
+            <action
+                android:id="@+id/action_createIntervalTimeFragment_to_createTimerFragment"
+                app:destination="@id/createTimerFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@id/createTimerFragment"
+                app:popUpToInclusive="true">
+                <argument
+                    android:name="clearViewModel"
+                    android:defaultValue="false"
+                    app:argType="boolean" />
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/createTimerFragment"
+            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.CreateTimerFragment"
+            android:label="@string/newTimer">
+            <action
+                android:id="@+id/action_createTimerFragment_to_createIntervalFragment"
+                app:destination="@id/createIntervalFragment" />
+            <action
+                android:id="@+id/action_createTimerFragment_to_intervalSoundsBottomSheet"
+                app:destination="@id/intervalSoundsBottomSheet" />
+            <action
+                android:id="@+id/action_createTimerFragment_to_homeFragment"
+                app:destination="@id/homeFragment"
+                app:launchSingleTop="true"
+                app:popUpTo="@id/main_nav_graph"
+                app:popUpToInclusive="true" />
+            <argument
+                android:name="clearViewModel"
+                android:defaultValue="true"
+                app:argType="boolean" />
+            <action
+                android:id="@+id/action_createTimerFragment_to_timerFragment"
+                app:destination="@id/timerFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/createIntervalFragment"
+            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.CreateIntervalFragment"
+            android:label="@string/createInterval">
+            <action
+                android:id="@+id/action_createIntervalFragment_to_createIntervalTimeFragment"
+                app:destination="@id/createIntervalTimeFragment" />
+        </fragment>
+        <dialog
+            android:id="@+id/intervalSoundsBottomSheet"
+            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.IntervalSoundsBottomSheet"
+            android:label="IntervalSoundsBottomSheet" />
+    </navigation>
+</navigation>

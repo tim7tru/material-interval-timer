@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/drawer_top"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/homeFragment"
+            android:icon="@drawable/ic_home_24px"
+            android:title="@string/home"/>
+        <item
+            android:id="@+id/createTimerFragment"
+            android:icon="@drawable/ic_timer_24px"
+            android:title="@string/newTimer" />
+        <item
+            android:id="@+id/favouritesFragment"
+            android:icon="@drawable/ic_grade_24px"
+            android:title="@string/favourites" />
+        <item
+            android:id="@+id/recentsFragment"
+            android:icon="@drawable/ic_history_24px"
+            android:title="@string/recents"/>
+    </group>
+
+    <group
+        android:id="@+id/drawer_settings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_24px"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/aboutFragment"
+            android:icon="@drawable/ic_info_24px"
+            android:title="@string/about"/>
+    </group>
+</menu>

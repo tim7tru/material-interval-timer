@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="checkedIconIndex"
+            type="Integer" />
+
+        <variable
+            name="iconChecked"
+            type="Boolean" />
+
+        <variable
+            name="onClick"
+            type="com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners.CreateIntervalFrag" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fragmentCreateIntervalTitle"
+            style="@style/HeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_sides"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="@string/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fragmentCreateIntervalTitleLayout"
+            style="@style/TextInputLayouts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_sides"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_sides"
+            android:hint="@string/nameThisInterval"
+            app:counterEnabled="true"
+            app:counterMaxLength="20"
+            app:helperText="@string/required"
+            app:helperTextEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fragmentCreateIntervalTitleInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondaryDark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fragmentCreateIntervalIconTitle"
+            style="@style/HeaderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_sides"
+            android:layout_marginTop="@dimen/margin_top"
+            android:text="@string/intervalIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTitleLayout" />
+
+        <LinearLayout
+            android:id="@+id/fragmentCreateIntervalIconSwitchContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_sides"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_sides"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconTitle">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragmentCreateIntervalSwitchContainer"
+                style="@style/SelectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{onClick::onIconSwitchClicked}">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TimerOptionsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enableIcon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/fragmentCreateIntervalIconSwitch"
+                    style="@style/TimerSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{iconChecked}"
+                    android:clickable="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_sides"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_sides"
+            android:columnCount="4"
+            android:rowCount="1"
+            android:useDefaultMargins="true"
+            android:visibility="@{iconChecked ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconSwitchContainer">
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                style="@style/SelectableItemBackground"
+                android:onClick="@{onClick::onIconClicked}"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@{checkedIconIndex == 0 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:src="@drawable/ic_fitness_center"
+                android:contentDescription="@string/fitnessTag"
+                android:tag="@string/fitnessTag"/>
+
+            <ImageView
+                android:background="@drawable/rounded_background"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                style="@style/SelectableItemBackground"
+                android:backgroundTint="@{checkedIconIndex == 1 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_accessibility_24px"
+                android:contentDescription="@string/personTag"
+                android:tag="@string/personTag"/>
+
+            <ImageView
+                android:background="@drawable/rounded_background"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                style="@style/SelectableItemBackground"
+                android:backgroundTint="@{checkedIconIndex == 2 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_speed_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/speedTag"
+                android:tag="@string/speedTag"/>
+
+            <ImageView
+                android:background="@drawable/rounded_background"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                style="@style/SelectableItemBackground"
+                android:backgroundTint="@{checkedIconIndex == 3 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_local_cafe_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/cafeTag"
+                android:tag="@string/cafeTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_android_24px"
+                style="@style/SelectableItemBackground"
+                app:tint="@color/colorSecondaryDark"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@{checkedIconIndex == 4 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:contentDescription="@string/androidTag"
+                android:tag="@string/androidTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:onClick="@{onClick::onIconClicked}"
+                style="@style/SelectableItemBackground"
+                android:background="@drawable/rounded_background"
+                android:src="@drawable/ic_audiotrack_24px"
+                android:backgroundTint="@{checkedIconIndex == 5 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/musicTag"
+                android:tag="@string/musicTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                style="@style/SelectableItemBackground"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@{checkedIconIndex == 6 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_language_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/worldTag"
+                android:tag="@string/worldTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                style="@style/SelectableItemBackground"
+                android:background="@drawable/rounded_background"
+                android:layout_gravity="center"
+                android:backgroundTint="@{checkedIconIndex == 7 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_email_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/emailTag"
+                android:tag="@string/emailTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                style="@style/SelectableItemBackground"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@{checkedIconIndex == 8 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_eco_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/ecoTag"
+                android:tag="@string/ecoTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                style="@style/SelectableItemBackground"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@{checkedIconIndex == 9 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_call_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/phoneTag"
+                android:tag="@string/phoneTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                style="@style/SelectableItemBackground"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@{checkedIconIndex == 10 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_play"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/playTag"
+                android:tag="@string/playTag"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_background"
+                style="@style/SelectableItemBackground"
+                android:backgroundTint="@{checkedIconIndex == 11 ? @color/colorSecondaryAccent: @color/colorPrimary}"
+                android:onClick="@{onClick::onIconClicked}"
+                android:src="@drawable/ic_pause_24px"
+                app:tint="@color/colorSecondaryDark"
+                android:contentDescription="@string/pauseTag"
+                android:tag="@string/pauseTag"/>
+        </GridLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fragmentCreateIntervalContinueButton"
+            style="@style/ContinueFlowButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/continueFlowButtonHeight"
+            android:onClick="@{onClick::onContinueClicked}"
+            android:text="@string/next"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_grade_24px"
+        android:title="@string/favorite"
+        android:visible="true"
+        android:contentDescription="@string/favoriteDescription"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/soundOn"
+        android:icon="@drawable/ic_volume_up_24px"
+        android:title="@string/soundOn"
+        android:visible="false"
+        android:contentDescription="@string/soundOnDescription"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/soundOff"
+        android:icon="@drawable/ic_volume_off_24px"
+        android:title="@string/soundOn"
+        android:visible="false"
+        android:contentDescription="@string/soundOffDescription"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings_24px"
+        android:title="@string/settings"
+        android:visible="false"
+        android:contentDescription="@string/settings"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/createTimerFragment"
+        android:icon="@drawable/ic_add_24px"
+        android:title="@string/newTimer"
+        android:visible="false"
+        android:contentDescription="@string/newTimer"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/start"
+        android:icon="@drawable/ic_play"
+        android:title="@string/newTimer"
+        android:visible="false"
+        android:contentDescription="@string/newTimer"
+        app:showAsAction="ifRoom"/>
+</menu>

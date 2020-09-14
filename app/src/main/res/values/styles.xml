@@ -1,0 +1,109 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:listDivider">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/colorSecondaryDark</item>
+    </style>
+
+    <style name="AppBarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextColor">@color/colorSecondaryDark</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppBarLayoutTheme" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="colorControlHighlight">@color/colorSecondaryAccent</item>
+        <item name="itemIconTint">@color/colorSecondaryDark</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+    </style>
+
+    <style name="HeaderText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorSecondaryDark</item>
+        <item name="android:textSize">@dimen/text_header</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+    </style>
+
+    <style name="CardHeaderText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="android:textSize">@dimen/card_text_header</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+    </style>
+
+    <style name="CardText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="android:textSize">@dimen/card_text</item>
+    </style>
+
+    <style name="Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorOnSurface">@color/colorSecondaryAccent</item>
+        <item name="colorSecondary">@color/colorSecondaryAccent</item>
+    </style>
+
+    <style name="TimerOptionsText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="android:textSize">@dimen/timer_options_text</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+    </style>
+
+    <style name="TextInputLayouts" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/colorUnselected</item>
+        <item name="boxStrokeColor">@color/colorSecondaryDark</item>
+        <item name="counterTextColor">@color/colorGray</item>
+        <item name="helperTextTextColor">@color/colorGray</item>
+        <item name="hintTextColor">@color/colorSecondaryDark</item>
+    </style>
+
+    <style name="SelectableItemBackground">
+        <item name="android:clickable">true</item>
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="SelectableItemTheme">
+        <item name="colorControlHighlight">@color/colorSecondaryAccent</item>
+    </style>
+
+    <style name="AffirmativeTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorGreen</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+        <item name="rippleColor">@color/colorGreen</item>
+    </style>
+
+    <style name="NegativeTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorRed</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+        <item name="rippleColor">@color/colorRed</item>
+    </style>
+
+    <style name="ContinueFlowButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="backgroundTint">@color/colorSecondaryDark</item>
+        <item name="android:layout_marginEnd">@dimen/margin_sides</item>
+        <item name="android:layout_marginStart">@dimen/margin_sides</item>
+        <item name="android:layout_marginBottom">@dimen/margin_medium</item>
+    </style>
+
+    <style name="TimeButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="android:textSize">@dimen/timeButtonTextSize</item>
+        <item name="rippleColor">@color/colorSecondaryAccent</item>
+    </style>
+
+    <style name="TimerSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="trackTint">@drawable/switch_track_color</item>
+        <item name="thumbTint">@color/colorWhite</item>
+        <item name="useMaterialThemeColors">true</item>
+    </style>
+</resources>

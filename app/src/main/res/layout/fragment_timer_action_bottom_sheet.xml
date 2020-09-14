@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_medium"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/startTimer"
+            app:icon="@drawable/ic_timer_24px"
+            app:rippleColor="@color/colorSecondaryAccent"
+            app:iconTint="@color/colorSecondaryDark"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"/>
+
+        <include layout="@layout/separator_line"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorSecondaryDark"
+            android:text="@string/favorite"
+            app:icon="@drawable/ic_grade_24px"
+            app:rippleColor="@color/colorSecondaryAccent"
+            app:iconTint="@color/colorSecondaryDark"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"/>
+
+        <include layout="@layout/separator_line"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorRed"
+            android:text="@string/delete"
+            app:rippleColor="@color/colorRed"
+            app:icon="@drawable/ic_delete_24px"
+            app:iconTint="@color/colorRed"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"/>
+
+    </LinearLayout>
+</layout>
