@@ -45,15 +45,15 @@ class TimerIntervalAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: TimerIntervalViewHolder, position: Int) {
         when (holder.itemViewType) {
             CURRENT_TITLE -> {
-                holder.view.itemIntervalTextTitle.visibility = View.VISIBLE
                 holder.view.title = currentTitle
+                holder.view.titleVisible = true
             }
             UP_NEXT_TITLE -> {
-                holder.view.itemIntervalTextTitle.visibility = View.VISIBLE
                 holder.view.title = upNextTitle
+                holder.view.titleVisible = true
             }
             INTERVAL -> {
-                holder.view.itemIntervalTextTitle.visibility = View.GONE
+                holder.view.titleVisible = false
             }
         }
         holder.view.interval = intervals[position]
@@ -74,10 +74,5 @@ class TimerIntervalAdapter @Inject constructor() :
         intervals.clear()
         intervals.addAll(list)
         notifyDataSetChanged()
-    }
-
-    fun popFirst() {
-        intervals.removeAt(0)
-        notifyItemRemoved(1)
     }
 }

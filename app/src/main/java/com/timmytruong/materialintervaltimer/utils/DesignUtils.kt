@@ -1,14 +1,19 @@
 package com.timmytruong.materialintervaltimer.utils
 
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.model.Dialog
+import com.timmytruong.materialintervaltimer.ui.reusable.TimerDialog
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
-import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 

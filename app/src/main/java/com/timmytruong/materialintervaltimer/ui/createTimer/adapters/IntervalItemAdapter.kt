@@ -27,6 +27,7 @@ class IntervalItemAdapter @Inject constructor(): RecyclerView.Adapter<IntervalIt
 
     override fun onBindViewHolder(holder: IntervalItemViewHolder, position: Int) {
         holder.view.interval = intervals[position]
+        holder.view.titleVisible = false
     }
 
     override fun getItemCount(): Int = intervals.size

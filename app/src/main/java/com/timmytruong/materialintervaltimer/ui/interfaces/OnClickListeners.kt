@@ -1,6 +1,8 @@
 package com.timmytruong.materialintervaltimer.ui.interfaces
 
+import android.app.Dialog
 import android.view.View
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 interface OnClickListeners {
     interface CreateIntervalTimeFrag {
@@ -41,11 +43,17 @@ interface OnClickListeners {
         fun onSoundClicked(view: View)
     }
 
-    interface TimerFrag {
+    interface TimerFrag: DialogCallback {
         fun onPlayPauseClicked(view: View)
 
         fun onStopClicked(view: View)
 
         fun showCloseDialog(view: View)
+    }
+
+    interface DialogCallback {
+        fun onPositiveDialogClicked(view: View)
+
+        fun onNegativeDialogClicked(view: View)
     }
 }

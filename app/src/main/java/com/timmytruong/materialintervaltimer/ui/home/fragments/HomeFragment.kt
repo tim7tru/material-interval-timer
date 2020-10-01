@@ -1,9 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.home.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -27,6 +25,22 @@ class HomeFragment : Fragment(), OnClickListeners.HomeFrag {
         setHasOptionsMenu(true)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_bar, menu)
+        menu.findItem(R.id.createTimerFragment).isVisible = true
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.createTimerFragment -> {
+                val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
+                Navigation.findNavController(binding.root).navigate(action)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,22 +52,7 @@ class HomeFragment : Fragment(), OnClickListeners.HomeFrag {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupAppBar()
         setupAdapters()
-    }
-
-    private fun setupAppBar() {
-        try {
-            val act = activity as MainActivity
-            act.appBar.findItem(R.id.createTimerFragment).isVisible = true
-            act.appBar.findItem(R.id.createTimerFragment).setOnMenuItemClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
-                this.view?.let { it1 -> Navigation.findNavController(it1).navigate(action) }
-                return@setOnMenuItemClickListener true
-            }
-        } catch (err: Exception) {
-            err.printStackTrace()
-        }
     }
 
     private fun setupAdapters() {

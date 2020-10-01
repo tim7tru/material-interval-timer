@@ -2,6 +2,7 @@ package com.timmytruong.materialintervaltimer.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.timmytruong.materialintervaltimer.utils.constants.RoomConstants
 
@@ -9,6 +10,7 @@ import com.timmytruong.materialintervaltimer.utils.constants.RoomConstants
 data class Interval(
     @ColumnInfo
     var interval_name: String = "",
+
     @ColumnInfo
     var interval_icon_id: String = "",
 

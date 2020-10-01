@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorSecondaryAccent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <item name="android:listDivider">@color/colorPrimaryDark</item>
     </style>
@@ -105,5 +106,15 @@
         <item name="trackTint">@drawable/switch_track_color</item>
         <item name="thumbTint">@color/colorWhite</item>
         <item name="useMaterialThemeColors">true</item>
+    </style>
+
+    <style name="TimerAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CustomDialog.Rounded</item>
+        <item name="colorSurface">@color/colorPrimary</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CustomDialog.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
     </style>
 </resources>

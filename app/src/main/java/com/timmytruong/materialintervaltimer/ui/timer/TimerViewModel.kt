@@ -118,6 +118,14 @@ class TimerViewModel @Inject constructor(
 
     fun setSaved(save: Boolean) { saveAtEnd = save }
 
+    fun saveIfChecked() {
+        if (saveAtEnd && !isAlreadySaved) {
+            viewModelScope.launch(Dispatchers.Main) {
+                timerRepository.saveNewTimer(timer = timer)
+            }
+        }
+    }
+
     private fun playSound() { intervalSound.forceRefresh() }
 
     private fun isIntervalsEmpty(): Boolean = intervals.value?.isEmpty() ?: true

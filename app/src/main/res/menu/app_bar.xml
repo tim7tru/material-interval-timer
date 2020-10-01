@@ -6,7 +6,7 @@
         android:id="@+id/favorite"
         android:icon="@drawable/ic_grade_24px"
         android:title="@string/favorite"
-        android:visible="true"
+        android:visible="false"
         android:contentDescription="@string/favoriteDescription"
         app:showAsAction="ifRoom"/>
 

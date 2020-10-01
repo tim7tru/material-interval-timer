@@ -23,6 +23,7 @@
     <dimen name="card_radius">5dp</dimen>
     <dimen name="line_width">1dp</dimen>
 
+    <dimen name="dialog_message_font">16sp</dimen>
     <dimen name="interval_sounds_bottom_sheet_height">300dp</dimen>
     <dimen name="continueFlowButtonHeight">60dp</dimen>
     <dimen name="timeButtonTextSize">30sp</dimen>

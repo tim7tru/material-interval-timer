@@ -8,7 +8,7 @@
             android:icon="@drawable/ic_home_24px"
             android:title="@string/home"/>
         <item
-            android:id="@+id/createTimerFragment"
+            android:id="@+id/createTimerNavGraph"
             android:icon="@drawable/ic_timer_24px"
             android:title="@string/newTimer" />
         <item

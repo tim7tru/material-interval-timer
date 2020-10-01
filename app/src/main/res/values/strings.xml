@@ -88,4 +88,8 @@
     <string name="currentIntervalTitle">Current interval</string>
     <string name="upNextIntervalTitle">Up next</string>
     <string name="emptyIntervalListError">Please add at least 1 interval</string>
+
+    <string name="dialogCloseTimerTitle">Exit timer?</string>
+    <string name="dialogCloseTimerMessage">Are you sure you want to exit this timer?</string>
+    <string name="exit">Exit</string>
 </resources>

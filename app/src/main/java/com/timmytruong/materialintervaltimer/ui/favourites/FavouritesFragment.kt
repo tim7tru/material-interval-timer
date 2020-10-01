@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.fragments
+package com.timmytruong.materialintervaltimer.ui.favourites
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
