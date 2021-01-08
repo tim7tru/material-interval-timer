@@ -1,37 +1,51 @@
 package com.timmytruong.materialintervaltimer.utils
 
 import android.animation.ObjectAnimator
-import android.app.Activity
+import android.content.Context
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.Interpolator
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.model.Dialog
-import com.timmytruong.materialintervaltimer.ui.reusable.TimerDialog
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import java.text.SimpleDateFormat
 import java.util.*
 
 object DesignUtils {
+    /**
+     * Takes time
+     */
     fun formatInputtedTime(time: String, format: String): String {
         val filledTime = fillTime(time = time)
-        return String.format(format, "${filledTime[0]}${filledTime[1]}", "${filledTime[2]}${filledTime[3]}", "${filledTime[4]}${filledTime[5]}")
+        return String.format(
+            format,
+            "${filledTime[0]}${filledTime[1]}",
+            "${filledTime[2]}${filledTime[3]}",
+            "${filledTime[4]}${filledTime[5]}"
+        )
     }
 
     fun formatNormalizedTime(time: String, format: String): String {
-        val normalizedTime = normalizeTime(time = fillTime(time = time))
-        return String.format(format, "${normalizedTime[0]}${normalizedTime[1]}", "${normalizedTime[2]}${normalizedTime[3]}", "${normalizedTime[4]}${normalizedTime[5]}")
+        val normalizedTime = normalizeTime(time = time)
+        return String.format(
+            format,
+            "${normalizedTime[0]}${normalizedTime[1]}",
+            "${normalizedTime[2]}${normalizedTime[3]}",
+            "${normalizedTime[4]}${normalizedTime[5]}"
+        )
     }
 
-    fun getCurrentDate(): String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    fun formatNormalizedTime(time: Int, format: String): String {
+        val newTime = time.toString()
+        return formatNormalizedTime(time = newTime, format = format)
+    }
+
+    fun getCurrentDate(): String =
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     fun getSecondsFromTime(time: String): Int {
-        val filledTime =  fillTime(time)
+        val filledTime = fillTime(time)
         return (filledTime.subSequence(0, 2).toString().toInt() * 3600) +
                 (filledTime.subSequence(2, 4).toString().toInt() * 60) +
                 filledTime.subSequence(4, 6).toString().toInt()
@@ -51,23 +65,31 @@ object DesignUtils {
         return normalizeTime(time = "$hoursString$minsString$secsString")
     }
 
+    /**
+     * Takes a format time and fills the time to ensure size of 6
+     * E.g. 4530 -> 004530, 123456 -> 123456, 0 -> 000000
+     */
     private fun fillTime(time: String): String {
         return if (time.length == 6) time
         else {
-            var timeReversed = time.reversed()
-            while (timeReversed.length < 6) {
-                timeReversed = "${timeReversed}0"
+            var tempTime = time
+            while (tempTime.length < 6) {
+                tempTime = "0${tempTime}"
             }
-            timeReversed.reversed()
+            tempTime
         }
     }
 
+    /**
+     * Normalizes time to correct hour, min, second
+     * E.g. 123466 -> 123506
+     */
     private fun normalizeTime(time: String): String {
         val filledTime = fillTime(time)
 
-        var currentSecs = filledTime.subSequence(4,6).toString().toInt()
-        var currentMins = filledTime.subSequence(2,4).toString().toInt()
-        var currentHours = filledTime.subSequence(0,2).toString().toInt()
+        var currentSecs = filledTime.subSequence(4, 6).toString().toInt()
+        var currentMins = filledTime.subSequence(2, 4).toString().toInt()
+        var currentHours = filledTime.subSequence(0, 2).toString().toInt()
 
         if (currentSecs >= 60) {
             val mins = currentSecs / 60
@@ -97,10 +119,39 @@ object DesignUtils {
             .show()
     }
 
-    fun updateProgressBar(view: ProgressBar, progress: Int) {
-        val animation = ObjectAnimator.ofInt(view, AppConstants.PROGRESS_BAR_PROPERTY, view.progress, progress)
-        animation.duration = AppConstants.PROGRESS_BAR_ANIMATION_DURATION_MS
-        animation.interpolator = DecelerateInterpolator()
-        animation.start()
+    fun getTagFromDrawableId(context: Context, id: Int): String? {
+        return when (id) {
+            R.drawable.ic_fitness_center -> context.getString(R.string.fitnessTag)
+            R.drawable.ic_accessibility_24px -> context.getString(R.string.personTag)
+            R.drawable.ic_speed_24px -> context.getString(R.string.speedTag)
+            R.drawable.ic_local_cafe_24px -> context.getString(R.string.cafeTag)
+            R.drawable.ic_android_24px -> context.getString(R.string.androidTag)
+            R.drawable.ic_audiotrack_24px -> context.getString(R.string.musicTag)
+            R.drawable.ic_language_24px -> context.getString(R.string.worldTag)
+            R.drawable.ic_email_24px -> context.getString(R.string.emailTag)
+            R.drawable.ic_eco_24px -> context.getString(R.string.ecoTag)
+            R.drawable.ic_call_24px -> context.getString(R.string.phoneTag)
+            R.drawable.ic_play -> context.getString(R.string.playTag)
+            R.drawable.ic_pause_24px -> context.getString(R.string.pauseTag)
+            else -> null
+        }
+    }
+
+    fun getDrawableIdFromTag(context: Context, tag: String): Int {
+        return when(tag) {
+            context.getString(R.string.fitnessTag) -> R.drawable.ic_fitness_center
+            context.getString(R.string.personTag) -> R.drawable.ic_accessibility_24px
+            context.getString(R.string.speedTag) -> R.drawable.ic_speed_24px
+            context.getString(R.string.cafeTag) -> R.drawable.ic_local_cafe_24px
+            context.getString(R.string.androidTag) -> R.drawable.ic_android_24px
+            context.getString(R.string.musicTag) -> R.drawable.ic_audiotrack_24px
+            context.getString(R.string.worldTag) -> R.drawable.ic_language_24px
+            context.getString(R.string.emailTag) -> R.drawable.ic_email_24px
+            context.getString(R.string.ecoTag) -> R.drawable.ic_eco_24px
+            context.getString(R.string.phoneTag) -> R.drawable.ic_call_24px
+            context.getString(R.string.playTag) -> R.drawable.ic_play
+            context.getString(R.string.pauseTag) -> R.drawable.ic_pause_24px
+            else -> 0
+        }
     }
 }

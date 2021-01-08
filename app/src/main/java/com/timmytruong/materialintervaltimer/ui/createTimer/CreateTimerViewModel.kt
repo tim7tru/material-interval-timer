@@ -1,5 +1,6 @@
 package com.timmytruong.materialintervaltimer.ui.createTimer
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
@@ -9,6 +10,7 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
@@ -19,145 +21,147 @@ import javax.inject.Inject
 class CreateTimerViewModel @Inject constructor(
     private val timerRepository: TimerRepository
 ) : BaseViewModel() {
-    val timer: MutableLiveData<Timer> = MutableLiveData(Timer())
 
-    val timerTitle: MutableLiveData<String> = MutableLiveData("")
+    private val _completionEvent = MutableLiveData<Event<Boolean>>()
+    val completionEvent: LiveData<Event<Boolean>> get() = _completionEvent
 
-    val intervals: MutableLiveData<ArrayList<Interval>> = MutableLiveData(arrayListOf())
+    private val _timer: MutableLiveData<Timer> = MutableLiveData(Timer())
+    val timer: LiveData<Timer> get() = _timer
 
-    val selectedSound: MutableLiveData<IntervalSound> = MutableLiveData(IntervalSound())
+    private val _interval: MutableLiveData<Interval> = MutableLiveData(Interval())
+    val interval: LiveData<Interval> get() = _interval
 
-    val repeatChecked: MutableLiveData<Boolean> = MutableLiveData(false)
+    private fun clearInterval() {
+        _interval.value = Interval()
+    }
 
-    val savedChecked: MutableLiveData<Boolean> = MutableLiveData(false)
+    private fun getTotalTimeMilliseconds(): Int {
+        val curTimer = timer.value
+        val curIntervals = curTimer?.timer_intervals
+        var totalTimeMilliseconds = 0
+        curIntervals?.let {
+            for (interval in it) {
+                totalTimeMilliseconds += interval.interval_time_ms
+            }
+        }
+        return totalTimeMilliseconds
+    }
 
-    val intervalTime: MutableLiveData<String> = MutableLiveData("")
-
-    val intervalTitle: MutableLiveData<String> = MutableLiveData("")
-
-    val intervalIconChecked: MutableLiveData<Boolean> = MutableLiveData(false)
-
-    val intervalIconId: MutableLiveData<Int> = MutableLiveData(0)
+    private fun setCompletion(isComplete: Boolean) {
+        _completionEvent.value = Event(isComplete)
+    }
 
     fun clearTimer() {
-        timer.value = null
-        timerTitle.value = ""
-        intervals.value = arrayListOf()
-        selectedSound.value = IntervalSound()
-        repeatChecked.value = false
-        savedChecked.value = false
+        _timer.value = Timer()
         clearInterval()
     }
 
-    private fun clearInterval() {
-        intervalTime.value = ""
-        intervalTitle.value = ""
-        intervalIconChecked.value = false
-        intervalIconId.value = 0
-    }
-
-    fun getSelectedSound(): IntervalSound? = selectedSound.value
-
-    fun setSelectedSound(intervalSound: IntervalSound?) {
-        if (intervalSound == null) return
-
-        val sounds = AppConstants.SOUNDS
-
-        sounds.forEach {
-            if (intervalSound.sound_id == it.sound_id) {
-                selectedSound.value = intervalSound
-            }
-
-            it.sound_is_selected = intervalSound.sound_id == it.sound_id
-        }
+    fun setSelectedSound(intervalSound: IntervalSound) {
+        val curTimer = timer.value
+        curTimer?.timer_interval_sound = intervalSound
+        _timer.value = curTimer
     }
 
     fun setTimerTitle(title: String) {
-        timerTitle.value = title
+        val curTimer = timer.value
+        curTimer?.timer_title = title
+        _timer.value = curTimer
     }
 
     fun setRepeat(checked: Boolean) {
-        repeatChecked.value = checked
+        val curTimer = timer.value
+        curTimer?.timer_repeat = checked
+        _timer.value = curTimer
     }
 
     fun setSaved(checked: Boolean) {
-        savedChecked.value = checked
+        val curTimer = timer.value
+        curTimer?.timer_saved = checked
+        _timer.value = curTimer
     }
 
     fun validateTimer(title: String) {
-        if (intervals.value?.size == 0) {
+        val curTimer = timer.value
+
+        if (curTimer?.timer_intervals.isNullOrEmpty()) {
             setError(errorType = ErrorType.EMPTY_INPUT)
             return
         }
 
-        val timer = timer.value ?: Timer()
-        timer.apply {
-            timer_interval_sound = selectedSound.value ?: AppConstants.SOUNDS[0]
-            timer_title = title
-            timer_created_date = DesignUtils.getCurrentDate()
-            timer_saved = savedChecked.value ?: false
-            timer_repeat = repeatChecked.value ?: false
-            timer_intervals = intervals.value ?: arrayListOf()
-            timer_intervals_count = intervals.value?.size.toString()
-            timer_total_time_secs = getTotalTimeSeconds().toString()
+        curTimer?.apply {
+            this.timer_title = title
+            this.timer_total_time_ms = getTotalTimeMilliseconds()
+            this.timer_created_date = DesignUtils.getCurrentDate()
         }
 
         viewModelScope.launch(Dispatchers.Main) {
-            timer.let {
-                val id = timerRepository.saveNewTimer(timer = timer)
+            curTimer?.let {
+                val id = timerRepository.saveNewTimer(timer = curTimer)
                 it.id = id.toInt()
-                this@CreateTimerViewModel.timer.value = it
+                _timer.value = it
+                _completionEvent.value = Event(true)
             }
         }
     }
 
-    private fun getTotalTimeSeconds(): Int {
-        var totalTime = 0
-        for (interval in intervals.value ?: arrayListOf()) {
-            totalTime += interval.interval_time_secs.toInt()
-        }
-        return totalTime
-    }
-
     fun setIntervalTitle(title: String) {
-        intervalTitle.value = title
+        if (title.isEmpty()) {
+            setError(errorType = ErrorType.EMPTY_INPUT)
+            return
+        }
+
+        val curInterval = interval.value
+        curInterval?.interval_name = title
+        _interval.value = curInterval
+        setCompletion(isComplete = true)
     }
 
-    fun addToTime(addition: String) {
-        if (intervalTime.value?.length ?: 0 > 5) return
-        intervalTime.value = "${intervalTime.value}${addition}"
+    fun addToTime(newNumber: String) {
+        val curInterval = interval.value
+        val curTime = curInterval?.interval_time_format
+        if (curTime?.length ?: 0 < 6) {
+            curInterval?.interval_time_format = "${curTime}${newNumber}"
+            _interval.value = curInterval
+        }
     }
 
     fun removeFromTime() {
-        if (intervalTime.value?.length ?: 0 == 0) return
-        val oldTime = intervalTime.value
-
-        oldTime?.let {
-            intervalTime.value = it.dropLast(1)
+        val curInterval = interval.value
+        val curTime = curInterval?.interval_time_format
+        if (curTime?.length ?: 0 != 0) {
+            curInterval?.interval_time_format = curTime?.dropLast(1).toString()
+            _interval.value = curInterval
         }
     }
 
     fun addInterval() {
-        val tempList = intervals.value ?: arrayListOf()
+        val curTimer = timer.value
+        val curIntervals = curTimer?.timer_intervals
+        val curInterval = interval.value
+        val curTimeFormat = curInterval?.interval_time_format
 
-        tempList.add(
-            Interval(
-                interval_time_format = DesignUtils.formatNormalizedTime(intervalTime.value ?: "", AppConstants.TIME_FORMAT),
-                interval_time_secs = DesignUtils.getSecondsFromTime(time = intervalTime.value ?: "").toString(),
-                interval_name = intervalTitle.value ?: "",
-                interval_icon_id = if (intervalIconChecked.value == true) intervalIconId.value.toString() else "0"
-            )
-        )
+        curInterval?.apply {
+            this.interval_time_ms = DesignUtils.getSecondsFromTime(time = curTimeFormat ?: "") * 1000
+            this.interval_time_format = DesignUtils.formatNormalizedTime(time = curTimeFormat ?: "", format = AppConstants.TIME_FORMAT)
+        }
 
-        intervals.value = tempList
+        curInterval?.let {
+            curIntervals?.add(it)
+        }
+
+        curIntervals?.let {
+            curTimer.timer_intervals = it
+            curTimer.timer_intervals_count = it.size
+        }
+
+        _timer.value = curTimer
+        setCompletion(isComplete = true)
         clearInterval()
     }
 
-    fun setIntervalIconChecked(checked: Boolean) {
-        intervalIconChecked.value = checked
-    }
-
-    fun setIntervalIcon(id: Int) {
-        intervalIconId.value = id
+    fun setIntervalIcon(id: Int?) {
+        val curInterval = interval.value
+        curInterval?.interval_icon_id = id ?: -1
+        _interval.value = curInterval
     }
 }

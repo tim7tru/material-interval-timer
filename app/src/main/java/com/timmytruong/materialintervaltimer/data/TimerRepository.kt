@@ -10,8 +10,7 @@ class TimerRepository @Inject constructor(
     private val timerDAO: TimerDAO
 ) {
     suspend fun saveNewTimer(timer: Timer): Long = withContext(Dispatchers.Default) {
-        val id= timerDAO.insert(timer)
-        return@withContext id
+        return@withContext timerDAO.insert(timer)
     }
 
     suspend fun getTimerById(id: Int): Timer = withContext(Dispatchers.Default) {

@@ -85,6 +85,8 @@
     <string name="playTag">Play</string>
     <string name="pauseTag">Pause</string>
 
+    <string name="timerTitle">Timer title</string>
+    <string name="intervalTitle">Interval title</string>
     <string name="currentIntervalTitle">Current interval</string>
     <string name="upNextIntervalTitle">Up next</string>
     <string name="emptyIntervalListError">Please add at least 1 interval</string>

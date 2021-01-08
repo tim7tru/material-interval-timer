@@ -8,31 +8,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_top"
             android:layout_marginStart="@dimen/margin_sides"
             android:layout_marginEnd="@dimen/margin_sides"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/fragmentHomeRecentContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    style="@style/HeaderText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/recentTimers" />
-
-                <include
-                    android:id="@+id/fragmentHomeRecentFrag"
-                    layout="@layout/horizontal_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,12 +25,35 @@
                     android:text="@string/favouriteTimers" />
 
                 <include
-                    android:id="@+id/fragmentHomeFavouritesFrag"
                     layout="@layout/horizontal_recycler"
+                    android:id="@+id/fragmentHomeFavouritesFrag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragmentHomeRecentContainer"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/margin_top"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/HeaderText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recentTimers" />
+
+                <include
+                    layout="@layout/horizontal_recycler"
+                    android:id="@+id/fragmentHomeRecentFrag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </layout>

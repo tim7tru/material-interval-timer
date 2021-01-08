@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+        android:id="@+id/activityMainDrawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
@@ -21,7 +21,7 @@
                 android:theme="@style/AppBarLayoutTheme">
 
                 <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/nav_tool_bar"
+                    android:id="@+id/activityMainNavToolBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:menu="@menu/app_bar"
@@ -29,7 +29,7 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <ProgressBar
-                android:id="@+id/determinateBar"
+                android:id="@+id/activityMainProgressBar"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
@@ -39,7 +39,7 @@
                 tools:progress="50"/>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/nav_host_fragment"
+                android:id="@+id/activityMainNavHostFragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -50,7 +50,7 @@
         </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_drawer"
+            android:id="@+id/activityMainNavDrawer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

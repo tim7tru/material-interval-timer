@@ -11,13 +11,19 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 
 class HorizontalTimerItemAdapter(
-    private val homeFrag: OnClickListeners.HomeFrag,
-    private val timers: ArrayList<Timer> = MockData.timerList
-): RecyclerView.Adapter<HorizontalTimerItemAdapter.TimerItemViewHolder>() {
+    private val homeFrag: OnClickListeners.HomeFrag
+) : RecyclerView.Adapter<HorizontalTimerItemAdapter.TimerItemViewHolder>() {
+    class TimerItemViewHolder(val view: HorizontalCardBinding) : RecyclerView.ViewHolder(view.root)
 
     private lateinit var binding: HorizontalCardBinding
 
-    class TimerItemViewHolder(val view: HorizontalCardBinding): RecyclerView.ViewHolder(view.root)
+    private val timers: ArrayList<Timer> = MockData.timerList
+
+    private fun addNewList(newTimers: List<Timer>) {
+        timers.clear()
+        timers.addAll(newTimers)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimerItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)

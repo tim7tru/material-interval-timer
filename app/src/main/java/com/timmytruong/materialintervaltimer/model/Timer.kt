@@ -31,10 +31,10 @@ data class Timer(
     var timer_intervals: ArrayList<Interval> = arrayListOf(),
 
     @ColumnInfo
-    var timer_intervals_count: String = "",
+    var timer_intervals_count: Int = 0,
 
     @ColumnInfo
-    var timer_total_time_secs: String = "",
+    var timer_total_time_ms: Int = 0,
 
     @ColumnInfo
     @TypeConverters(IntervalSoundConverter::class)

@@ -3,6 +3,7 @@ package com.timmytruong.materialintervaltimer.ui.createTimer.adapters
 import android.content.Context
 import android.media.MediaPlayer
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +12,10 @@ import com.timmytruong.materialintervaltimer.databinding.SoundItemBinding
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
 import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
-@ActivityScoped
+@FragmentScoped
 class IntervalSoundsAdapter @Inject constructor(
     private val createTimerViewModel: CreateTimerViewModel
 ) : RecyclerView.Adapter<IntervalSoundsAdapter.IntervalSoundsViewHolder>() {
@@ -40,19 +42,25 @@ class IntervalSoundsAdapter @Inject constructor(
 
         holder.view.isSelected = sounds[position].sound_is_selected
 
-        holder.view.root.setOnClickListener {
-            createTimerViewModel.setSelectedSound(sounds[position])
-            notifyItemChanged(previousPosition)
-            notifyItemChanged(position)
-            previousPosition = position
-            playSound()
-        }
+        holder.view.root.setOnClickListener { onSoundClicked(position = position) }
     }
 
     override fun getItemCount(): Int = sounds.size
 
-    private fun playSound() {
-        val id = createTimerViewModel.getSelectedSound()?.sound_id
-        id?.let { MediaPlayer.create(parentContext, it).start() }
+    private fun onSoundClicked(position: Int) {
+        sounds[previousPosition].sound_is_selected = false
+        sounds[position].sound_is_selected = true
+        createTimerViewModel.setSelectedSound(sounds[position])
+        notifyItemChanged(previousPosition)
+        notifyItemChanged(position)
+        previousPosition = position
+        playSound(position = position)
+    }
+
+    private fun playSound(position: Int) {
+        val id = sounds[position].sound_id
+        if (id != -1) {
+            id.let { MediaPlayer.create(parentContext, it).start() }
+        }
     }
 }

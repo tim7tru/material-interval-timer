@@ -5,11 +5,10 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 
 object AppConstants {
     val SOUNDS = arrayListOf(
-        IntervalSound(0, "None", true),
+        IntervalSound(-1, "None", true),
         IntervalSound(R.raw.beep, "Beep", false),
         IntervalSound(R.raw.another_beep, "Another beep", false),
         IntervalSound(R.raw.censor, "Censor", false),
-        IntervalSound(R.raw.another_censor, "Another censor", false),
         IntervalSound(R.raw.ding, "Ding", false),
         IntervalSound(R.raw.elevator, "Elevator", false),
         IntervalSound(R.raw.error, "Error", false),

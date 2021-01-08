@@ -5,67 +5,75 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.google.android.material.button.MaterialButton
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.base.BaseFragment
+import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
-import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.ui.MainActivity
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
+import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
+import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
+import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateIntervalTimeFragment : Fragment(), OnClickListeners.CreateIntervalTimeFrag {
+class CreateIntervalTimeFragment : BaseFragment(), OnClickListeners.CreateIntervalTimeFrag {
+
+    override val baseViewModel: BaseViewModel
+        get() = createTimerViewModel
+
+    override val errorObserver: Observer<Event<ErrorType>>
+        get() = Observer { }
 
     private lateinit var binding: FragmentCreateIntervalTimeBinding
 
-    @Inject lateinit var createTimerViewModel: CreateTimerViewModel
+    @Inject
+    lateinit var createTimerViewModel: CreateTimerViewModel
 
-    private val timeObserver = Observer<String> {
-        binding.time = DesignUtils.formatInputtedTime(time = it, format = getString(R.string.timeFormat))
-        binding.length = it.length
+    private val intervalObserver = Observer<Interval> { binding.interval = it }
+
+    private val completionObserver = Observer<Event<Boolean>> {
+        it?.getContentIfNotHandled()?.let {
+            goToCreateTimer()
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_interval_time, container, false)
+    ): View {
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_create_interval_time,
+            container,
+            false
+        )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.onClick = this
-        binding.time = DesignUtils.formatInputtedTime(time = "", format = getString(R.string.timeFormat))
-
         subscribeObservers()
-
-        updateProgressBar()
+        bindView()
+        updateProgressBar(progress = 100)
     }
 
-    private fun subscribeObservers() {
-        createTimerViewModel.intervalTime.observe(viewLifecycleOwner, timeObserver)
+    override fun bindView() {
+        binding.onClick = this
     }
 
-    private fun updateProgressBar() {
-        try {
-            (activity as MainActivity).updateProgressBar(100)
-        } catch (err: Exception) {
-            err.printStackTrace()
-        }
+    override fun subscribeObservers() {
+        createTimerViewModel.interval.observe(viewLifecycleOwner, intervalObserver)
+        createTimerViewModel.completionEvent.observe(viewLifecycleOwner, completionObserver)
     }
 
     override fun onNumberClicked(view: View) {
-        try {
-            createTimerViewModel.addToTime(addition = (view as MaterialButton).text.toString())
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        createTimerViewModel.addToTime(newNumber = (view as? MaterialButton)?.text.toString())
     }
 
     override fun onBackClicked(view: View) {
@@ -74,9 +82,12 @@ class CreateIntervalTimeFragment : Fragment(), OnClickListeners.CreateIntervalTi
 
     override fun onAddClicked(view: View) {
         createTimerViewModel.addInterval()
+    }
+
+    private fun goToCreateTimer() {
         val action =
             CreateIntervalTimeFragmentDirections.actionCreateIntervalTimeFragmentToCreateTimerFragment()
         action.clearViewModel = false
-        Navigation.findNavController(view).navigate(action)
+        view?.let { Navigation.findNavController(it).navigate(action) }
     }
 }

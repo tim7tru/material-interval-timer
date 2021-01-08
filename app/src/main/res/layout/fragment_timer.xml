@@ -5,15 +5,24 @@
 
     <data>
         <import type="com.timmytruong.materialintervaltimer.utils.enums.TimerState"/>
+        <import type="com.timmytruong.materialintervaltimer.utils.DesignUtils"/>
+
         <variable
-            name="time"
-            type="String" />
+            name="timeRemaining"
+            type="Integer" />
+
+        <variable
+            name="currentInterval"
+            type="com.timmytruong.materialintervaltimer.model.Interval" />
+
         <variable
             name="progress"
             type="Integer"/>
+
         <variable
             name="timerState"
             type="com.timmytruong.materialintervaltimer.utils.enums.TimerState" />
+
         <variable
             name="onClick"
             type="com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners.TimerFrag" />
@@ -68,35 +77,31 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                android:scaleX="0.85"
-                android:scaleY="0.85"
+                android:scaleX="0.90"
+                android:scaleY="0.90"
                 android:src="@drawable/ic_circle"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle" />
+                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
+                android:contentDescription="TODO" />
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/fragmentTimerProgressCircle"
-                style="?android:progressBarStyleHorizontal"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
-                android:max="100"
-                android:progress="100"
-                android:progressDrawable="@drawable/circular_progress"
-                android:secondaryProgress="100"
-                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@id/timer_progress_right_guide"
                 app:layout_constraintStart_toStartOf="@id/timer_progress_left_guide"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/TimerRoundProgress"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/quicksand_light"
-                android:text="@{time}"
+                android:text="@{DesignUtils.INSTANCE.formatNormalizedTime(timeRemaining, @string/timerTimeFormat)}"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/text_timer"
                 app:layout_constraintBottom_toBottomOf="@id/fragmentTimerProgressCircle"
@@ -117,26 +122,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
+                android:contentDescription="TODO"
                 android:onClick="@{onClick::onPlayPauseClicked}"
                 android:src="@{timerState == TimerState.RUNNING ? @drawable/ic_pause_24px : @drawable/ic_play}"
-                app:backgroundTint="@color/colorSecondary"
                 app:layout_constraintEnd_toStartOf="@id/timer_stop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:tint="@color/colorWhite" />
+                style="@style/TimerFab" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/timer_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
+                android:contentDescription="TODO"
                 android:src="@drawable/ic_stop_24px"
                 android:onClick="@{onClick::onStopClicked}"
-                app:backgroundTint="@color/colorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/timer_play_pause"
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:tint="@color/colorWhite" />
+                style="@style/TimerFab" />
 
             <LinearLayout
                 android:id="@+id/bottom_sheet"

@@ -4,21 +4,36 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.base.BaseFragment
+import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.home.HorizontalTimerItemAdapter
 import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
+import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import java.lang.Exception
 
-class HomeFragment : Fragment(), OnClickListeners.HomeFrag {
+class HomeFragment : BaseFragment(), OnClickListeners.HomeFrag {
 
     private lateinit var binding: FragmentHomeBinding
 
     private lateinit var recentsAdapter: HorizontalTimerItemAdapter
 
     private lateinit var favouritesAdapter: HorizontalTimerItemAdapter
+
+    override val baseViewModel: BaseViewModel
+        get() = TODO("Not yet implemented")
+
+    override val errorObserver: Observer<Event<ErrorType>>
+        get() = TODO("Not yet implemented")
+
+    override fun bindView() {
+        TODO("Not yet implemented")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +59,7 @@ class HomeFragment : Fragment(), OnClickListeners.HomeFrag {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = this
         return binding.root

@@ -21,8 +21,6 @@ class TimerIntervalAdapter @Inject constructor() :
         const val UP_NEXT_TITLE = 2
     }
 
-    private var intervalIterator = 0
-
     private lateinit var currentTitle: String
 
     private lateinit var upNextTitle: String
@@ -69,8 +67,7 @@ class TimerIntervalAdapter @Inject constructor() :
 
     override fun getItemCount(): Int = intervals.size
 
-    fun newList(list: ArrayList<Interval>) {
-        intervalIterator = 0
+    fun newList(list: List<Interval>) {
         intervals.clear()
         intervals.addAll(list)
         notifyDataSetChanged()

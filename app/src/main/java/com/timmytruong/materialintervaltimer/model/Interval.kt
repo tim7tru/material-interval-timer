@@ -12,10 +12,10 @@ data class Interval(
     var interval_name: String = "",
 
     @ColumnInfo
-    var interval_icon_id: String = "",
+    var interval_icon_id: Int = 0,
 
     @ColumnInfo
-    var interval_time_secs: String = "",
+    var interval_time_ms: Int = 0,
 
     @ColumnInfo
     var interval_time_format: String = ""

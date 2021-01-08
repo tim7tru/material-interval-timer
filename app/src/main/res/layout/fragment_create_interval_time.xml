@@ -4,17 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.timmytruong.materialintervaltimer.utils.DesignUtils"/>
+
         <variable
             name="onClick"
             type="com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners.CreateIntervalTimeFrag"/>
 
         <variable
-            name="time"
-            type="String"/>
-
-        <variable
-            name="length"
-            type="Integer" />
+            name="interval"
+            type="com.timmytruong.materialintervaltimer.model.Interval" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,34 +26,34 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_sides"
             android:layout_marginTop="@dimen/margin_top"
+            android:fontFamily="@font/quicksand_bold"
+            android:textSize="@dimen/timerFont"
+            android:text="@{DesignUtils.INSTANCE.formatInputtedTime(interval.interval_time_format, @string/timeFormat)}"
+            android:padding="@dimen/margin_small"
+            android:textColor="@{interval.interval_time_format.length() == 0 ? @color/colorUnselected : @color/colorSecondary}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="@font/quicksand_bold"
-            android:textSize="52sp"
-            android:text="@{time}"
-            android:padding="@dimen/margin_small"
-            android:textColor="@{length == 0 ? @color/colorUnselected : @color/colorSecondary}"
             tools:text="99h 99m 99s"/>
 
         <ImageView
+            style="@style/SelectableItemBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
             android:src="@drawable/ic_backspace_24px"
             android:onClick="@{onClick::onBackClicked}"
             android:clickable="true"
-            android:tint="@{length == 0 ? @color/colorUnselected : @color/colorGray}"
+            android:tint="@{interval.interval_time_format.length() == 0 ? @color/colorUnselected : @color/colorGray}"
             app:layout_constraintTop_toTopOf="@id/fragmentCreateIntervalTimeText"
             app:layout_constraintBottom_toBottomOf="@id/fragmentCreateIntervalTimeText"
             app:layout_constraintStart_toEndOf="@id/fragmentCreateIntervalTimeText"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             android:contentDescription="TODO"
-            style="@style/SelectableItemBackground"
             tools:ignore="UseAppTint" />
 
         <include
-            android:id="@+id/fragmentCreateIntervalTimeSeparatorLine"
             layout="@layout/separator_line"
+            android:id="@+id/fragmentCreateIntervalTimeSeparatorLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top"
@@ -64,21 +62,21 @@
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTimeText"/>
 
         <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
             android:id="@+id/fragmentCreateIntervalTime1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/one"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime4"/>
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/TimeButton"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/two"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
@@ -86,31 +84,31 @@
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime4"/>
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/TimeButton"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/three"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime4"/>
 
         <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
             android:id="@+id/fragmentCreateIntervalTime4"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/four"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTime1"
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime7"/>
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/TimeButton"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/five"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
@@ -118,10 +116,10 @@
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime7"/>
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/TimeButton"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/six"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTime1"
@@ -129,21 +127,21 @@
 
 
         <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
             android:id="@+id/fragmentCreateIntervalTime7"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/seven"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTime4"
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime0"/>
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            style="@style/TimeButton"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
             android:text="@string/eight"
-            style="@style/TimeButton"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
@@ -151,21 +149,21 @@
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime0"/>
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="@string/nine"
             style="@style/TimeButton"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
+            android:text="@string/nine"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTime4"
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTime0"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/fragmentCreateIntervalTime0"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="@string/zero"
             style="@style/TimeButton"
+            android:id="@+id/fragmentCreateIntervalTime0"
+            android:layout_width="@dimen/timeButtonDimension"
+            android:layout_height="@dimen/timeButtonDimension"
+            android:text="@string/zero"
             android:onClick="@{onClick::onNumberClicked}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
@@ -173,14 +171,14 @@
             app:layout_constraintBottom_toTopOf="@id/fragmentCreateIntervalTimeContinueButton"/>
 
         <com.google.android.material.button.MaterialButton
+            style="@style/ContinueFlowButton"
             android:id="@+id/fragmentCreateIntervalTimeContinueButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/continueFlowButtonHeight"
             android:text="@string/addInterval"
-            android:clickable="@{length != 0 ? true : false}"
+            android:clickable="@{interval.interval_time_format.length() != 0 ? true : false}"
             android:onClick="@{onClick::onAddClicked}"
-            android:backgroundTint="@{length != 0 ? @color/colorSecondaryDark : @color/colorUnselected}"
-            style="@style/ContinueFlowButton"
+            android:backgroundTint="@{interval.interval_time_format.length() != 0 ? @color/colorSecondaryDark : @color/colorUnselected}"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,25 +4,32 @@
     <dimen name="margin_small_medium">10dp</dimen>
     <dimen name="margin_medium">15dp</dimen>
     <dimen name="margin_large">25dp</dimen>
-
     <dimen name="margin_sides">25dp</dimen>
     <dimen name="margin_top">30dp</dimen>
+
     <dimen name="padding_small">5dp</dimen>
     <dimen name="padding_medium">10dp</dimen>
     <dimen name="padding_large">15dp</dimen>
 
     <dimen name="text_header">24sp</dimen>
     <dimen name="card_text_header">18sp</dimen>
+    <dimen name="intervalCardTitleFont">16sp</dimen>
     <dimen name="card_text">14sp</dimen>
     <dimen name="text_timer">50sp</dimen>
     <dimen name="timer_options_text">14sp</dimen>
 
+    <dimen name="cardCornerRadius">7.5dp</dimen>
+    <dimen name="intervalIconDimension">30dp</dimen>
     <dimen name="card_width">200dp</dimen>
     <dimen name="card_height">150dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_radius">5dp</dimen>
     <dimen name="line_width">1dp</dimen>
-
+    <dimen name="timerFont">52sp</dimen>
+    <dimen name="iconDimension">75dp</dimen>
+    <dimen name="timeButtonDimension">100dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="one">1dp</dimen>
     <dimen name="dialog_message_font">16sp</dimen>
     <dimen name="interval_sounds_bottom_sheet_height">300dp</dimen>
     <dimen name="continueFlowButtonHeight">60dp</dimen>
