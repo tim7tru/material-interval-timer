@@ -28,7 +28,7 @@ class HomeFragment : BaseFragment(), OnClickListeners.HomeFrag {
     override val baseViewModel: BaseViewModel
         get() = TODO("Not yet implemented")
 
-    override val errorObserver: Observer<Event<ErrorType>>
+    override val eventObserver: Observer<Event<Any>>
         get() = TODO("Not yet implemented")
 
     override fun bindView() {

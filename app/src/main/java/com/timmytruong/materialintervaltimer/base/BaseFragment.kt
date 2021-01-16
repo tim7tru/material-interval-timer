@@ -1,23 +1,30 @@
 package com.timmytruong.materialintervaltimer.base
 
-import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.MainActivity
+import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.ui.interfaces.ProgressBarInterface
+import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 
-abstract class BaseFragment : Fragment(), ProgressBarInterface {
+abstract class BaseFragment : Fragment(), ProgressBarInterface, OnClickListeners.IOBackPressed {
     abstract val baseViewModel: BaseViewModel
 
-    abstract val errorObserver: Observer<Event<ErrorType>>
+    abstract val eventObserver: Observer<Event<Any>>
 
     abstract fun bindView()
 
-    open fun subscribeObservers() {
-        baseViewModel.error.observe(viewLifecycleOwner, errorObserver)
+    protected open fun subscribeObservers() {
+        baseViewModel.event.observe(viewLifecycleOwner, eventObserver)
+    }
+
+    protected fun handleUnknownError() {
+        DesignUtils.showSnackbarError(
+            contextView = requireView(),
+            message = getString(R.string.somethingWentWrong)
+        )
     }
 
     override fun toggleProgressBarVisibility(show: Boolean) {
@@ -34,12 +41,5 @@ abstract class BaseFragment : Fragment(), ProgressBarInterface {
         }
     }
 
-    protected fun setOnBackPressed(callback: (view: View) -> Unit) {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object :
-            OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                view?.let { callback.invoke(it) }
-            }
-        })
-    }
+    override fun onBackPressed(): Boolean = true
 }

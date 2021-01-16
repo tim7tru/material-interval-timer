@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.timer
+package com.timmytruong.materialintervaltimer.ui.timer.adapters
 
 import android.view.LayoutInflater
 import android.view.View

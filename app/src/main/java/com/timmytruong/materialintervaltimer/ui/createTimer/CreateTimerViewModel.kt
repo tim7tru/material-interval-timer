@@ -10,6 +10,7 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.Error
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import dagger.hilt.android.scopes.ActivityRetainedScoped
@@ -19,11 +20,8 @@ import javax.inject.Inject
 
 @ActivityRetainedScoped
 class CreateTimerViewModel @Inject constructor(
-    private val timerRepository: TimerRepository
+    private val timerLocalDataSource: TimerRepository
 ) : BaseViewModel() {
-
-    private val _completionEvent = MutableLiveData<Event<Boolean>>()
-    val completionEvent: LiveData<Event<Boolean>> get() = _completionEvent
 
     private val _timer: MutableLiveData<Timer> = MutableLiveData(Timer())
     val timer: LiveData<Timer> get() = _timer
@@ -45,10 +43,6 @@ class CreateTimerViewModel @Inject constructor(
             }
         }
         return totalTimeMilliseconds
-    }
-
-    private fun setCompletion(isComplete: Boolean) {
-        _completionEvent.value = Event(isComplete)
     }
 
     fun clearTimer() {
@@ -84,7 +78,7 @@ class CreateTimerViewModel @Inject constructor(
         val curTimer = timer.value
 
         if (curTimer?.timer_intervals.isNullOrEmpty()) {
-            setError(errorType = ErrorType.EMPTY_INPUT)
+            setEvent(event = Error.InputError(error = ErrorType.EMPTY_INPUT))
             return
         }
 
@@ -96,24 +90,24 @@ class CreateTimerViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.Main) {
             curTimer?.let {
-                val id = timerRepository.saveNewTimer(timer = curTimer)
+                val id = timerLocalDataSource.saveNewTimer(timer = curTimer)
                 it.id = id.toInt()
                 _timer.value = it
-                _completionEvent.value = Event(true)
+                setEvent(event = true)
             }
         }
     }
 
     fun setIntervalTitle(title: String) {
         if (title.isEmpty()) {
-            setError(errorType = ErrorType.EMPTY_INPUT)
+            setEvent(event = Error.InputError(error = ErrorType.EMPTY_INPUT))
             return
         }
 
         val curInterval = interval.value
         curInterval?.interval_name = title
         _interval.value = curInterval
-        setCompletion(isComplete = true)
+        setEvent(true)
     }
 
     fun addToTime(newNumber: String) {
@@ -155,7 +149,7 @@ class CreateTimerViewModel @Inject constructor(
         }
 
         _timer.value = curTimer
-        setCompletion(isComplete = true)
+        setEvent(event = true)
         clearInterval()
     }
 

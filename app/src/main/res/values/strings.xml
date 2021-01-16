@@ -84,13 +84,14 @@
     <string name="phoneTag">Phone</string>
     <string name="playTag">Play</string>
     <string name="pauseTag">Pause</string>
+    <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
 
     <string name="timerTitle">Timer title</string>
     <string name="intervalTitle">Interval title</string>
     <string name="currentIntervalTitle">Current interval</string>
     <string name="upNextIntervalTitle">Up next</string>
     <string name="emptyIntervalListError">Please add at least 1 interval</string>
-
+    <string name="somethingWentWrong">Something went wrong, please try again</string>
     <string name="dialogCloseTimerTitle">Exit timer?</string>
     <string name="dialogCloseTimerMessage">Are you sure you want to exit this timer?</string>
     <string name="exit">Exit</string>

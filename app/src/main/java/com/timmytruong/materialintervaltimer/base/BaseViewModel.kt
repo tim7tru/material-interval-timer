@@ -7,10 +7,10 @@ import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 
 abstract class BaseViewModel: ViewModel() {
-    private val _error = MutableLiveData<Event<ErrorType>>()
-    val error: LiveData<Event<ErrorType>> get() = _error
+    private val _event = MutableLiveData<Event<Any>>()
+    val event: LiveData<Event<Any>> get() = _event
 
-    fun setError(errorType: ErrorType) {
-        _error.value = Event(errorType)
+    protected fun setEvent(event: Any) {
+        _event.value = Event(event)
     }
 }

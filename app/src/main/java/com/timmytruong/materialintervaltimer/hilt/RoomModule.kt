@@ -2,7 +2,7 @@ package com.timmytruong.materialintervaltimer.hilt
 
 import android.content.Context
 import androidx.room.Room
-import com.timmytruong.materialintervaltimer.data.room.TimerDatabase
+import com.timmytruong.materialintervaltimer.data.local.room.TimerDatabase
 import com.timmytruong.materialintervaltimer.utils.constants.RoomConstants
 import dagger.Module
 import dagger.Provides

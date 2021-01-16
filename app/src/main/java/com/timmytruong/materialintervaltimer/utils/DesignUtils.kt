@@ -11,6 +11,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
 
 object DesignUtils {
     /**

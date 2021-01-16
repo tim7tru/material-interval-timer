@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @ActivityRetainedScoped
 class TimerViewModel @Inject constructor(
-    private val timerRepository: TimerRepository
+    private val timerLocalDataSource: TimerRepository
 ) : BaseViewModel() {
     private lateinit var timer: Timer
 
@@ -26,9 +26,7 @@ class TimerViewModel @Inject constructor(
     private lateinit var currentInterval: Interval
 
     private var currentState: TimerState = TimerState.STOPPED
-        set(value) {
-            _timerStateEvent.value = Event(content = value)
-        }
+        set(value) = setEvent(event = value)
 
     private var shouldPlaySound: Boolean = true
 
@@ -38,15 +36,6 @@ class TimerViewModel @Inject constructor(
 
     private val _timeRemaining = MutableLiveData<Int>()
     val timeRemaining: LiveData<Int> get() = _timeRemaining
-
-    private val _currentIntervalTotalTimeEvent = MutableLiveData<Event<Int>>()
-    val currentIntervalTotalTimeEvent: LiveData<Event<Int>> get() = _currentIntervalTotalTimeEvent
-
-    private val _timerStateEvent = MutableLiveData<Event<TimerState>>()
-    val timerStateEvent: LiveData<Event<TimerState>> get() = _timerStateEvent
-
-    private val _soundEvent: MutableLiveData<Event<IntervalSound>> = MutableLiveData()
-    val soundEvent: LiveData<Event<IntervalSound>> get() = _soundEvent
 
     private val _intervals: MutableLiveData<ArrayList<Interval>> = MutableLiveData()
     val intervals: LiveData<ArrayList<Interval>> get() = _intervals
@@ -67,7 +56,7 @@ class TimerViewModel @Inject constructor(
         currentInterval = interval
         countDownTimer = buildIntervalTimer(milliseconds = interval.interval_time_ms)
         _timeRemaining.value = currentInterval.interval_time_ms
-        _currentIntervalTotalTimeEvent.value = Event(content = currentInterval.interval_time_ms)
+        setEvent(event = currentInterval.interval_time_ms)
     }
 
     private fun startTimer() {
@@ -97,9 +86,8 @@ class TimerViewModel @Inject constructor(
     }
 
     private fun playSound() {
-        if (shouldPlaySound) {
-            _soundEvent.value = Event(content = timer.timer_interval_sound)
-        }
+        if (shouldPlaySound)
+            setEvent(event = timer.timer_interval_sound)
     }
 
     private fun addRepeatIntervals() {
@@ -113,7 +101,10 @@ class TimerViewModel @Inject constructor(
             override fun onTick(millisUntilFinished: Long) {
                 _timeRemaining.value = millisUntilFinished.toInt()
 
-                if (shouldRepeat && intervals.value?.size ?: 0 <= timer.timer_intervals_count / 2) {
+                if (shouldRepeat &&
+                    (intervals.value?.size ?: 0 <= timer.timer_intervals_count / 2 ||
+                            intervals.value?.size ?: 0 == 1)
+                ) {
                     addRepeatIntervals()
                 }
             }
@@ -125,7 +116,9 @@ class TimerViewModel @Inject constructor(
 
     fun fetchTimerFromRoom(id: Int) {
         viewModelScope.launch {
-            timer = timerRepository.getTimerById(id = id)
+            timer =
+                if (this@TimerViewModel::timer.isInitialized) timer
+                else timerLocalDataSource.getTimerById(id = id)
             sound = timer.timer_interval_sound
             shouldRepeat = timer.timer_repeat
             resetTimer()
@@ -154,5 +147,12 @@ class TimerViewModel @Inject constructor(
 
     fun setShouldPlaySound(playSound: Boolean) {
         shouldPlaySound = playSound
+    }
+
+    fun setShouldSave(save: Boolean) {
+        viewModelScope.launch {
+            val id = timer.id
+            timerLocalDataSource.setShouldSave(id = id, save = save)
+        }
     }
 }

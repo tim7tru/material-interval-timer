@@ -7,11 +7,15 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.*
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ActivityMainBinding
+import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.ui.interfaces.ProgressBarInterface
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +54,12 @@ class MainActivity : AppCompatActivity(), ProgressBarInterface {
         binding.activityMainNavToolBar.setupWithNavController(controller, appBarConfig)
     }
 
+    private fun getForegorundFragment(): Fragment? {
+        val frag = supportFragmentManager.findFragmentById(binding.activityMainNavHostFragment.id)
+        return if (frag == null) null else frag.childFragmentManager.fragments[0]
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.activityMainNavHostFragment)
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
@@ -70,5 +80,15 @@ class MainActivity : AppCompatActivity(), ProgressBarInterface {
         animation.duration = AppConstants.PROGRESS_BAR_ANIMATION_DURATION_MS
         animation.interpolator = DecelerateInterpolator()
         animation.start()
+    }
+
+    override fun onBackPressed() {
+        try {
+            if ((getForegorundFragment() as? OnClickListeners.IOBackPressed)?.onBackPressed() == true) {
+                super.onBackPressed()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

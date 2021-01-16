@@ -62,9 +62,9 @@
             android:textSize="@dimen/dialog_message_font"
             android:layout_marginStart="@dimen/margin_sides"
             android:layout_marginEnd="@dimen/margin_sides"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginTop="@dimen/margin_small"
             app:layout_constraintTop_toBottomOf="@id/dialogTitle"
-            tools:text="Sample Text"/>
+            tools:text="@string/loremIpsum"/>
 
         <LinearLayout
             android:id="@+id/action_layout"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginTop="@dimen/margin_small_medium"
             app:layout_constraintTop_toBottomOf="@id/dialogMessage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">

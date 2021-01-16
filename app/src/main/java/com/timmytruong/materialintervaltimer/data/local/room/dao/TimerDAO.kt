@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.data.room.dao
+package com.timmytruong.materialintervaltimer.data.local.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -16,4 +16,7 @@ interface TimerDAO {
 
     @Query("SELECT * FROM Timers WHERE id = :id")
     fun getTimerById(id: Int): Timer
+
+    @Query("UPDATE Timers SET timer_saved = :shouldSave WHERE id = :id")
+    fun setSaveTimer(id: Int, shouldSave: Boolean)
 }

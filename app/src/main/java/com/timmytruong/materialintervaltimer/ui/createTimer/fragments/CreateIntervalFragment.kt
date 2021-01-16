@@ -1,7 +1,6 @@
 package com.timmytruong.materialintervaltimer.ui.createTimer.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +17,8 @@ import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.Error
 import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,26 +31,18 @@ class CreateIntervalFragment : BaseFragment(), OnClickListeners.CreateIntervalFr
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
 
-    override val errorObserver: Observer<Event<ErrorType>>
+    override val eventObserver: Observer<Event<Any>>
         get() = Observer { event ->
             event?.getContentIfNotHandled()?.let {
                 when (it) {
-                    ErrorType.EMPTY_INPUT -> showInvalidTitleError()
-                    else -> {
-                    }
+                    is Error.InputError -> handleInputError()
+                    Error.UnknownError -> handleUnknownError()
+                    is Boolean -> handleCompletionEvent(completed = it)
                 }
             }
         }
 
     private lateinit var binding: FragmentCreateIntervalBinding
-
-    private val completionObserver = Observer<Event<Boolean>> {
-        it?.getContentIfNotHandled()?.let { complete ->
-            if (complete) {
-                goToCreateIntervalTime()
-            }
-        }
-    }
 
     private val intervalObserver = Observer<Interval> { interval ->
         interval.interval_icon_id.let {
@@ -88,7 +79,6 @@ class CreateIntervalFragment : BaseFragment(), OnClickListeners.CreateIntervalFr
         subscribeObservers()
         bindView()
         updateProgressBar(progress = 50)
-        Log.d("ViewModel", "CreateViewModel $createTimerViewModel")
     }
 
     override fun bindView() {
@@ -98,7 +88,6 @@ class CreateIntervalFragment : BaseFragment(), OnClickListeners.CreateIntervalFr
     override fun subscribeObservers() {
         super.subscribeObservers()
         createTimerViewModel.interval.observe(viewLifecycleOwner, intervalObserver)
-        createTimerViewModel.completionEvent.observe(viewLifecycleOwner, completionObserver)
     }
 
     override fun onContinueClicked(view: View) {
@@ -122,13 +111,15 @@ class CreateIntervalFragment : BaseFragment(), OnClickListeners.CreateIntervalFr
         )
     }
 
-    private fun goToCreateIntervalTime() {
-        val action =
-            CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
-        view?.let { Navigation.findNavController(it).navigate(action) }
+    private fun handleCompletionEvent(completed: Boolean) {
+        if (completed) {
+            val action =
+                CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
+            view?.let { Navigation.findNavController(it).navigate(action) }
+        }
     }
 
-    private fun showInvalidTitleError() {
+    private fun handleInputError() {
         binding.fragmentCreateIntervalTitleInput.error = getString(R.string.noTitleError)
     }
 
@@ -146,5 +137,4 @@ class CreateIntervalFragment : BaseFragment(), OnClickListeners.CreateIntervalFr
                 )
         }
     }
-
 }

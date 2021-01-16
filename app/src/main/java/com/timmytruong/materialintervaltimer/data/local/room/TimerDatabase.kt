@@ -1,11 +1,11 @@
-package com.timmytruong.materialintervaltimer.data.room
+package com.timmytruong.materialintervaltimer.data.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.timmytruong.materialintervaltimer.data.room.dao.IntervalDAO
-import com.timmytruong.materialintervaltimer.data.room.dao.IntervalSoundDAO
-import com.timmytruong.materialintervaltimer.data.room.dao.TimerDAO
+import com.timmytruong.materialintervaltimer.data.local.room.dao.IntervalDAO
+import com.timmytruong.materialintervaltimer.data.local.room.dao.IntervalSoundDAO
+import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDAO
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer

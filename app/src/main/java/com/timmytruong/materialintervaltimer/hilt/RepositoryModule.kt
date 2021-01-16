@@ -1,6 +1,7 @@
 package com.timmytruong.materialintervaltimer.hilt
 
-import com.timmytruong.materialintervaltimer.data.room.dao.TimerDAO
+import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDAO
+import com.timmytruong.materialintervaltimer.data.local.TimerLocalDataSource
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import dagger.Module
 import dagger.Provides
@@ -13,5 +14,5 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 object RepositoryModule {
     @ActivityRetainedScoped
     @Provides
-    fun provideTimerRepository(timerDAO: TimerDAO) = TimerRepository(timerDAO)
+    fun provideTimerRepository(timerDAO: TimerDAO): TimerRepository = TimerLocalDataSource(timerDAO)
 }

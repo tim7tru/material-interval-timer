@@ -3,6 +3,10 @@ package com.timmytruong.materialintervaltimer.ui.interfaces
 import android.view.View
 
 interface OnClickListeners {
+    interface IOBackPressed {
+        fun onBackPressed(): Boolean
+    }
+
     interface CreateIntervalTimeFrag {
         fun onNumberClicked(view: View)
 
@@ -29,8 +33,6 @@ interface OnClickListeners {
         fun onSoundClicked(view: View)
 
         fun onStartTimerClicked(view: View)
-
-        fun goToHome(view: View)
     }
 
     interface HomeFrag {

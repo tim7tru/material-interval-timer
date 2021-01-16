@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.data.room.dao
+package com.timmytruong.materialintervaltimer.data.local.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -9,7 +9,7 @@
 
         <variable
             name="timeRemaining"
-            type="Integer" />
+            type="String" />
 
         <variable
             name="currentInterval"
@@ -77,6 +77,23 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
+                android:scaleX="0.875"
+                android:scaleY="0.875"
+                android:backgroundTint="@color/colorSecondaryDark"
+                android:background="@drawable/ic_circle"
+                android:elevation="10dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
+                app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
+                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
+                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
+                android:contentDescription="TODO"
+                app:tint="@color/colorSecondaryDark" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
                 android:scaleX="0.90"
                 android:scaleY="0.90"
                 android:src="@drawable/ic_circle"
@@ -86,6 +103,21 @@
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
                 android:contentDescription="TODO" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:scaleX="0.925"
+                android:scaleY="0.925"
+                android:src="@drawable/ic_circle"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
+                app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
+                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
+                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
+                android:contentDescription="TODO"
+                app:tint="@color/colorSecondaryDark" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/fragmentTimerProgressCircle"
@@ -101,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/quicksand_light"
-                android:text="@{DesignUtils.INSTANCE.formatNormalizedTime(timeRemaining, @string/timerTimeFormat)}"
+                android:text="@{timeRemaining}"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/text_timer"
                 app:layout_constraintBottom_toBottomOf="@id/fragmentTimerProgressCircle"

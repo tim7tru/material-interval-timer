@@ -17,6 +17,7 @@ import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.createTimer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.Error
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,17 +38,13 @@ class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
 
-    override val errorObserver: Observer<Event<ErrorType>>
+    override val eventObserver: Observer<Event<Any>>
         get() = Observer { event ->
-            event?.getContentIfNotHandled().let {
+            event?.getContentIfNotHandled()?.let {
                 when (it) {
-                    ErrorType.EMPTY_INPUT -> {
-                        DesignUtils.showSnackbarError(
-                            contextView = requireView(),
-                            message = getString(R.string.emptyIntervalListError)
-                        )
-                    }
-                    else -> {}
+                    is Boolean -> handleCompletionEvent(completed = it)
+                    is Error.InputError -> handleInputError(inputError = it)
+                    is Error.UnknownError -> handleUnknownError()
                 }
             }
         }
@@ -57,12 +54,6 @@ class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
     private var timerId: Int? = null
 
     private val args: CreateTimerFragmentArgs by navArgs()
-
-    private val completionObserver = Observer<Event<Boolean>> { event ->
-        event?.getContentIfNotHandled()?.let {
-            if (it) timerId?.let { id -> goToTimer(id = id) }
-        }
-    }
 
     private val timerObserver = Observer<Timer> { timer ->
         timer?.let {
@@ -94,7 +85,6 @@ class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
         subscribeObservers()
         bindView()
         checkArguments()
-        setOnBackPressed(callback = { goToHome(view = it) })
     }
 
     override fun onResume() {
@@ -105,11 +95,6 @@ class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
     override fun onPause() {
         super.onPause()
         createTimerViewModel.setTimerTitle(binding.fragmentCreateTimerTitleInput.text.toString())
-    }
-
-    override fun goToHome(view: View) {
-        val action = CreateTimerFragmentDirections.actionCreateTimerFragmentToHomeFragment()
-        Navigation.findNavController(view).navigate(action)
     }
 
     override fun goToAddInterval(view: View) {
@@ -139,12 +124,22 @@ class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
     override fun subscribeObservers() {
         super.subscribeObservers()
         createTimerViewModel.timer.observe(viewLifecycleOwner, timerObserver)
-        createTimerViewModel.completionEvent.observe(viewLifecycleOwner, completionObserver)
     }
 
     override fun bindView() {
         binding.fragmentCreateTimerTaskList.adapter = intervalAdapter
         binding.onClick = this
+    }
+
+    private fun handleInputError(inputError: Error.InputError) {
+        DesignUtils.showSnackbarError(
+            contextView = requireView(),
+            message = getString(R.string.emptyIntervalListError)
+        )
+    }
+
+    private fun handleCompletionEvent(completed: Boolean) {
+        if (completed) timerId?.let { id -> goToTimer(id = id) }
     }
 
     private fun goToTimer(id: Int) {
