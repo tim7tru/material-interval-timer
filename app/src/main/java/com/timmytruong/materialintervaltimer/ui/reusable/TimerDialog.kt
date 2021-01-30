@@ -12,7 +12,7 @@ import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @FragmentScoped
-open class TimerDialog @Inject constructor() {
+class TimerDialog @Inject constructor() {
     private lateinit var binding: AlertDialogBinding
 
     private lateinit var alert: AlertDialog

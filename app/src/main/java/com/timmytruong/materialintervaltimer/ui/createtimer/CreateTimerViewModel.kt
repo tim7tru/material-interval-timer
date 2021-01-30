@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.createTimer
+package com.timmytruong.materialintervaltimer.ui.createtimer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,8 +10,7 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.Error
-import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
@@ -28,22 +27,6 @@ class CreateTimerViewModel @Inject constructor(
 
     private val _interval: MutableLiveData<Interval> = MutableLiveData(Interval())
     val interval: LiveData<Interval> get() = _interval
-
-    private fun clearInterval() {
-        _interval.value = Interval()
-    }
-
-    private fun getTotalTimeMilliseconds(): Int {
-        val curTimer = timer.value
-        val curIntervals = curTimer?.timer_intervals
-        var totalTimeMilliseconds = 0
-        curIntervals?.let {
-            for (interval in it) {
-                totalTimeMilliseconds += interval.interval_time_ms
-            }
-        }
-        return totalTimeMilliseconds
-    }
 
     fun clearTimer() {
         _timer.value = Timer()
@@ -86,6 +69,7 @@ class CreateTimerViewModel @Inject constructor(
             this.timer_title = title
             this.timer_total_time_ms = getTotalTimeMilliseconds()
             this.timer_created_date = DesignUtils.getCurrentDate()
+            this.timer_updated_date = DesignUtils.getCurrentDate()
         }
 
         viewModelScope.launch(Dispatchers.Main) {
@@ -157,5 +141,21 @@ class CreateTimerViewModel @Inject constructor(
         val curInterval = interval.value
         curInterval?.interval_icon_id = id ?: -1
         _interval.value = curInterval
+    }
+
+    private fun clearInterval() {
+        _interval.value = Interval()
+    }
+
+    private fun getTotalTimeMilliseconds(): Int {
+        val curTimer = timer.value
+        val curIntervals = curTimer?.timer_intervals
+        var totalTimeMilliseconds = 0
+        curIntervals?.let {
+            for (interval in it) {
+                totalTimeMilliseconds += interval.interval_time_ms
+            }
+        }
+        return totalTimeMilliseconds
     }
 }

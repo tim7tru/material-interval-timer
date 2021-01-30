@@ -1,17 +1,15 @@
-package com.timmytruong.materialintervaltimer.ui.createTimer.adapters
+package com.timmytruong.materialintervaltimer.ui.createtimer.adapters
 
 import android.content.Context
 import android.media.MediaPlayer
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.SoundItemBinding
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
-import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
-import dagger.hilt.android.scopes.ActivityScoped
+import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 

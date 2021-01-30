@@ -3,57 +3,69 @@ package com.timmytruong.materialintervaltimer.ui.home.fragments
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
-import com.timmytruong.materialintervaltimer.ui.MainActivity
-import com.timmytruong.materialintervaltimer.ui.home.HorizontalTimerItemAdapter
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
-import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
-import java.lang.Exception
+import com.timmytruong.materialintervaltimer.di.Favourites
+import com.timmytruong.materialintervaltimer.di.Recents
+import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.ui.home.Home
+import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
+import com.timmytruong.materialintervaltimer.ui.home.adapters.HorizontalTimerItemAdapter
+import com.timmytruong.materialintervaltimer.utils.events.Event
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class HomeFragment : BaseFragment(), OnClickListeners.HomeFrag {
+@AndroidEntryPoint
+class HomeFragment : BaseFragment(), Home.Main {
+
+    @Inject @Recents
+    lateinit var recentsAdapter: HorizontalTimerItemAdapter
+
+    @Inject @Favourites
+    lateinit var favouritesAdapter: HorizontalTimerItemAdapter
+
+    @Inject
+    lateinit var homeViewModel: HomeViewModel
 
     private lateinit var binding: FragmentHomeBinding
 
-    private lateinit var recentsAdapter: HorizontalTimerItemAdapter
+    private val favouriteTimersObserver = Observer<List<Timer>> {
+        binding.isFavouritesEmpty = it.isEmpty()
+        favouritesAdapter.addNewList(newTimers = it)
+    }
 
-    private lateinit var favouritesAdapter: HorizontalTimerItemAdapter
+    private val recentTimersObserver = Observer<List<Timer>> {
+        binding.isRecentsEmpty = it.isEmpty()
+        recentsAdapter.addNewList(newTimers = it)
+    }
 
     override val baseViewModel: BaseViewModel
-        get() = TODO("Not yet implemented")
+        get() = homeViewModel
 
     override val eventObserver: Observer<Event<Any>>
-        get() = TODO("Not yet implemented")
-
-    override fun bindView() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.app_bar, menu)
-        menu.findItem(R.id.createTimerFragment).isVisible = true
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.createTimerFragment -> {
-                val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
-                Navigation.findNavController(binding.root).navigate(action)
+        get() = Observer { event ->
+            event?.getContentIfNotHandled()?.let {
+                when (it) {
+                    is Timer -> handleTimerEvent(timer = it)
+                    else -> { /** Do Nothing **/ }
+                }
             }
         }
-        return super.onOptionsItemSelected(item)
+
+    override fun bindView() {
+        binding.onClick = this
+        binding.fragmentHomeRecentFrag.horizontalRecycler.adapter = recentsAdapter
+        binding.fragmentHomeFavouritesFrag.horizontalRecycler.adapter = favouritesAdapter
+    }
+
+    override fun subscribeObservers() {
+        super.subscribeObservers()
+        homeViewModel.favouriteTimers.observe(viewLifecycleOwner, favouriteTimersObserver)
+        homeViewModel.recentTimers.observe(viewLifecycleOwner, recentTimersObserver)
     }
 
     override fun onCreateView(
@@ -67,19 +79,22 @@ class HomeFragment : BaseFragment(), OnClickListeners.HomeFrag {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupAdapters()
+        subscribeObservers()
+        bindView()
+        homeViewModel.getFavouriteTimers()
+        homeViewModel.getRecentTimers()
     }
 
-    private fun setupAdapters() {
-        recentsAdapter = HorizontalTimerItemAdapter(this)
-        binding.fragmentHomeRecentFrag.horizontalRecycler.adapter = recentsAdapter
-
-        favouritesAdapter = HorizontalTimerItemAdapter(this)
-        binding.fragmentHomeFavouritesFrag.horizontalRecycler.adapter = favouritesAdapter
+    private fun handleTimerEvent(timer: Timer) {
+        val action = HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet()
+        action.timerId = timer.id
+        action.isFavourited = timer.timer_saved
+        Navigation.findNavController(requireView()).navigate(action)
     }
 
-    override fun onTimerClicked(view: View) {
-        val bottomSheetFragment = TimerActionBottomSheet()
-        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
+    override fun onAddClicked(view: View) {
+        val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
+        action.clearViewModel = true
+        Navigation.findNavController(requireView()).navigate(action)
     }
 }

@@ -5,11 +5,11 @@
 
     <data>
         <variable
-            name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners.HomeFrag" />
-        <variable
             name="timer"
             type="com.timmytruong.materialintervaltimer.model.Timer" />
+        <variable
+            name="homeViewModel"
+            type="com.timmytruong.materialintervaltimer.ui.home.HomeViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
             android:layout_width="@dimen/card_width"
             android:layout_height="@dimen/card_height"
             android:layout_marginEnd="@dimen/margin_small_medium"
-            android:onClick="@{onClick::onTimerClicked}"
+            android:onClick="@{() -> homeViewModel.timerCardClicked(timer)}"
             app:cardCornerRadius="@dimen/card_radius"
             app:cardElevation="@dimen/card_elevation"
             app:strokeColor="@color/colorPrimaryDark"
@@ -142,7 +142,7 @@
                     android:id="@+id/timer_last_used_dynamic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{timer.timer_title}"
+                    android:text="@{timer.timer_updated_date}"
                     android:layout_marginEnd="@dimen/margin_small"
                     app:layout_constraintTop_toBottomOf="@id/timer_tasks_in_cycles_static"
                     app:layout_constraintEnd_toEndOf="parent"

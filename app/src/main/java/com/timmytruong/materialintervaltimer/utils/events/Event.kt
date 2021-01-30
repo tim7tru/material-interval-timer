@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.utils
+package com.timmytruong.materialintervaltimer.utils.events
 
 /**
  * This class is a wrapper that handles single shot events through LiveData observables
@@ -16,6 +16,4 @@ open class Event<out T>(private val content: T?) {
             content
         }
     }
-
-    fun peekContent(): T? = content
 }

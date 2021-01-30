@@ -35,14 +35,6 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/createTimerFragment"
-        android:icon="@drawable/ic_add_24px"
-        android:title="@string/newTimer"
-        android:visible="false"
-        android:contentDescription="@string/newTimer"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/start"
         android:icon="@drawable/ic_play"
         android:title="@string/newTimer"

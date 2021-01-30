@@ -3,8 +3,7 @@ package com.timmytruong.materialintervaltimer.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
+import com.timmytruong.materialintervaltimer.utils.events.Event
 
 abstract class BaseViewModel: ViewModel() {
     private val _event = MutableLiveData<Event<Any>>()

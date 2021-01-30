@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.hilt
+package com.timmytruong.materialintervaltimer.di
 
 import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDAO
 import com.timmytruong.materialintervaltimer.data.local.TimerLocalDataSource
