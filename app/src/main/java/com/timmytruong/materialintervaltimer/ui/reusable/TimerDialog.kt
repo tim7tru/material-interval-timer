@@ -2,6 +2,7 @@ package com.timmytruong.materialintervaltimer.ui.reusable
 
 import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,4 +43,10 @@ class TimerDialog @Inject constructor() {
             dialog.callback?.onNegativeDialogClicked(view = it)
         }
     }
+}
+
+interface DialogClicks {
+    fun onPositiveDialogClicked(view: View)
+
+    fun onNegativeDialogClicked(view: View)
 }

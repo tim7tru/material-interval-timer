@@ -8,7 +8,7 @@
 
         <variable
             name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimer.Time"/>
+            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks.Time"/>
 
         <variable
             name="interval"

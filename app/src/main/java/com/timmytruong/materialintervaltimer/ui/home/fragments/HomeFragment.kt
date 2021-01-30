@@ -12,7 +12,7 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.home.Home
+import com.timmytruong.materialintervaltimer.ui.home.HomeClicks
 import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
 import com.timmytruong.materialintervaltimer.ui.home.adapters.HorizontalTimerItemAdapter
 import com.timmytruong.materialintervaltimer.utils.events.Event
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment(), Home.Main {
+class HomeFragment : BaseFragment(), HomeClicks.Main {
 
     @Inject @Recents
     lateinit var recentsAdapter: HorizontalTimerItemAdapter

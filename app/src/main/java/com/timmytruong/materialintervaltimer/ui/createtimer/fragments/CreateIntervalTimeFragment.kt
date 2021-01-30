@@ -13,15 +13,14 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
 import com.timmytruong.materialintervaltimer.model.Interval
-import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimer
+import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateIntervalTimeFragment : BaseFragment(), CreateTimer.Time {
+class CreateIntervalTimeFragment : BaseFragment(), CreateTimerClicks.Time {
 
     @Inject
     lateinit var createTimerViewModel: CreateTimerViewModel

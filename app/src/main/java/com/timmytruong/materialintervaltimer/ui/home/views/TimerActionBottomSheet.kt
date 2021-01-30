@@ -5,26 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.Observer
-import androidx.navigation.NavArgs
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseObserver
-import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerActionBottomSheetBinding
-import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.home.Home
+import com.timmytruong.materialintervaltimer.ui.home.HomeClicks
 import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
 import com.timmytruong.materialintervaltimer.ui.home.fragments.HomeFragmentDirections
-import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TimerActionBottomSheet : BottomSheetDialogFragment(), Home.BottomSheet {
+class TimerActionBottomSheet : BottomSheetDialogFragment(), HomeClicks.BottomSheet {
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
