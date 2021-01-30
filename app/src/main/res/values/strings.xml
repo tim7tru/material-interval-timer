@@ -47,6 +47,7 @@
     <string name="noTasks">You currently have no intervals loaded.</string>
     <string name="recentTimers">Recent timers</string>
     <string name="favouriteTimers">Favourite timers</string>
+    <string name="noTimersText">You have no timers yet!</string>
 
     <string name="recents">Recents</string>
     <string name="about">About</string>

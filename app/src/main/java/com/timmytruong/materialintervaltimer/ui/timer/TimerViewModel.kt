@@ -9,7 +9,6 @@ import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.enums.TimerState
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.launch
@@ -20,8 +19,6 @@ class TimerViewModel @Inject constructor(
     private val timerLocalDataSource: TimerRepository
 ) : BaseViewModel() {
     private lateinit var timer: Timer
-
-    private lateinit var sound: IntervalSound
 
     private lateinit var currentInterval: Interval
 
@@ -39,6 +36,47 @@ class TimerViewModel @Inject constructor(
 
     private val _intervals: MutableLiveData<ArrayList<Interval>> = MutableLiveData()
     val intervals: LiveData<ArrayList<Interval>> get() = _intervals
+
+    fun fetchTimerFromRoom(id: Int) {
+        viewModelScope.launch {
+            timer =
+                if (this@TimerViewModel::timer.isInitialized) timer
+                else timerLocalDataSource.getTimerById(id = id)
+            shouldRepeat = timer.timer_repeat
+            resetTimer()
+        }
+    }
+
+    fun setTimerState(newState: TimerState) {
+        // If the new state is RUNNING, we start the timer built in the PAUSED or STOPPED state
+        // If the new state is PAUSED, we build a new countdown timer
+        // If the new state is STOPPED, we reset the timer
+        when (newState) {
+            TimerState.RUNNING -> {
+                currentState = newState
+                startTimer()
+            }
+            TimerState.PAUSED -> {
+                clearCountDownTimer()
+                countDownTimer = buildIntervalTimer(milliseconds = _timeRemaining.value ?: 0)
+                currentState = newState
+            }
+            TimerState.STOPPED -> {
+                resetTimer()
+            }
+        }
+    }
+
+    fun setShouldPlaySound(playSound: Boolean) {
+        shouldPlaySound = playSound
+    }
+
+    fun setShouldSave(save: Boolean) {
+        viewModelScope.launch {
+            val id = timer.id
+            timerLocalDataSource.setShouldSave(id = id, saved = save)
+        }
+    }
 
     private fun resetTimer() {
         clearCountDownTimer()
@@ -113,46 +151,4 @@ class TimerViewModel @Inject constructor(
                 onIntervalFinished()
             }
         }
-
-    fun fetchTimerFromRoom(id: Int) {
-        viewModelScope.launch {
-            timer =
-                if (this@TimerViewModel::timer.isInitialized) timer
-                else timerLocalDataSource.getTimerById(id = id)
-            sound = timer.timer_interval_sound
-            shouldRepeat = timer.timer_repeat
-            resetTimer()
-        }
-    }
-
-    fun setTimerState(newState: TimerState) {
-        // If the new state is RUNNING, we start the timer built in the PAUSED or STOPPED state
-        // If the new state is PAUSED, we build a new countdown timer
-        // If the new state is STOPPED, we reset the timer
-        when (newState) {
-            TimerState.RUNNING -> {
-                currentState = newState
-                startTimer()
-            }
-            TimerState.PAUSED -> {
-                clearCountDownTimer()
-                countDownTimer = buildIntervalTimer(milliseconds = _timeRemaining.value ?: 0)
-                currentState = newState
-            }
-            TimerState.STOPPED -> {
-                resetTimer()
-            }
-        }
-    }
-
-    fun setShouldPlaySound(playSound: Boolean) {
-        shouldPlaySound = playSound
-    }
-
-    fun setShouldSave(save: Boolean) {
-        viewModelScope.launch {
-            val id = timer.id
-            timerLocalDataSource.setShouldSave(id = id, save = save)
-        }
-    }
 }

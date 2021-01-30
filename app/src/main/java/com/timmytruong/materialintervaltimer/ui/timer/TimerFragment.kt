@@ -19,12 +19,12 @@ import com.timmytruong.materialintervaltimer.model.Dialog
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
+import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
 import com.timmytruong.materialintervaltimer.ui.reusable.TimerDialog
 import com.timmytruong.materialintervaltimer.ui.timer.adapters.TimerIntervalAdapter
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.events.Event
 import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import com.timmytruong.materialintervaltimer.utils.enums.TimerState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -156,7 +156,7 @@ class TimerFragment : OnClickListeners.TimerFrag, BaseFragment() {
         progressAnimation =
             ObjectAnimator.ofInt(
                 binding.fragmentTimerProgressCircle,
-                AppConstants.PROGRESS_BAR_PROPERTY,
+                PROGRESS_BAR_PROPERTY,
                 from,
                 to
             )

@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.hilt
+package com.timmytruong.materialintervaltimer.di
 
 import android.content.Context
 import androidx.room.Room
@@ -22,12 +22,4 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideTimerDao(db: TimerDatabase) = db.timerDAO()
-
-    @Singleton
-    @Provides
-    fun provideIntervalDao(db: TimerDatabase) = db.intervalDAO()
-
-    @Singleton
-    @Provides
-    fun provideIntervalSoundDao(db: TimerDatabase) = db.intervalSoundDAO()
 }

@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.createTimer.fragments
+package com.timmytruong.materialintervaltimer.ui.createtimer.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,13 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsBottomSheetBinding
-import com.timmytruong.materialintervaltimer.ui.createTimer.adapters.IntervalSoundsAdapter
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
-import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
-import dagger.hilt.android.scopes.ActivityScoped
+import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalSoundsAdapter
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 

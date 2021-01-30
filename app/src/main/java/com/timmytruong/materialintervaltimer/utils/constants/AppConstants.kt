@@ -16,9 +16,5 @@ object AppConstants {
         IntervalSound(R.raw.synth, "Synth", false),
     )
 
-    const val PROGRESS_BAR_PROPERTY = "progress"
-
-    const val PROGRESS_BAR_ANIMATION_DURATION_MS = 500L
-
     const val TIME_FORMAT = "%sh %sm %ss"
 }

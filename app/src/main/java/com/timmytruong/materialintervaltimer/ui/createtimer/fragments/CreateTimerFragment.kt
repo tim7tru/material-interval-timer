@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.createTimer.fragments
+package com.timmytruong.materialintervaltimer.ui.createtimer.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,18 +13,19 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.createTimer.CreateTimerViewModel
-import com.timmytruong.materialintervaltimer.ui.createTimer.adapters.IntervalItemAdapter
+import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimer
+import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
+import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalItemAdapter
+import com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet
 import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.Error
-import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
+import com.timmytruong.materialintervaltimer.utils.events.Error
+import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
+class CreateTimerFragment : BaseFragment(), CreateTimer.Main {
 
     @Inject
     lateinit var bottomSheetFragment: IntervalSoundsBottomSheet
@@ -117,7 +118,7 @@ class CreateTimerFragment : BaseFragment(), OnClickListeners.CreateTimerFrag {
     }
 
     override fun onStartTimerClicked(view: View) {
-        val title = binding.fragmentCreateTimerTitleTitle.text.toString()
+        val title = binding.fragmentCreateTimerTitleInput.text.toString()
         createTimerViewModel.validateTimer(title = title)
     }
 

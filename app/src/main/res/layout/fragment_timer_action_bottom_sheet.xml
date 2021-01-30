@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="isFavourited"
+            type="Boolean" />
+        <variable
+            name="onClick"
+            type="com.timmytruong.materialintervaltimer.ui.home.Home.BottomSheet" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/colorPrimary"
-        android:padding="@dimen/padding_medium"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textColor="@color/colorSecondaryDark"
             android:text="@string/startTimer"
+            android:onClick="@{onClick::onStartClicked}"
             app:icon="@drawable/ic_timer_24px"
             app:rippleColor="@color/colorSecondaryAccent"
             app:iconTint="@color/colorSecondaryDark" />
 
         <include layout="@layout/separator_line"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorSecondaryDark"
+            android:layout_height="match_parent"
+            android:textColor="@{isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
             android:text="@string/favorite"
+            android:onClick="@{onClick::onFavouriteClicked}"
             app:icon="@drawable/ic_grade_24px"
-            app:rippleColor="@color/colorSecondaryAccent"
-            app:iconTint="@color/colorSecondaryDark"/>
+            app:rippleColor="@{isFavourited ? @color/colorGoldenAccent : @color/colorSecondaryAccent}"
+            app:iconTint="@{isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
+            tools:iconTint="@color/colorGolden"
+            tools:textColor="@color/colorSecondaryDark"/>
 
         <include layout="@layout/separator_line"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textColor="@color/colorRed"
             android:text="@string/delete"
+            android:onClick="@{onClick::onDeleteClicked}"
             app:rippleColor="@color/colorRed"
             app:icon="@drawable/ic_delete_24px"
             app:iconTint="@color/colorRed"/>

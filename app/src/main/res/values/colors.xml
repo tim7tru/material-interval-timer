@@ -17,4 +17,5 @@
     <color name="colorGreen">#00AB66</color>
     <color name="colorRed">#CF142B</color>
     <color name="colorGolden">#FFB300</color>
+    <color name="colorGoldenAccent">#FFE099</color>
 </resources>

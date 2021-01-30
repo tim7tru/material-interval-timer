@@ -15,13 +15,14 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ActivityMainBinding
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
-import com.timmytruong.materialintervaltimer.ui.interfaces.ProgressBarInterface
-import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
+import com.timmytruong.materialintervaltimer.ui.reusable.BackButton
+import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_ANIMATION_DURATION_MS
+import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
+import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), ProgressBarInterface {
+class MainActivity : AppCompatActivity(), ProgressBar {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -73,18 +74,18 @@ class MainActivity : AppCompatActivity(), ProgressBarInterface {
         val animation =
             ObjectAnimator.ofInt(
                 binding.activityMainProgressBar,
-                AppConstants.PROGRESS_BAR_PROPERTY,
+                PROGRESS_BAR_PROPERTY,
                 binding.activityMainProgressBar.progress,
                 progress
             )
-        animation.duration = AppConstants.PROGRESS_BAR_ANIMATION_DURATION_MS
+        animation.duration = PROGRESS_BAR_ANIMATION_DURATION_MS
         animation.interpolator = DecelerateInterpolator()
         animation.start()
     }
 
     override fun onBackPressed() {
         try {
-            if ((getForegorundFragment() as? OnClickListeners.IOBackPressed)?.onBackPressed() == true) {
+            if ((getForegorundFragment() as? BackButton)?.onBackPressed() == true) {
                 super.onBackPressed()
             }
         } catch (e: Exception) {

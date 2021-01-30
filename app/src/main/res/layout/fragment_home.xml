@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <ScrollView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="onClick"
+            type="com.timmytruong.materialintervaltimer.ui.home.Home.Main" />
+
+        <variable
+            name="isRecentsEmpty"
+            type="Boolean" />
+
+        <variable
+            name="isFavouritesEmpty"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_sides"
             android:layout_marginEnd="@dimen/margin_sides"
             android:orientation="vertical">
@@ -16,9 +33,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
+                android:visibility="@{isFavouritesEmpty ? View.GONE : View.VISIBLE}"
                 android:orientation="vertical">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     style="@style/HeaderText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,10 +54,11 @@
                 android:id="@+id/fragmentHomeRecentContainer"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/margin_top"
+                android:visibility="@{isRecentsEmpty ? View.GONE : View.VISIBLE}"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     style="@style/HeaderText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,7 +72,29 @@
                     android:layout_marginTop="@dimen/margin_small" />
 
             </LinearLayout>
-
         </LinearLayout>
-    </ScrollView>
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/HeaderText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/noTimersText"
+            android:gravity="center"
+            android:visibility="@{isRecentsEmpty &amp;&amp; isFavouritesEmpty ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:onClick="@{onClick::onAddClicked}"
+            app:srcCompat="@drawable/ic_add_24px"
+            app:tint="@color/colorWhite"
+            app:backgroundTint="@color/colorSecondaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="TODO" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

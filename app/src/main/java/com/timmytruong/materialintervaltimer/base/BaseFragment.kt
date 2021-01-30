@@ -4,21 +4,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.MainActivity
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
-import com.timmytruong.materialintervaltimer.ui.interfaces.ProgressBarInterface
+import com.timmytruong.materialintervaltimer.ui.reusable.BackButton
+import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.events.Event
 
-abstract class BaseFragment : Fragment(), ProgressBarInterface, OnClickListeners.IOBackPressed {
-    abstract val baseViewModel: BaseViewModel
-
-    abstract val eventObserver: Observer<Event<Any>>
+abstract class BaseFragment : Fragment(), ProgressBar, BackButton, BaseObserver {
 
     abstract fun bindView()
 
-    protected open fun subscribeObservers() {
-        baseViewModel.event.observe(viewLifecycleOwner, eventObserver)
-    }
+    abstract override val eventObserver: Observer<Event<Any>>
 
     protected fun handleUnknownError() {
         DesignUtils.showSnackbarError(
@@ -29,6 +24,10 @@ abstract class BaseFragment : Fragment(), ProgressBarInterface, OnClickListeners
 
     override fun toggleProgressBarVisibility(show: Boolean) {
         (activity as? MainActivity)?.toggleProgressBarVisibility(show = false)
+    }
+
+    override fun subscribeObservers() {
+        baseViewModel.event.observe(viewLifecycleOwner, eventObserver)
     }
 
     override fun updateProgressBar(progress: Int) {

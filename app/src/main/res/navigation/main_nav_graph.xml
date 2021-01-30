@@ -60,8 +60,18 @@
 
     <dialog
         android:id="@+id/timerActionBottomSheet"
-        android:name="com.timmytruong.materialintervaltimer.ui.home.fragments.TimerActionBottomSheet"
+        android:name="com.timmytruong.materialintervaltimer.ui.home.views.TimerActionBottomSheet"
         android:label="TimerActionBottomSheet" >
+        <argument
+            android:name="timerId"
+            android:defaultValue="-1"
+            app:argType="integer"/>
+
+        <argument
+            android:name="isFavourited"
+            android:defaultValue="false"
+            app:argType="boolean"/>
+
         <action
             android:id="@+id/action_timerActionBottomSheet_to_timerFragment"
             app:destination="@id/timerFragment" />
@@ -71,7 +81,7 @@
         app:startDestination="@id/createTimerFragment">
         <fragment
             android:id="@+id/createIntervalTimeFragment"
-            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.CreateIntervalTimeFragment"
+            android:name="com.timmytruong.materialintervaltimer.ui.createtimer.fragments.CreateIntervalTimeFragment"
             android:label="@string/createInterval">
             <action
                 android:id="@+id/action_createIntervalTimeFragment_to_createTimerFragment"
@@ -87,7 +97,7 @@
         </fragment>
         <fragment
             android:id="@+id/createTimerFragment"
-            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.CreateTimerFragment"
+            android:name="com.timmytruong.materialintervaltimer.ui.createtimer.fragments.CreateTimerFragment"
             android:label="@string/newTimer">
             <action
                 android:id="@+id/action_createTimerFragment_to_createIntervalFragment"
@@ -114,7 +124,7 @@
         </fragment>
         <fragment
             android:id="@+id/createIntervalFragment"
-            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.CreateIntervalFragment"
+            android:name="com.timmytruong.materialintervaltimer.ui.createtimer.fragments.CreateIntervalFragment"
             android:label="@string/createInterval">
             <action
                 android:id="@+id/action_createIntervalFragment_to_createIntervalTimeFragment"
@@ -122,7 +132,7 @@
         </fragment>
         <dialog
             android:id="@+id/intervalSoundsBottomSheet"
-            android:name="com.timmytruong.materialintervaltimer.ui.createTimer.fragments.IntervalSoundsBottomSheet"
+            android:name="com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet"
             android:label="IntervalSoundsBottomSheet" />
     </navigation>
 </navigation>
