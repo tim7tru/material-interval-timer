@@ -9,7 +9,7 @@
             type="Boolean" />
         <variable
             name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.home.Home.BottomSheet" />
+            type="com.timmytruong.materialintervaltimer.ui.home.HomeClicks.BottomSheet" />
     </data>
 
     <LinearLayout

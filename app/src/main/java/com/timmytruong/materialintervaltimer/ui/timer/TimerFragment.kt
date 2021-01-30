@@ -18,19 +18,17 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.model.Dialog
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
 import com.timmytruong.materialintervaltimer.ui.reusable.TimerDialog
 import com.timmytruong.materialintervaltimer.ui.timer.adapters.TimerIntervalAdapter
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.events.Event
-import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.utils.enums.TimerState
+import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TimerFragment : OnClickListeners.TimerFrag, BaseFragment() {
+class TimerFragment : TimerClicks, BaseFragment() {
 
     @Inject
     lateinit var timerViewModel: TimerViewModel
@@ -75,7 +73,9 @@ class TimerFragment : OnClickListeners.TimerFrag, BaseFragment() {
                     is TimerState -> handleTimerStateEvent(timerState = it)
                     is IntervalSound -> handleSoundEvent(sound = it)
                     is Int -> handleTotalTimeEvent(totalTime = it)
-                    else -> { /** Do Nothing **/ }
+                    else -> {
+                        /** Do Nothing **/
+                    }
                 }
             }
         }
@@ -86,7 +86,8 @@ class TimerFragment : OnClickListeners.TimerFrag, BaseFragment() {
     private val timeRemainingObserver = Observer<Int> {
         currentIntervalTimeRemaining = it.toFloat()
         val time = DesignUtils.getTimeFromSeconds(currentIntervalTimeRemaining.toInt() / 1000)
-        binding.timeRemaining = DesignUtils.formatNormalizedTime(time, getString(R.string.timerTimeFormat))
+        binding.timeRemaining =
+            DesignUtils.formatNormalizedTime(time, getString(R.string.timerTimeFormat))
     }
 
     private val intervalsObserver = Observer<ArrayList<Interval>> {
@@ -109,11 +110,16 @@ class TimerFragment : OnClickListeners.TimerFrag, BaseFragment() {
             }
             TimerState.PAUSED -> {
                 cancelProgressAnimation()
-                binding.progress = ((currentIntervalTimeRemaining / currentIntervalTotalTime) * 1000).toInt()
+                binding.progress =
+                    ((currentIntervalTimeRemaining / currentIntervalTotalTime) * 1000).toInt()
             }
             TimerState.RUNNING -> {
                 cancelProgressAnimation()
-                updateProgressBar(from = binding.progress ?: 1000, to = 0, duration = currentIntervalTimeRemaining.toLong())
+                updateProgressBar(
+                    from = binding.progress ?: 1000,
+                    to = 0,
+                    duration = currentIntervalTimeRemaining.toLong()
+                )
             }
         }
 
@@ -243,5 +249,7 @@ class TimerFragment : OnClickListeners.TimerFrag, BaseFragment() {
         return false
     }
 
-    override fun onNegativeDialogClicked(view: View) { /** Do Nothing */ }
+    override fun onNegativeDialogClicked(view: View) {
+        /** Do Nothing */
+    }
 }

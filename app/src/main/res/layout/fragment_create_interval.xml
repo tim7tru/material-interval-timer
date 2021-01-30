@@ -10,7 +10,7 @@
 
         <variable
             name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimer.Interval" />
+            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks.Interval" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

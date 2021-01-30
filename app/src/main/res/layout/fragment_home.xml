@@ -7,7 +7,7 @@
 
         <variable
             name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.home.Home.Main" />
+            type="com.timmytruong.materialintervaltimer.ui.home.HomeClicks.Main" />
 
         <variable
             name="isRecentsEmpty"

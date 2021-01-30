@@ -2,7 +2,7 @@ package com.timmytruong.materialintervaltimer.ui.createtimer
 
 import android.view.View
 
-interface CreateTimer {
+interface CreateTimerClicks {
     interface Main {
         fun goToAddInterval(view: View)
 

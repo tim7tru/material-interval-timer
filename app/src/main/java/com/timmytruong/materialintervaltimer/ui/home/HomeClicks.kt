@@ -2,7 +2,7 @@ package com.timmytruong.materialintervaltimer.ui.home
 
 import android.view.View
 
-interface Home {
+interface HomeClicks {
     interface Main {
         fun onAddClicked(view: View)
     }

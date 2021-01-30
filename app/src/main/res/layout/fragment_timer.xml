@@ -25,7 +25,7 @@
 
         <variable
             name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners.TimerFrag" />
+            type="com.timmytruong.materialintervaltimer.ui.timer.TimerClicks" />
     </data>
 
     <LinearLayout

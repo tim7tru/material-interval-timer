@@ -13,11 +13,10 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimer
+import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet
-import com.timmytruong.materialintervaltimer.ui.interfaces.OnClickListeners
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.events.Event
@@ -25,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateTimerFragment : BaseFragment(), CreateTimer.Main {
+class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
 
     @Inject
     lateinit var bottomSheetFragment: IntervalSoundsBottomSheet
