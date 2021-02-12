@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@{soundTitle}"
-        android:textColor="@{isSelected ? @color/colorSecondaryAccent : @color/colorUnselected}"
-        app:backgroundTint="@color/colorPrimary"
+        android:textColor="@{isSelected ? @color/colorSecondaryAccent : @color/colorBlack}"
+        app:backgroundTint="@color/colorBackgroundLight"
         app:rippleColor="@color/colorSecondaryAccent"
         tools:text="fdnskf"
         tools:textColor="@color/colorGray"/>

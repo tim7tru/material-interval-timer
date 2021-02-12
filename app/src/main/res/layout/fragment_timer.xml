@@ -36,7 +36,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark">
+            android:background="@color/colorBackgroundDark">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/top_action_guideline"
@@ -87,7 +87,7 @@
                 app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/timer_circle"
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
@@ -102,7 +102,7 @@
                 app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                android:contentDescription="TODO" />
+                android:contentDescription="@string/timer_circle" />
 
             <ImageView
                 android:layout_width="0dp"
@@ -123,7 +123,7 @@
                 android:id="@+id/fragmentTimerProgressCircle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/material"
                 app:layout_constraintEnd_toEndOf="@id/timer_progress_right_guide"
                 app:layout_constraintStart_toStartOf="@id/timer_progress_left_guide"
                 app:layout_constraintTop_toTopOf="parent"
@@ -134,8 +134,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/quicksand_light"
                 android:text="@{timeRemaining}"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/text_timer"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/material_text_xxxxlarge"
                 app:layout_constraintBottom_toBottomOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
@@ -153,8 +153,8 @@
                 android:id="@+id/timer_play_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:contentDescription="TODO"
+                android:layout_marginTop="@dimen/material"
+                android:contentDescription="@string/play_pause"
                 android:onClick="@{onClick::onPlayPauseClicked}"
                 android:src="@{timerState == TimerState.RUNNING ? @drawable/ic_pause_24px : @drawable/ic_play}"
                 app:layout_constraintEnd_toStartOf="@id/timer_stop"
@@ -166,8 +166,8 @@
                 android:id="@+id/timer_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:contentDescription="TODO"
+                android:layout_marginTop="@dimen/material"
+                android:contentDescription="@string/stop"
                 android:src="@drawable/ic_stop_24px"
                 android:onClick="@{onClick::onStopClicked}"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -179,8 +179,8 @@
                 android:id="@+id/bottom_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="@dimen/margin_large"
-                android:background="@color/colorAccent"
+                android:layout_marginTop="@dimen/material_large"
+                android:background="@color/colorBackgroundLight"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/timer_stop">
@@ -190,7 +190,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:layout_margin="@dimen/margin_medium" />
+                    android:layout_margin="@dimen/material" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

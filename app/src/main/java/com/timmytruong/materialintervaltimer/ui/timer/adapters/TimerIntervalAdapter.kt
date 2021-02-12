@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.databinding.IntervalItemBinding
+import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
 import com.timmytruong.materialintervaltimer.model.Interval
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
@@ -27,16 +27,16 @@ class TimerIntervalAdapter @Inject constructor() :
 
     private var intervals: ArrayList<Interval> = arrayListOf()
 
-    private lateinit var binding: IntervalItemBinding
+    private lateinit var binding: ItemIntervalBinding
 
-    class TimerIntervalViewHolder(val view: IntervalItemBinding) :
+    class TimerIntervalViewHolder(val view: ItemIntervalBinding) :
         RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimerIntervalViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         currentTitle = parent.context.getString(R.string.currentIntervalTitle)
         upNextTitle = parent.context.getString(R.string.upNextIntervalTitle)
-        binding = DataBindingUtil.inflate(inflater, R.layout.interval_item, parent, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.item_interval, parent, false)
         return TimerIntervalViewHolder(view = binding)
     }
 

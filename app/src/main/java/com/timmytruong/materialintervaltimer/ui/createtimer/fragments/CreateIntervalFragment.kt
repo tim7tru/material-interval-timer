@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -56,7 +55,6 @@ class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
                 val view = grid.getChildAt(i)
                 setIconCheckedBackground(image = view as ImageView, checked = view.tag == tag)
             }
-
         }
     }
 
@@ -79,6 +77,11 @@ class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
         subscribeObservers()
         bindView()
         updateProgressBar(progress = 50)
+    }
+
+    override fun onBackPressed(): Boolean {
+        updateProgressBar(progress = 0)
+        return super.onBackPressed()
     }
 
     override fun bindView() {
@@ -125,16 +128,14 @@ class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
 
     private fun setIconCheckedBackground(image: ImageView, checked: Boolean) {
         when (checked) {
-            true -> image.backgroundTintList =
-                ContextCompat.getColorStateList(
-                    requireContext(),
-                    R.color.colorSecondaryAccent
-                )
-            false -> image.backgroundTintList =
-                ContextCompat.getColorStateList(
-                    requireContext(),
-                    R.color.colorPrimary
-                )
+            true -> {
+                image.backgroundTintList =
+                    DesignUtils.getColour(requireContext(), R.color.colorSecondaryAccent)
+            }
+            false -> {
+                image.backgroundTintList =
+                    DesignUtils.getColour(requireContext(), R.color.colorBackgroundLight)
+            }
         }
     }
 }

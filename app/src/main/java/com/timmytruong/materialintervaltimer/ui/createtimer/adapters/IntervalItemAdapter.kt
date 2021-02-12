@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.databinding.IntervalItemBinding
+import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
 import com.timmytruong.materialintervaltimer.model.Interval
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
@@ -15,13 +15,13 @@ class IntervalItemAdapter @Inject constructor(): RecyclerView.Adapter<IntervalIt
 
     private var intervals: ArrayList<Interval> = arrayListOf()
 
-    private lateinit var binding: IntervalItemBinding
+    private lateinit var binding: ItemIntervalBinding
 
-    class IntervalItemViewHolder(val view: IntervalItemBinding): RecyclerView.ViewHolder(view.root)
+    class IntervalItemViewHolder(val view: ItemIntervalBinding): RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntervalItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = DataBindingUtil.inflate(inflater, R.layout.interval_item, parent, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.item_interval, parent, false)
         return IntervalItemViewHolder(view = binding)
     }
 

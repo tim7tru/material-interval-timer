@@ -150,4 +150,7 @@ object DesignUtils {
             else -> 0
         }
     }
+
+    fun getColour(context: Context, colorRes: Int) =
+        ContextCompat.getColorStateList(context, colorRes)
 }
