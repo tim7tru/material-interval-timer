@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.timmytruong.materialintervaltimer.R
@@ -49,9 +51,9 @@ class TimerActionBottomSheet : BottomSheetDialogFragment(), HomeClicks.BottomShe
     }
 
     override fun onStartClicked(view: View) {
-        val action = HomeFragmentDirections.actionHomeFragmentToTimerFragment()
+        val action = TimerActionBottomSheetDirections.actionTimerActionBottomSheetToTimerFragment()
         action.timerId = timerId
-        Navigation.findNavController(view).navigate(action)
+        findNavController().navigate(action)
         dismiss()
     }
 

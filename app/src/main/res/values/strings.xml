@@ -70,8 +70,15 @@
     <string name="timerTimeFormat">%s:%s:%s</string>
     <string name="timeFormat">%sh %sm %ss</string>
     <string name="createInterval">Create interval</string>
+    <string name="number_of_intervals_format">%s intervals</string>
     <string name="repeat">Repeat</string>
     <string name="saveTimer">Save timer</string>
+    <string name="backspace">Backspace</string>
+    <string name="play_pause">Play Pause</string>
+    <string name="stop">Stop</string>
+    <string name="timer_circle">Timer Circle</string>
+    <string name="timer_click">Timer Click</string>
+    <string name="drag">Drag interval</string>
 
     <string name="fitnessTag">Fitness</string>
     <string name="personTag">Person</string>

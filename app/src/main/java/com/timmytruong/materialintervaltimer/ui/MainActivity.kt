@@ -8,6 +8,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,10 +27,16 @@ class MainActivity : AppCompatActivity(), ProgressBar {
 
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment
+
+        navController = navHostFragment.navController
 
         setSupportActionBar(binding.activityMainNavToolBar)
 
@@ -41,28 +48,20 @@ class MainActivity : AppCompatActivity(), ProgressBar {
     }
 
     private fun setupNavDrawer() {
-        val navHostFrag =
-            supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment
-        val controller = navHostFrag.navController
-        binding.activityMainNavDrawer.setupWithNavController(controller)
+        binding.activityMainNavDrawer.setupWithNavController(navController)
     }
 
     private fun setupAppBar() {
-        val navHostFrag =
-            supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment
-        val controller = navHostFrag.navController
-        val appBarConfig = AppBarConfiguration(controller.graph, binding.activityMainDrawerLayout)
-        binding.activityMainNavToolBar.setupWithNavController(controller, appBarConfig)
+        val appBarConfig = AppBarConfiguration(navController.graph, binding.activityMainDrawerLayout)
+        binding.activityMainNavToolBar.setupWithNavController(navController, appBarConfig)
     }
 
     private fun getForegorundFragment(): Fragment? {
         val frag = supportFragmentManager.findFragmentById(binding.activityMainNavHostFragment.id)
         return if (frag == null) null else frag.childFragmentManager.fragments[0]
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = findNavController(R.id.activityMainNavHostFragment)
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 

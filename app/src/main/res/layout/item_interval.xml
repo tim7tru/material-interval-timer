@@ -20,12 +20,11 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
+            style="@style/HeaderText"
             android:id="@+id/itemIntervalTextTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorSecondaryDark"
-            android:fontFamily="@font/quicksand_bold"
-            android:textSize="@dimen/card_text_header"
             android:text="@{title}"
             android:visibility="@{titleVisible ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,14 +32,11 @@
             tools:text="Current interval" />
 
         <com.google.android.material.card.MaterialCardView
+            style="@style/TimerCard"
             android:id="@+id/intervalCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            app:cardBackgroundColor="@color/colorPrimary"
-            app:cardCornerRadius="@dimen/cardCornerRadius"
-            app:strokeColor="@color/colorPrimaryDark"
-            app:strokeWidth="@dimen/one"
+            android:layout_marginTop="@dimen/material_small"
             app:layout_constraintTop_toBottomOf="@id/itemIntervalTextTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,46 +44,42 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/intervalIcon"
-                    android:layout_width="@dimen/intervalIconDimension"
-                    android:layout_height="@dimen/intervalIconDimension"
-                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_width="@dimen/material_touch"
+                    android:layout_height="@dimen/material_touch"
+                    android:layout_marginStart="@dimen/material"
+                    android:layout_marginTop="@dimen/material_small"
+                    android:layout_marginBottom="@dimen/material_small"
                     android:visibility="@{Integer.valueOf(interval.interval_icon_id) == 0 ? View.GONE : View.VISIBLE}"
                     app:imageResource="@{Integer.valueOf(interval.interval_icon_id) != 0 ? Integer.valueOf(interval.interval_icon_id) : 0}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:contentDescription="@string/intervalIconDesc"
-                    app:tint="@color/colorSecondaryDark" />
+                    app:tint="@color/colorWhite" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/TimerCardTitle"
                     android:id="@+id/intervalTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorGray"
-                    android:fontFamily="@font/quicksand_bold"
-                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/material"
                     android:text="@{interval.interval_name}"
-                    android:textSize="@dimen/intervalCardTitleFont"
                     app:layout_constraintStart_toEndOf="@id/intervalIcon"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/intervalTime"
                     tools:text="Title - 20 Character" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/TimerCardTitle"
                     android:id="@+id/intervalTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorGray"
-                    android:fontFamily="@font/quicksand_bold"
-                    android:textSize="@dimen/intervalCardTitleFont"
                     android:text="@{interval.interval_time_format}"
-                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/material"
                     app:layout_constraintStart_toEndOf="@id/intervalIcon"
                     app:layout_constraintTop_toBottomOf="@id/intervalTitle"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -95,17 +87,16 @@
 
                 <ImageView
                     android:id="@+id/intervalDragIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:layout_marginBottom="@dimen/margin_medium"
-                    android:layout_marginEnd="@dimen/margin_medium"
+                    android:layout_width="@dimen/material_touch_small"
+                    android:layout_height="@dimen/material_touch_small"
+                    android:layout_marginStart="@dimen/material"
+                    android:layout_marginEnd="@dimen/material"
                     android:src="@drawable/ic_drag_indicator_24px"
-                    android:contentDescription="TODO"
+                    android:contentDescription="@string/drag"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:tint="@color/colorSecondaryDark" />
+                    app:tint="@color/colorWhite" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

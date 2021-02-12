@@ -28,15 +28,12 @@
                     style="@style/AppBarStyle"/>
             </com.google.android.material.appbar.AppBarLayout>
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                style="@style/HorizontalProgressBar"
                 android:id="@+id/activityMainProgressBar"
-                style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:progress="0"
-                android:progressBackgroundTint="@color/colorPrimary"
-                android:progressTint="@color/colorSecondaryAccent"
-                android:visibility="gone"
+                android:layout_height="wrap_content"
+                tools:visibility="visible"
                 tools:progress="50"/>
 
             <androidx.fragment.app.FragmentContainerView
@@ -44,7 +41,7 @@
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorBackgroundDark"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/main_nav_graph"
                 tools:layout="@layout/fragment_timer"/>
@@ -58,7 +55,7 @@
             app:menu="@menu/main_drawer"
             app:itemIconTint="@drawable/navigation_drawer_item_color"
             app:itemTextColor="@drawable/navigation_drawer_item_color"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorBackgroundLight"
             android:fitsSystemWindows="true"/>
 
     </androidx.drawerlayout.widget.DrawerLayout>

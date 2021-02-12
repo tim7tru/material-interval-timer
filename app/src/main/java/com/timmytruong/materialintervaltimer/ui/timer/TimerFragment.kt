@@ -15,11 +15,9 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
-import com.timmytruong.materialintervaltimer.model.Dialog
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
-import com.timmytruong.materialintervaltimer.ui.reusable.TimerDialog
 import com.timmytruong.materialintervaltimer.ui.timer.adapters.TimerIntervalAdapter
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.enums.TimerState
@@ -35,9 +33,6 @@ class TimerFragment : TimerClicks, BaseFragment() {
 
     @Inject
     lateinit var intervalItemAdapter: TimerIntervalAdapter
-
-    @Inject
-    lateinit var timerDialog: TimerDialog
 
     private lateinit var menu: Menu
 
@@ -225,23 +220,23 @@ class TimerFragment : TimerClicks, BaseFragment() {
     }
 
     override fun showCloseDialog(view: View) {
-        timerDialog.build(
-            act = requireActivity(),
-            dialog = Dialog(
-                title = getString(R.string.dialogCloseTimerTitle),
-                message = getString(R.string.dialogCloseTimerMessage),
-                negativeMessage = getString(R.string.cancel),
-                positiveMessage = getString(R.string.exit),
-                callback = this
-            )
-        )
-        timerDialog.show()
+//        timerDialog.build(
+//            act = requireActivity(),
+//            dialog = Dialog(
+//                title = getString(R.string.dialogCloseTimerTitle),
+//                message = getString(R.string.dialogCloseTimerMessage),
+//                negativeMessage = getString(R.string.cancel),
+//                positiveMessage = getString(R.string.exit),
+//                callback = this
+//            )
+//        )
+//        timerDialog.show()
     }
 
-    override fun onPositiveDialogClicked(view: View) {
-        timerViewModel.setTimerState(TimerState.STOPPED)
-        goToHome()
-    }
+//    override fun onPositiveDialogClicked(view: View) {
+//        timerViewModel.setTimerState(TimerState.STOPPED)
+//        goToHome()
+//    }
 
     override fun onBackPressed(): Boolean {
         timerViewModel.setTimerState(newState = TimerState.PAUSED)
@@ -249,7 +244,7 @@ class TimerFragment : TimerClicks, BaseFragment() {
         return false
     }
 
-    override fun onNegativeDialogClicked(view: View) {
-        /** Do Nothing */
-    }
+//    override fun onNegativeDialogClicked(view: View) {
+//        /** Do Nothing */
+//    }
 }

@@ -16,15 +16,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorBackgroundDark">
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/HeaderText"
             android:id="@+id/fragmentCreateIntervalTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_sides"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginTop="@dimen/material"
             android:text="@string/intervalTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,9 +34,9 @@
             android:id="@+id/fragmentCreateIntervalTitleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_sides"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_sides"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginTop="@dimen/material"
+            android:layout_marginEnd="@dimen/material"
             android:hint="@string/nameThisInterval"
             app:counterEnabled="true"
             app:counterMaxLength="20"
@@ -56,8 +56,8 @@
             android:id="@+id/fragmentCreateIntervalIconTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_sides"
-            android:layout_marginTop="@dimen/margin_top"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginTop="@dimen/material_large"
             android:text="@string/intervalIcon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTitleLayout" />
@@ -66,14 +66,14 @@
             android:id="@+id/fragmentCreateIntervalIconSwitchContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_sides"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_sides"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginTop="@dimen/material"
+            android:layout_marginEnd="@dimen/material"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconTitle">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/SelectableItemBackground"
+                style="@style/TimerOptionsText"
                 android:id="@+id/fragmentCreateIntervalSwitchContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,9 +104,9 @@
             android:id="@+id/fragmentCreateIntervalIconGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_sides"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_sides"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginTop="@dimen/material"
+            android:layout_marginEnd="@dimen/material"
             android:columnCount="4"
             android:rowCount="1"
             android:useDefaultMargins="true"
@@ -116,36 +116,27 @@
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconSwitchContainer">
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
-                android:background="@drawable/rounded_background"
                 android:src="@drawable/ic_fitness_center"
                 android:contentDescription="@string/fitnessTag"
                 android:tag="@string/fitnessTag"/>
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:background="@drawable/rounded_background"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_accessibility_24px"
                 android:contentDescription="@string/personTag"
                 android:tag="@string/personTag"/>
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:background="@drawable/rounded_background"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_speed_24px"
                 android:contentDescription="@string/speedTag"
@@ -153,12 +144,9 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:background="@drawable/rounded_background"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_local_cafe_24px"
                 android:contentDescription="@string/cafeTag"
@@ -166,38 +154,29 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_android_24px"
-                android:background="@drawable/rounded_background"
                 android:contentDescription="@string/androidTag"
                 android:tag="@string/androidTag"
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
-                android:background="@drawable/rounded_background"
                 android:src="@drawable/ic_audiotrack_24px"
                 android:contentDescription="@string/musicTag"
                 android:tag="@string/musicTag"
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_background"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_language_24px"
                 android:contentDescription="@string/worldTag"
@@ -205,12 +184,9 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:background="@drawable/rounded_background"
-                android:layout_gravity="center"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_email_24px"
                 android:contentDescription="@string/emailTag"
@@ -218,12 +194,9 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_background"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_eco_24px"
                 android:contentDescription="@string/ecoTag"
@@ -231,12 +204,9 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_background"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_call_24px"
                 android:contentDescription="@string/phoneTag"
@@ -244,12 +214,9 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_background"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_play"
                 android:contentDescription="@string/playTag"
@@ -257,12 +224,9 @@
                 app:tint="@color/colorSecondaryDark" />
 
             <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="@dimen/iconDimension"
-                android:layout_height="@dimen/iconDimension"
-                android:layout_columnWeight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_background"
+                style="@style/TimerIcon"
+                android:layout_width="@dimen/material_touch"
+                android:layout_height="@dimen/material_touch"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_pause_24px"
                 android:contentDescription="@string/pauseTag"
@@ -274,7 +238,7 @@
             style="@style/ContinueFlowButton"
             android:id="@+id/fragmentCreateIntervalContinueButton"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/continueFlowButtonHeight"
+            android:layout_height="wrap_content"
             android:onClick="@{onClick::onContinueClicked}"
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent" />

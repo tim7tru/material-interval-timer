@@ -20,19 +20,20 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorBackgroundDark">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_sides"
-            android:layout_marginEnd="@dimen/margin_sides"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginEnd="@dimen/material"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/material_large"
                 android:visibility="@{isFavouritesEmpty ? View.GONE : View.VISIBLE}"
                 android:orientation="vertical">
 
@@ -46,14 +47,13 @@
                     layout="@layout/horizontal_recycler"
                     android:id="@+id/fragmentHomeFavouritesFrag"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/fragmentHomeRecentContainer"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/margin_top"
+                android:layout_marginTop="@dimen/material_large"
                 android:visibility="@{isRecentsEmpty ? View.GONE : View.VISIBLE}"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -68,8 +68,7 @@
                     layout="@layout/horizontal_recycler"
                     android:id="@+id/fragmentHomeRecentFrag"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small" />
+                    android:layout_height="wrap_content"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -85,16 +84,14 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/TimerFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_medium"
-            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_margin="@dimen/material"
             android:onClick="@{onClick::onAddClicked}"
             app:srcCompat="@drawable/ic_add_24px"
-            app:tint="@color/colorWhite"
-            app:backgroundTint="@color/colorSecondaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="TODO" />
+            android:contentDescription="@string/add" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

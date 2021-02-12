@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.databinding.SoundItemBinding
-import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
+import com.timmytruong.materialintervaltimer.databinding.ItemSoundBinding
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
+import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class IntervalSoundsAdapter @Inject constructor(
     private val createTimerViewModel: CreateTimerViewModel
 ) : RecyclerView.Adapter<IntervalSoundsAdapter.IntervalSoundsViewHolder>() {
 
-    private lateinit var binding: SoundItemBinding
+    private lateinit var binding: ItemSoundBinding
 
     private var previousPosition: Int = 0
 
@@ -26,11 +26,11 @@ class IntervalSoundsAdapter @Inject constructor(
 
     private lateinit var parentContext: Context
 
-    class IntervalSoundsViewHolder(val view: SoundItemBinding) : RecyclerView.ViewHolder(view.root)
+    class IntervalSoundsViewHolder(val view: ItemSoundBinding) : RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntervalSoundsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = DataBindingUtil.inflate(inflater, R.layout.sound_item, parent, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.item_sound, parent, false)
         parentContext = parent.context
         return IntervalSoundsViewHolder(view = binding)
     }
