@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalConverter
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalSoundConverter
-import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.utils.constants.RoomConstants
 
 @Entity(tableName = RoomConstants.TIMER_TABLE_NAME)
@@ -38,7 +37,7 @@ data class Timer(
 
     @ColumnInfo
     @TypeConverters(IntervalSoundConverter::class)
-    var timer_interval_sound: IntervalSound = AppConstants.SOUNDS[0]
+    var timer_interval_sound: IntervalSound = IntervalSound(-1, "None", true)
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

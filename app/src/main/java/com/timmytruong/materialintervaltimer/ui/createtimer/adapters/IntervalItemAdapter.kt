@@ -1,40 +1,21 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer.adapters
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.base.BaseListAdapter
 import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
 import com.timmytruong.materialintervaltimer.model.Interval
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
 @ActivityScoped
-class IntervalItemAdapter @Inject constructor(): RecyclerView.Adapter<IntervalItemAdapter.IntervalItemViewHolder>() {
+class IntervalItemAdapter @Inject constructor():
+    BaseListAdapter<ItemIntervalBinding, Interval>() {
 
-    private var intervals: ArrayList<Interval> = arrayListOf()
+    override val bindingLayout: Int
+        get() = R.layout.item_interval
 
-    private lateinit var binding: ItemIntervalBinding
-
-    class IntervalItemViewHolder(val view: ItemIntervalBinding): RecyclerView.ViewHolder(view.root)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntervalItemViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        binding = DataBindingUtil.inflate(inflater, R.layout.item_interval, parent, false)
-        return IntervalItemViewHolder(view = binding)
-    }
-
-    override fun onBindViewHolder(holder: IntervalItemViewHolder, position: Int) {
-        holder.view.interval = intervals[position]
+    override fun onBindViewHolder(holder: BaseViewHolder<ItemIntervalBinding>, position: Int) {
+        holder.view.interval = list[position]
         holder.view.titleVisible = false
-    }
-
-    override fun getItemCount(): Int = intervals.size
-
-    fun newList(list: ArrayList<Interval>) {
-        intervals.clear()
-        intervals.addAll(list)
-        notifyDataSetChanged()
     }
 }

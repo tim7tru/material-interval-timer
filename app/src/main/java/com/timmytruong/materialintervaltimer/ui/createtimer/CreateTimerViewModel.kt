@@ -1,17 +1,19 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
+import com.timmytruong.materialintervaltimer.utils.events.Error
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @ActivityRetainedScoped
 class CreateTimerViewModel @Inject constructor(
-    private val timerLocalDataSource: TimerRepository
+    private val timerLocalDataSource: TimerRepository,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel() {
 
     private val _timer: MutableLiveData<Timer> = MutableLiveData(Timer())
@@ -119,8 +122,12 @@ class CreateTimerViewModel @Inject constructor(
         val curTimeFormat = curInterval?.interval_time_format
 
         curInterval?.apply {
-            this.interval_time_ms = DesignUtils.getSecondsFromTime(time = curTimeFormat ?: "") * 1000
-            this.interval_time_format = DesignUtils.formatNormalizedTime(time = curTimeFormat ?: "", format = AppConstants.TIME_FORMAT)
+            this.interval_time_ms =
+                DesignUtils.getSecondsFromTime(time = curTimeFormat ?: "") * 1000
+            this.interval_time_format = DesignUtils.formatNormalizedTime(
+                time = curTimeFormat ?: "",
+                format = context.getString(R.string.timeFormat)
+            )
         }
 
         curInterval?.let {

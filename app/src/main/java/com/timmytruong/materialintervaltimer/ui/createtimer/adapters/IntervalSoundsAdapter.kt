@@ -1,54 +1,39 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer.adapters
 
-import android.content.Context
 import android.media.MediaPlayer
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.base.BaseListAdapter
 import com.timmytruong.materialintervaltimer.databinding.ItemSoundBinding
+import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
-import com.timmytruong.materialintervaltimer.utils.constants.AppConstants
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @FragmentScoped
 class IntervalSoundsAdapter @Inject constructor(
-    private val createTimerViewModel: CreateTimerViewModel
-) : RecyclerView.Adapter<IntervalSoundsAdapter.IntervalSoundsViewHolder>() {
+    private val createTimerViewModel: CreateTimerViewModel,
+    sounds: List<IntervalSound>
+) : BaseListAdapter<ItemSoundBinding, IntervalSound>() {
 
-    private lateinit var binding: ItemSoundBinding
+    init {
+        addList(sounds)
+    }
 
     private var previousPosition: Int = 0
 
-    private val sounds = AppConstants.SOUNDS
+    override val bindingLayout: Int
+        get() = R.layout.item_sound
 
-    private lateinit var parentContext: Context
-
-    class IntervalSoundsViewHolder(val view: ItemSoundBinding) : RecyclerView.ViewHolder(view.root)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntervalSoundsViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        binding = DataBindingUtil.inflate(inflater, R.layout.item_sound, parent, false)
-        parentContext = parent.context
-        return IntervalSoundsViewHolder(view = binding)
-    }
-
-    override fun onBindViewHolder(holder: IntervalSoundsViewHolder, position: Int) {
-        holder.view.soundTitle = sounds[position].sound_name
-
-        holder.view.isSelected = sounds[position].sound_is_selected
-
+    override fun onBindViewHolder(holder: BaseViewHolder<ItemSoundBinding>, position: Int) {
+        holder.view.soundTitle = list[position].sound_name
+        holder.view.isSelected = list[position].sound_is_selected
         holder.view.root.setOnClickListener { onSoundClicked(position = position) }
     }
 
-    override fun getItemCount(): Int = sounds.size
-
     private fun onSoundClicked(position: Int) {
-        sounds[previousPosition].sound_is_selected = false
-        sounds[position].sound_is_selected = true
-        createTimerViewModel.setSelectedSound(sounds[position])
+        list[previousPosition].sound_is_selected = false
+        list[position].sound_is_selected = true
+        createTimerViewModel.setSelectedSound(list[position])
         notifyItemChanged(previousPosition)
         notifyItemChanged(position)
         previousPosition = position
@@ -56,9 +41,9 @@ class IntervalSoundsAdapter @Inject constructor(
     }
 
     private fun playSound(position: Int) {
-        val id = sounds[position].sound_id
+        val id = list[position].sound_id
         if (id != -1) {
-            id.let { MediaPlayer.create(parentContext, it).start() }
+            id.let { MediaPlayer.create(context, it).start() }
         }
     }
 }

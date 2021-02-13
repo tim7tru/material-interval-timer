@@ -35,7 +35,7 @@ class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
             event?.getContentIfNotHandled()?.let {
                 when (it) {
                     is Error.InputError -> handleInputError()
-                    Error.UnknownError -> handleUnknownError()
+                    is Error.UnknownError -> handleUnknownError()
                     is Boolean -> handleCompletionEvent(completed = it)
                 }
             }

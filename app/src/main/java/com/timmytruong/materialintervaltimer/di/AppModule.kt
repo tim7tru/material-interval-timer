@@ -1,10 +1,20 @@
-package com.timmytruong.materialintervaltimer.utils.constants
+package com.timmytruong.materialintervaltimer.di
 
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.model.IntervalSound
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import javax.inject.Singleton
 
-object AppConstants {
-    val SOUNDS = arrayListOf(
+@InstallIn(ApplicationComponent::class)
+@Module
+object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideSounds(): List<IntervalSound> = listOf(
         IntervalSound(-1, "None", true),
         IntervalSound(R.raw.beep, "Beep", false),
         IntervalSound(R.raw.another_beep, "Another beep", false),
@@ -15,6 +25,4 @@ object AppConstants {
         IntervalSound(R.raw.robot, "Robot", false),
         IntervalSound(R.raw.synth, "Synth", false),
     )
-
-    const val TIME_FORMAT = "%sh %sm %ss"
 }

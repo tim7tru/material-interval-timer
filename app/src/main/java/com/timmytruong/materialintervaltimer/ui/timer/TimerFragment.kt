@@ -86,7 +86,7 @@ class TimerFragment : TimerClicks, BaseFragment() {
     }
 
     private val intervalsObserver = Observer<ArrayList<Interval>> {
-        intervalItemAdapter.newList(it)
+        intervalItemAdapter.addList(it)
     }
 
     private fun cancelProgressAnimation() {

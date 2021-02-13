@@ -64,7 +64,7 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
             }
 
             it.timer_intervals.let {
-                intervalAdapter.newList(list = it)
+                intervalAdapter.addList(it)
             }
 
             dismissBottomSheet()

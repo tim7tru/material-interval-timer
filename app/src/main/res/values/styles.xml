@@ -144,27 +144,33 @@
     </style>
 
     <style name="TimerCardTitle">
+        <item name="android:textSize">@dimen/material_text_large</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+        <item name="fontFamily">@font/quicksand_bold</item>
+    </style>
+
+    <style name="IntervalCardTitle">
         <item name="android:textSize">@dimen/material_text_medium</item>
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorGray</item>
         <item name="fontFamily">@font/quicksand_bold</item>
     </style>
 
     <style name="TimerCardSubtitle">
         <item name="android:textSize">@dimen/material_text</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">@color/colorGray</item>
         <item name="fontFamily">@font/quicksand_bold</item>
     </style>
 
     <style name="TimerCardDescription">
         <item name="android:textSize">@dimen/material_text</item>
-        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColor">@color/colorGray</item>
         <item name="fontFamily">@font/quicksand_light</item>
     </style>
 
     <style name="TimerCard" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@color/colorSecondaryDark</item>
+        <item name="cardBackgroundColor">@color/colorWhite</item>
         <item name="cornerRadius">@dimen/material_small</item>
-        <item name="elevation">@dimen/material_xsmall</item>
+        <item name="elevation">@dimen/material</item>
         <item name="android:clickable">true</item>
         <item name="android:theme">@style/SelectableItemTheme</item>
         <item name="android:background">?attr/selectableItemBackground</item>

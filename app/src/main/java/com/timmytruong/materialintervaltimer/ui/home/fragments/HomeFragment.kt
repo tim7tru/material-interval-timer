@@ -35,12 +35,12 @@ class HomeFragment : BaseFragment(), HomeClicks.Main {
 
     private val favouriteTimersObserver = Observer<List<Timer>> {
         binding.isFavouritesEmpty = it.isEmpty()
-        favouritesAdapter.addNewList(newTimers = it)
+        favouritesAdapter.addList(it)
     }
 
     private val recentTimersObserver = Observer<List<Timer>> {
         binding.isRecentsEmpty = it.isEmpty()
-        recentsAdapter.addNewList(newTimers = it)
+        recentsAdapter.addList(it)
     }
 
     override val baseViewModel: BaseViewModel

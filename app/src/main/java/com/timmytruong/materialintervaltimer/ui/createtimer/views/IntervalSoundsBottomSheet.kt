@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsBottomSheetBinding
+import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalSoundsAdapter
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
@@ -16,6 +17,9 @@ import javax.inject.Inject
 class IntervalSoundsBottomSheet @Inject constructor(
     private val intervalSoundsAdapter: IntervalSoundsAdapter
 ) : BottomSheetDialogFragment() {
+
+    @Inject
+    lateinit var sounds: List<IntervalSound>
 
     private lateinit var binding: FragmentIntervalSoundsBottomSheetBinding
 
@@ -34,6 +38,7 @@ class IntervalSoundsBottomSheet @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        intervalSoundsAdapter.addList(sounds)
         binding.fragmentIntervalsSoundsBottomSheetRecycler.adapter = intervalSoundsAdapter
     }
 }
