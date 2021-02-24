@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.favourites
+package com.timmytruong.materialintervaltimer.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,15 +7,23 @@ import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.events.Error
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal const val EMPTY_LIST_ERROR = "empty"
 
-class FavouritesViewModel @Inject constructor(
+@ActivityRetainedScoped
+class TimerListViewModel @Inject constructor(
     private val timerRepository: TimerRepository
 ): BaseViewModel() {
+
+    private var currentTimer: Timer = Timer()
+        set(value) = setEvent(value)
+
+    private val _recents = MutableLiveData<List<Timer>>()
+    val recents: LiveData<List<Timer>> get() = _recents
 
     private val _favourites = MutableLiveData<List<Timer>>()
     val favourites: LiveData<List<Timer>> get() = _favourites
@@ -24,7 +32,13 @@ class FavouritesViewModel @Inject constructor(
         timerRepository.getFavouriteTimers().collectLatest(_favourites::setValue)
     }
 
+    fun fetchRecents() = viewModelScope.launch {
+        timerRepository.getRecentTimers().collectLatest(_recents::setValue)
+    }
+
     fun onEmptyList() = setEvent(Error.QualifierError(EMPTY_LIST_ERROR))
 
-    fun onTimerClicked(id: Int) {}
+    fun onTimerClicked(timer: Timer) {
+        currentTimer = timer
+    }
 }

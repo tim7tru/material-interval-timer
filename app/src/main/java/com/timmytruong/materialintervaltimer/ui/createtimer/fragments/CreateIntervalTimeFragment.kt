@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
@@ -20,10 +21,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateIntervalTimeFragment : BaseFragment(), CreateTimerClicks.Time {
+class CreateIntervalTimeFragment : BaseFragment<FragmentCreateIntervalTimeBinding>(),
+    CreateTimerClicks.Time {
 
     @Inject
     lateinit var createTimerViewModel: CreateTimerViewModel
+
+    override val layoutId: Int
+        get() = R.layout.fragment_create_interval_time
 
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
@@ -38,21 +43,6 @@ class CreateIntervalTimeFragment : BaseFragment(), CreateTimerClicks.Time {
         }
 
     private val intervalObserver = Observer<Interval> { binding.interval = it }
-
-    private lateinit var binding: FragmentCreateIntervalTimeBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_create_interval_time,
-            container,
-            false
-        )
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,7 +77,7 @@ class CreateIntervalTimeFragment : BaseFragment(), CreateTimerClicks.Time {
             val action =
                 CreateIntervalTimeFragmentDirections.actionCreateIntervalTimeFragmentToCreateTimerFragment()
             action.clearViewModel = false
-            view?.let { Navigation.findNavController(it).navigate(action) }
+            findNavController().navigate(action)
         }
     }
 }

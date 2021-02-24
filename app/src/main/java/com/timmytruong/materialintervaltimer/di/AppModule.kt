@@ -5,10 +5,11 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 @Module
 object AppModule {
 
@@ -26,3 +27,6 @@ object AppModule {
         IntervalSound(R.raw.synth, "Synth", false),
     )
 }
+
+@Qualifier annotation class Recents
+@Qualifier annotation class Favourites

@@ -78,6 +78,7 @@
     <style name="TimerIcon">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_columnWeight">1</item>
+        <item name="android:padding">@dimen/material_xxsmall</item>
         <item name="android:background">@drawable/rounded_background</item>
     </style>
 

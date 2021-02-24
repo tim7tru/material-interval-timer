@@ -15,10 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material"
             android:layout_marginTop="@dimen/material"
-            android:text="@string/favouriteTimers"/>
+            android:text="@string/recentTimers"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragmentFavouritesRecycler"
+            android:id="@+id/fragmentRecentsRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/material"

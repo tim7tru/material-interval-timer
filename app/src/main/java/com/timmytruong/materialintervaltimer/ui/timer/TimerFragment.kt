@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
@@ -26,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TimerFragment : TimerClicks, BaseFragment() {
+class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
 
     @Inject
     lateinit var timerViewModel: TimerViewModel
@@ -35,8 +33,6 @@ class TimerFragment : TimerClicks, BaseFragment() {
     lateinit var intervalItemAdapter: TimerIntervalAdapter
 
     private lateinit var menu: Menu
-
-    private lateinit var binding: FragmentTimerBinding
 
     private var progressAnimation: ObjectAnimator? = null
 
@@ -55,7 +51,8 @@ class TimerFragment : TimerClicks, BaseFragment() {
 
     private val onFavouriteClicked = MenuItem.OnMenuItemClickListener {
         val isChecked = menu.findItem(R.id.favorite).isChecked
-        menu.findItem(R.id.favorite).iconTintList = getFavouriteColour(isChecked = isChecked)
+        menu.findItem(R.id.favorite).iconTintList =
+            ContextCompat.getColorStateList(requireContext(), R.color.favourite_button_color)
         menu.findItem(R.id.favorite).isChecked = !isChecked
         timerViewModel.setShouldSave(save = !isChecked)
         return@OnMenuItemClickListener true
@@ -130,7 +127,6 @@ class TimerFragment : TimerClicks, BaseFragment() {
 
     private fun handleTotalTimeEvent(totalTime: Int) {
         currentIntervalTotalTime = totalTime.toFloat()
-
     }
 
     private fun showFavouriteMenuIcon() {
@@ -147,11 +143,6 @@ class TimerFragment : TimerClicks, BaseFragment() {
     private fun getFavouriteColour(isChecked: Boolean): ColorStateList? =
         if (!isChecked) ContextCompat.getColorStateList(requireContext(), R.color.colorGolden)
         else ContextCompat.getColorStateList(requireContext(), R.color.colorSecondaryDark)
-
-    private fun goToHome() {
-        val action = TimerFragmentDirections.actionTimerFragmentToHomeFragment()
-        Navigation.findNavController(requireView()).navigate(action)
-    }
 
     private fun updateProgressBar(from: Int, to: Int, duration: Long = 1000L) {
         progressAnimation =
@@ -182,15 +173,6 @@ class TimerFragment : TimerClicks, BaseFragment() {
     override fun bindView() {
         binding.onClick = this
         binding.bottomSheetRecycler.adapter = intervalItemAdapter
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timer, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -243,6 +225,9 @@ class TimerFragment : TimerClicks, BaseFragment() {
         showCloseDialog(view = requireView())
         return false
     }
+
+    override val layoutId: Int
+        get() = R.layout.fragment_timer
 
 //    override fun onNegativeDialogClicked(view: View) {
 //        /** Do Nothing */
