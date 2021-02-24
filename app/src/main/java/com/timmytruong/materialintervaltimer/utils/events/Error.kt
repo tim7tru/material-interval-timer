@@ -7,3 +7,9 @@ sealed class Error<T> {
     data class QualifierError(val qualifier: String): Error<String>()
     object UnknownError: Error<Nothing>()
 }
+
+interface ErrorHandler {
+    fun handleInputError(error: ErrorType)
+    fun handleQualifierError(qualifier: String)
+    fun handleUnknownError()
+}

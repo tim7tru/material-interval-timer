@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
@@ -18,13 +19,14 @@ import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
+class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTimerClicks.Main {
 
     @Inject
     lateinit var bottomSheetFragment: IntervalSoundsBottomSheet
@@ -35,6 +37,10 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
     @Inject
     lateinit var createTimerViewModel: CreateTimerViewModel
 
+
+    override val layoutId: Int
+        get() = R.layout.fragment_create_timer
+
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
 
@@ -43,13 +49,11 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
             event?.getContentIfNotHandled()?.let {
                 when (it) {
                     is Boolean -> handleCompletionEvent(completed = it)
-                    is Error.InputError -> handleInputError(inputError = it)
+                    is Error.InputError -> handleInputError(error = it.error)
                     is Error.UnknownError -> handleUnknownError()
                 }
             }
         }
-
-    private lateinit var binding: FragmentCreateTimerBinding
 
     private var timerId: Int? = null
 
@@ -63,21 +67,12 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
                 timerId = it.id
             }
 
-            it.timer_intervals.let {
-                intervalAdapter.addList(it)
+            it.timer_intervals.let { list ->
+                intervalAdapter.addList(list)
             }
 
             dismissBottomSheet()
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_create_timer, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,7 +95,7 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
     override fun goToAddInterval(view: View) {
         val action =
             CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment()
-        Navigation.findNavController(view).navigate(action)
+        findNavController().navigate(action)
     }
 
     override fun onRepeatClicked(view: View) {
@@ -131,7 +126,7 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
         binding.onClick = this
     }
 
-    private fun handleInputError(inputError: Error.InputError) {
+    override fun handleInputError(error: ErrorType) {
         DesignUtils.showSnackbarError(
             contextView = requireView(),
             message = getString(R.string.emptyIntervalListError)
@@ -146,7 +141,7 @@ class CreateTimerFragment : BaseFragment(), CreateTimerClicks.Main {
         val action =
             CreateTimerFragmentDirections.actionCreateTimerFragmentToTimerFragment()
         action.timerId = id
-        Navigation.findNavController(requireView()).navigate(action)
+        findNavController().navigate(action)
     }
 
     private fun checkArguments() {

@@ -1,11 +1,8 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.timmytruong.materialintervaltimer.R
@@ -15,6 +12,8 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalB
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
+import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_HALF
+import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_ZERO
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.events.Event
@@ -22,13 +21,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
+class CreateIntervalFragment : BaseFragment<FragmentCreateIntervalBinding>(),
+    CreateTimerClicks.Interval {
 
     @Inject
     lateinit var createTimerViewModel: CreateTimerViewModel
 
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
+
+    override val layoutId: Int
+        get() = R.layout.fragment_create_interval
 
     override val eventObserver: Observer<Event<Any>>
         get() = Observer { event ->
@@ -41,47 +44,34 @@ class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
             }
         }
 
-    private lateinit var binding: FragmentCreateIntervalBinding
-
     private val intervalObserver = Observer<Interval> { interval ->
         interval.interval_icon_id.let {
-            val tag = if (it != -1) DesignUtils.getTagFromDrawableId(
-                context = requireContext(),
-                id = it
-            ) else it
+            val tag =
+                if (it != -1) DesignUtils.getTagFromDrawableId(context = requireContext(), id = it)
+                else it
             val grid = binding.fragmentCreateIntervalIconGrid
-            val count = grid.childCount
-            for (i in 0 until count) {
+            for (i in 0 until grid.childCount) {
                 val view = grid.getChildAt(i)
-                setIconCheckedBackground(image = view as ImageView, checked = view.tag == tag)
+                (view as ImageView).isSelected = view.tag == tag
             }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_create_interval, container, false)
-        return binding.root
-    }
-
     override fun onResume() {
         super.onResume()
-        updateProgressBar(progress = 50)
+        updateProgressBar(progress = PROGRESS_HALF)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
         bindView()
-        updateProgressBar(progress = 50)
+        updateProgressBar(progress = PROGRESS_HALF)
     }
 
-    override fun onBackPressed(): Boolean {
-        updateProgressBar(progress = 0)
-        return super.onBackPressed()
+    override fun onPause() {
+        updateProgressBar(progress = PROGRESS_ZERO)
+        super.onPause()
     }
 
     override fun bindView() {
@@ -124,18 +114,5 @@ class CreateIntervalFragment : BaseFragment(), CreateTimerClicks.Interval {
 
     private fun handleInputError() {
         binding.fragmentCreateIntervalTitleInput.error = getString(R.string.noTitleError)
-    }
-
-    private fun setIconCheckedBackground(image: ImageView, checked: Boolean) {
-        when (checked) {
-            true -> {
-                image.backgroundTintList =
-                    DesignUtils.getColour(requireContext(), R.color.colorSecondaryAccent)
-            }
-            false -> {
-                image.backgroundTintList =
-                    DesignUtils.getColour(requireContext(), R.color.colorBackgroundLight)
-            }
-        }
     }
 }

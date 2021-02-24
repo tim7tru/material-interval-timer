@@ -13,15 +13,15 @@
             type="com.timmytruong.materialintervaltimer.model.Timer" />
 
         <variable
-            name="favouritesViewModel"
-            type="com.timmytruong.materialintervaltimer.ui.favourites.FavouritesViewModel" />
+            name="timerListViewModel"
+            type="com.timmytruong.materialintervaltimer.ui.list.TimerListViewModel"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView
         style="@style/TimerCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> favouritesViewModel.onTimerClicked(timer.id)}"
+        android:onClick="@{() -> timerListViewModel.onTimerClicked(timer)}"
         android:layout_marginBottom="@dimen/material_small">
 
         <LinearLayout

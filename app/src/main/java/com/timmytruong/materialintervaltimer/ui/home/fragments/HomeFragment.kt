@@ -1,10 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.home.fragments
 
 import android.os.Bundle
-import android.view.*
-import androidx.databinding.DataBindingUtil
+import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
@@ -16,22 +15,27 @@ import com.timmytruong.materialintervaltimer.ui.home.HomeClicks
 import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
 import com.timmytruong.materialintervaltimer.ui.home.adapters.HorizontalTimerItemAdapter
 import com.timmytruong.materialintervaltimer.utils.events.Event
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment(), HomeClicks.Main {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeClicks.Main {
 
-    @Inject @Recents
+    @Inject
+    @Recents
     lateinit var recentsAdapter: HorizontalTimerItemAdapter
 
-    @Inject @Favourites
+    @Inject
+    @Favourites
     lateinit var favouritesAdapter: HorizontalTimerItemAdapter
 
     @Inject
     lateinit var homeViewModel: HomeViewModel
-
-    private lateinit var binding: FragmentHomeBinding
 
     private val favouriteTimersObserver = Observer<List<Timer>> {
         binding.isFavouritesEmpty = it.isEmpty()
@@ -43,6 +47,9 @@ class HomeFragment : BaseFragment(), HomeClicks.Main {
         recentsAdapter.addList(it)
     }
 
+    override val layoutId: Int
+        get() = R.layout.fragment_home
+
     override val baseViewModel: BaseViewModel
         get() = homeViewModel
 
@@ -51,7 +58,9 @@ class HomeFragment : BaseFragment(), HomeClicks.Main {
             event?.getContentIfNotHandled()?.let {
                 when (it) {
                     is Timer -> handleTimerEvent(timer = it)
-                    else -> { /** Do Nothing **/ }
+                    else -> {
+                        /** Do Nothing **/
+                    }
                 }
             }
         }
@@ -68,15 +77,6 @@ class HomeFragment : BaseFragment(), HomeClicks.Main {
         homeViewModel.recentTimers.observe(viewLifecycleOwner, recentTimersObserver)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        binding.lifecycleOwner = this
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
@@ -89,12 +89,29 @@ class HomeFragment : BaseFragment(), HomeClicks.Main {
         val action = HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet()
         action.timerId = timer.id
         action.isFavourited = timer.timer_saved
-        Navigation.findNavController(requireView()).navigate(action)
+        findNavController().navigate(action)
     }
 
     override fun onAddClicked(view: View) {
         val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
         action.clearViewModel = true
-        Navigation.findNavController(requireView()).navigate(action)
+        findNavController().navigate(action)
     }
+}
+
+@InstallIn(FragmentComponent::class)
+@Module
+class HomeModule {
+
+    @FragmentScoped
+    @Recents
+    @Provides
+    fun provideRecentsAdapter(homeViewModel: HomeViewModel) =
+        HorizontalTimerItemAdapter(homeViewModel)
+
+    @FragmentScoped
+    @Favourites
+    @Provides
+    fun provideFavouritesAdapter(homeViewModel: HomeViewModel) =
+        HorizontalTimerItemAdapter(homeViewModel)
 }

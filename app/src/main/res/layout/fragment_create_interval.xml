@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="iconChecked"
             type="Boolean" />
@@ -19,8 +21,8 @@
         android:background="@color/colorBackgroundDark">
 
         <com.google.android.material.textview.MaterialTextView
-            style="@style/HeaderText"
             android:id="@+id/fragmentCreateIntervalTitle"
+            style="@style/HeaderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material"
@@ -30,8 +32,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/TimerEditTextLayout"
             android:id="@+id/fragmentCreateIntervalTitleLayout"
+            style="@style/TimerEditTextLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material"
@@ -45,15 +47,15 @@
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTitle">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/TimerEditTextInput"
                 android:id="@+id/fragmentCreateIntervalTitleInput"
+                style="@style/TimerEditTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            style="@style/HeaderText"
             android:id="@+id/fragmentCreateIntervalIconTitle"
+            style="@style/HeaderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material"
@@ -62,43 +64,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTitleLayout" />
 
-        <LinearLayout
-            android:id="@+id/fragmentCreateIntervalIconSwitchContainer"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragmentCreateIntervalSwitchContainer"
+            style="@style/TimerOptionsText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material"
             android:layout_marginTop="@dimen/material"
+            android:layout_marginStart="@dimen/material"
             android:layout_marginEnd="@dimen/material"
-            android:orientation="horizontal"
+            android:onClick="@{onClick::onIconSwitchClicked}"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconTitle">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textview.MaterialTextView
                 style="@style/TimerOptionsText"
-                android:id="@+id/fragmentCreateIntervalSwitchContainer"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{onClick::onIconSwitchClicked}">
+                android:text="@string/enableIcon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    style="@style/TimerOptionsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/enableIcon"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    style="@style/TimerSwitch"
-                    android:id="@+id/fragmentCreateIntervalIconSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="@{iconChecked}"
-                    android:clickable="false"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/fragmentCreateIntervalIconSwitch"
+                style="@style/TimerSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{iconChecked}"
+                android:clickable="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <GridLayout
             android:id="@+id/fragmentCreateIntervalIconGrid"
@@ -113,33 +108,36 @@
             android:visibility="@{iconChecked ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconSwitchContainer">
+            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalSwitchContainer">
 
             <ImageView
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/fitnessTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_fitness_center"
-                android:contentDescription="@string/fitnessTag"
-                android:tag="@string/fitnessTag"/>
+                android:tag="@string/fitnessTag" />
 
             <ImageView
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/personTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_accessibility_24px"
-                android:contentDescription="@string/personTag"
-                android:tag="@string/personTag"/>
+                android:tag="@string/personTag" />
 
             <ImageView
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/speedTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_speed_24px"
-                android:contentDescription="@string/speedTag"
                 android:tag="@string/speedTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -147,9 +145,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/cafeTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_local_cafe_24px"
-                android:contentDescription="@string/cafeTag"
                 android:tag="@string/cafeTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -157,9 +156,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/androidTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_android_24px"
-                android:contentDescription="@string/androidTag"
                 android:tag="@string/androidTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -167,9 +167,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/musicTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_audiotrack_24px"
-                android:contentDescription="@string/musicTag"
                 android:tag="@string/musicTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -177,9 +178,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/worldTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_language_24px"
-                android:contentDescription="@string/worldTag"
                 android:tag="@string/worldTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -187,9 +189,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/emailTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_email_24px"
-                android:contentDescription="@string/emailTag"
                 android:tag="@string/emailTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -197,9 +200,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/ecoTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_eco_24px"
-                android:contentDescription="@string/ecoTag"
                 android:tag="@string/ecoTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -207,9 +211,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/phoneTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_call_24px"
-                android:contentDescription="@string/phoneTag"
                 android:tag="@string/phoneTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -217,9 +222,10 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/playTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_play"
-                android:contentDescription="@string/playTag"
                 android:tag="@string/playTag"
                 app:tint="@color/colorSecondaryDark" />
 
@@ -227,16 +233,17 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
+                android:backgroundTint="@color/selected_icon_color"
+                android:contentDescription="@string/pauseTag"
                 android:onClick="@{onClick::onIconClicked}"
                 android:src="@drawable/ic_pause_24px"
-                android:contentDescription="@string/pauseTag"
                 android:tag="@string/pauseTag"
                 app:tint="@color/colorSecondaryDark" />
         </GridLayout>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/ContinueFlowButton"
             android:id="@+id/fragmentCreateIntervalContinueButton"
+            style="@style/ContinueFlowButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{onClick::onContinueClicked}"
