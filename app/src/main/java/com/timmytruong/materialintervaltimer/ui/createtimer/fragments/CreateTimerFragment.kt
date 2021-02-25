@@ -34,7 +34,6 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
     @Inject
     lateinit var createTimerViewModel: CreateTimerViewModel
 
-
     override val layoutId: Int
         get() = R.layout.fragment_create_timer
 

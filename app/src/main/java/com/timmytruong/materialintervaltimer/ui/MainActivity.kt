@@ -9,14 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ActivityMainBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.BackButton
+import com.timmytruong.materialintervaltimer.ui.home.fragments.HomeFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_ANIMATION_DURATION_MS
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
@@ -29,12 +26,15 @@ class MainActivity : AppCompatActivity(), ProgressBar {
 
     private lateinit var navController: NavController
 
+    private lateinit var appBarConfig: AppBarConfiguration
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment
 
         navController = navHostFragment.navController
 
@@ -52,8 +52,21 @@ class MainActivity : AppCompatActivity(), ProgressBar {
     }
 
     private fun setupAppBar() {
-        val appBarConfig = AppBarConfiguration(navController.graph, binding.activityMainDrawerLayout)
-        binding.activityMainNavToolBar.setupWithNavController(navController, appBarConfig)
+        appBarConfig = AppBarConfiguration(
+            setOf(R.id.homeFragment),
+            binding.activityMainDrawerLayout
+        )
+
+        NavigationUI.setupActionBarWithNavController(
+            this,
+            navController,
+            appBarConfig
+        )
+
+        NavigationUI.setupWithNavController(
+            binding.activityMainNavDrawer,
+            navController
+        )
     }
 
     private fun getForegorundFragment(): Fragment? {
@@ -62,7 +75,22 @@ class MainActivity : AppCompatActivity(), ProgressBar {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            getForegorundFragment()?.let {
+                if (it is HomeFragment)
+                    return@let
+                else {
+                    onBackPressedDispatcher.onBackPressed()
+                    return true
+                }
+            }
+        }
+
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
     }
 
     override fun toggleProgressBarVisibility(show: Boolean) {
@@ -80,15 +108,5 @@ class MainActivity : AppCompatActivity(), ProgressBar {
         animation.duration = PROGRESS_BAR_ANIMATION_DURATION_MS
         animation.interpolator = DecelerateInterpolator()
         animation.start()
-    }
-
-    override fun onBackPressed() {
-        try {
-            if ((getForegorundFragment() as? BackButton)?.onBackPressed() == true) {
-                super.onBackPressed()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 }

@@ -15,11 +15,8 @@ import javax.inject.Inject
 
 @FragmentScoped
 class IntervalSoundsBottomSheet @Inject constructor(
-    private val intervalSoundsAdapter: IntervalSoundsAdapter
+    private val intervalSoundsAdapter: IntervalSoundsAdapter,
 ) : BottomSheetDialogFragment() {
-
-    @Inject
-    lateinit var sounds: List<IntervalSound>
 
     private lateinit var binding: FragmentIntervalSoundsBottomSheetBinding
 
@@ -38,7 +35,6 @@ class IntervalSoundsBottomSheet @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        intervalSoundsAdapter.addList(sounds)
         binding.fragmentIntervalsSoundsBottomSheetRecycler.adapter = intervalSoundsAdapter
     }
 }
