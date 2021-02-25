@@ -6,14 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.events.Error
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-const val RECENTS = "recents"
-const val FAVOURITES = "favourites"
+internal const val RECENTS = "recents"
+internal const val FAVOURITES = "favourites"
+internal const val TIMER = "timer"
 
 @ActivityRetainedScoped
 class HomeViewModel @Inject constructor(
@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private var currentTimer: Timer = Timer()
-        set(value) = setEvent(value)
+        set(value) = setEvent(TIMER, value)
 
     private val _favouriteTimers = MutableLiveData<List<Timer>>()
     val favouriteTimers: LiveData<List<Timer>> get() = _favouriteTimers

@@ -58,16 +58,13 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
         return@OnMenuItemClickListener true
     }
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event?.getContentIfNotHandled()?.let {
-                when (it) {
-                    is TimerState -> handleTimerStateEvent(timerState = it)
-                    is IntervalSound -> handleSoundEvent(sound = it)
-                    is Int -> handleTotalTimeEvent(totalTime = it)
-                    else -> {
-                        /** Do Nothing **/
-                    }
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    TIMER_STATE -> handleTimerStateEvent(timerState = it.second as TimerState)
+                    SOUND -> handleSoundEvent(sound = it.second as IntervalSound)
+                    REMAINING_TIME -> handleTotalTimeEvent(totalTime = it.second as Int)
                 }
             }
         }

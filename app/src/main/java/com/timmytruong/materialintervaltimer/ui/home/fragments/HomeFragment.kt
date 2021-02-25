@@ -13,6 +13,7 @@ import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.home.HomeClicks
 import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
+import com.timmytruong.materialintervaltimer.ui.home.TIMER
 import com.timmytruong.materialintervaltimer.ui.home.adapters.HorizontalTimerItemAdapter
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.Module
@@ -53,14 +54,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeClicks.Main {
     override val baseViewModel: BaseViewModel
         get() = homeViewModel
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event?.getContentIfNotHandled()?.let {
-                when (it) {
-                    is Timer -> handleTimerEvent(timer = it)
-                    else -> {
-                        /** Do Nothing **/
-                    }
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    TIMER -> handleTimerEvent(timer = it.second as Timer)
                 }
             }
         }
