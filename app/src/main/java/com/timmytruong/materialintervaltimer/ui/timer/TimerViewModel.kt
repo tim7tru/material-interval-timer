@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.Interval
-import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.enums.TimerState
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+internal const val TIMER_STATE = "timer state"
+internal const val REMAINING_TIME = "remaining time"
+internal const val SOUND = "sound"
 
 @ActivityRetainedScoped
 class TimerViewModel @Inject constructor(
@@ -23,7 +26,7 @@ class TimerViewModel @Inject constructor(
     private lateinit var currentInterval: Interval
 
     private var currentState: TimerState = TimerState.STOPPED
-        set(value) = setEvent(event = value)
+        set(value) = setEvent(TIMER_STATE, value)
 
     private var shouldPlaySound: Boolean = true
 
@@ -94,7 +97,7 @@ class TimerViewModel @Inject constructor(
         currentInterval = interval
         countDownTimer = buildIntervalTimer(milliseconds = interval.interval_time_ms)
         _timeRemaining.value = currentInterval.interval_time_ms
-        setEvent(event = currentInterval.interval_time_ms)
+        setEvent(REMAINING_TIME, currentInterval.interval_time_ms)
     }
 
     private fun startTimer() {
@@ -125,7 +128,7 @@ class TimerViewModel @Inject constructor(
 
     private fun playSound() {
         if (shouldPlaySound)
-            setEvent(event = timer.timer_interval_sound)
+            setEvent(SOUND, timer.timer_interval_sound)
     }
 
     private fun addRepeatIntervals() {

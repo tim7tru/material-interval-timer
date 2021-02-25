@@ -11,7 +11,7 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentRecentsBinding
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.reusable.VerticalTimerListAdapter
-import com.timmytruong.materialintervaltimer.utils.events.Error
+import com.timmytruong.materialintervaltimer.utils.events.EMPTY_ERROR
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.Module
 import dagger.Provides
@@ -39,12 +39,12 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
     override val baseViewModel: BaseViewModel
         get() = timerListViewModel
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event.getContentIfNotHandled()?.let {
-                when (it) {
-                    is Error.QualifierError -> handleQualifierError(it.qualifier)
-                    is Timer -> handleTimerClick(timer = it)
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    EMPTY_ERROR -> toggleEmptyListError(show = true)
+                    TIMER -> handleTimerClick(timer = it.second as Timer)
                 }
             }
         }
@@ -63,12 +63,6 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
 
     override fun bindView() {
         binding.fragmentRecentsRecycler.adapter = verticalTimerListAdapter
-    }
-
-    override fun handleQualifierError(qualifier: String) {
-        when (qualifier) {
-            EMPTY_LIST_ERROR -> toggleEmptyListError(show = true)
-        }
     }
 
     private fun handleTimerClick(timer: Timer) {

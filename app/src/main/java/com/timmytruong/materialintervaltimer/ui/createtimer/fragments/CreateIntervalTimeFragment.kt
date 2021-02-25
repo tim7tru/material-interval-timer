@@ -1,12 +1,8 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.timmytruong.materialintervaltimer.R
@@ -14,6 +10,7 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
 import com.timmytruong.materialintervaltimer.model.Interval
+import com.timmytruong.materialintervaltimer.ui.createtimer.COMPLETION_EVENT
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.utils.events.Event
@@ -33,11 +30,11 @@ class CreateIntervalTimeFragment : BaseFragment<FragmentCreateIntervalTimeBindin
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event?.getContentIfNotHandled()?.let {
-                when (it) {
-                    is Boolean -> handleCompletionEvent(completed = it)
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    COMPLETION_EVENT -> handleCompletionEvent()
                 }
             }
         }
@@ -72,12 +69,10 @@ class CreateIntervalTimeFragment : BaseFragment<FragmentCreateIntervalTimeBindin
         createTimerViewModel.addInterval()
     }
 
-    private fun handleCompletionEvent(completed: Boolean) {
-        if (completed) {
-            val action =
-                CreateIntervalTimeFragmentDirections.actionCreateIntervalTimeFragmentToCreateTimerFragment()
-            action.clearViewModel = false
-            findNavController().navigate(action)
-        }
+    private fun handleCompletionEvent() {
+        val action =
+            CreateIntervalTimeFragmentDirections.actionCreateIntervalTimeFragmentToCreateTimerFragment()
+        action.clearViewModel = false
+        findNavController().navigate(action)
     }
 }

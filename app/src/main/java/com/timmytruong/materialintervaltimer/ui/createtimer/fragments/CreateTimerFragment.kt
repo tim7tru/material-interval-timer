@@ -1,12 +1,8 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
@@ -14,14 +10,15 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
 import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.ui.createtimer.COMPLETION_EVENT
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
-import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.events.Event
+import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
+import com.timmytruong.materialintervaltimer.utils.events.UNKNOWN_ERROR
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -44,13 +41,13 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event?.getContentIfNotHandled()?.let {
-                when (it) {
-                    is Boolean -> handleCompletionEvent(completed = it)
-                    is Error.InputError -> handleInputError(error = it.error)
-                    is Error.UnknownError -> handleUnknownError()
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    COMPLETION_EVENT -> handleCompletionEvent()
+                    INPUT_ERROR -> handleInputError()
+                    UNKNOWN_ERROR -> handleUnknownError()
                 }
             }
         }
@@ -126,15 +123,15 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
         binding.onClick = this
     }
 
-    override fun handleInputError(error: ErrorType) {
+    override fun handleInputError() {
         DesignUtils.showSnackbarError(
             contextView = requireView(),
             message = getString(R.string.emptyIntervalListError)
         )
     }
 
-    private fun handleCompletionEvent(completed: Boolean) {
-        if (completed) timerId?.let { id -> goToTimer(id = id) }
+    private fun handleCompletionEvent() {
+        timerId?.let { id -> goToTimer(id = id) }
     }
 
     private fun goToTimer(id: Int) {

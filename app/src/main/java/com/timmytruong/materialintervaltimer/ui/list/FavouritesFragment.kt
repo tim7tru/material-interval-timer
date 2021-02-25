@@ -1,10 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.timmytruong.materialintervaltimer.R
@@ -14,7 +11,7 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentFavouritesBindi
 import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.reusable.VerticalTimerListAdapter
-import com.timmytruong.materialintervaltimer.utils.events.Error
+import com.timmytruong.materialintervaltimer.utils.events.EMPTY_ERROR
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.Module
 import dagger.Provides
@@ -33,7 +30,8 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
     @Inject
     lateinit var timerListViewModel: TimerListViewModel
 
-    @Inject @Favourites
+    @Inject
+    @Favourites
     lateinit var timerListObserver: Observer<List<Timer>>
 
     override val layoutId: Int
@@ -46,12 +44,12 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
         binding.fragmentFavouritesRecycler.adapter = verticalTimerListAdapter
     }
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event.getContentIfNotHandled()?.let {
-                when (it) {
-                    is Error.QualifierError -> handleQualifierError(it.qualifier)
-                    is Timer -> handleTimerClick(timer = it)
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    EMPTY_ERROR -> toggleEmptyListError(true)
+                    TIMER -> handleTimerClick(timer = it.second as Timer)
                 }
             }
         }
@@ -66,12 +64,6 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
     override fun subscribeObservers() {
         super.subscribeObservers()
         timerListViewModel.favourites.observe(viewLifecycleOwner, timerListObserver)
-    }
-
-    override fun handleQualifierError(qualifier: String) {
-        when (qualifier) {
-            EMPTY_LIST_ERROR -> toggleEmptyListError(show = true)
-        }
     }
 
     private fun handleTimerClick(timer: Timer) {

@@ -22,7 +22,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
 
     abstract fun bindView()
 
-    abstract override val eventObserver: Observer<Event<Any>>
+    abstract override val eventObserver: Observer<Event<Pair<String, Any>>>
 
     abstract val layoutId: Int
 
@@ -44,9 +44,9 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
         )
     }
 
-    override fun handleQualifierError(qualifier: String) {}
+    override fun handleEmptyError() {}
 
-    override fun handleInputError(error: ErrorType) {}
+    override fun handleInputError() {}
 
     override fun toggleProgressBarVisibility(show: Boolean) {
         (activity as? MainActivity)?.toggleProgressBarVisibility(show = false)

@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalBinding
 import com.timmytruong.materialintervaltimer.model.Interval
+import com.timmytruong.materialintervaltimer.ui.createtimer.COMPLETION_EVENT
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_HALF
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_ZERO
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.events.Error
 import com.timmytruong.materialintervaltimer.utils.events.Event
+import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
+import com.timmytruong.materialintervaltimer.utils.events.UNKNOWN_ERROR
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,13 +35,13 @@ class CreateIntervalFragment : BaseFragment<FragmentCreateIntervalBinding>(),
     override val layoutId: Int
         get() = R.layout.fragment_create_interval
 
-    override val eventObserver: Observer<Event<Any>>
+    override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            event?.getContentIfNotHandled()?.let {
-                when (it) {
-                    is Error.InputError -> handleInputError()
-                    is Error.UnknownError -> handleUnknownError()
-                    is Boolean -> handleCompletionEvent(completed = it)
+            isEventHandled(event)?.let {
+                when (it.first) {
+                    INPUT_ERROR -> handleInputError()
+                    UNKNOWN_ERROR -> handleUnknownError()
+                    COMPLETION_EVENT -> handleCompletionEvent()
                 }
             }
         }
@@ -104,15 +106,13 @@ class CreateIntervalFragment : BaseFragment<FragmentCreateIntervalBinding>(),
         )
     }
 
-    private fun handleCompletionEvent(completed: Boolean) {
-        if (completed) {
-            val action =
-                CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
-            view?.let { Navigation.findNavController(it).navigate(action) }
-        }
+    override fun handleInputError() {
+        binding.fragmentCreateIntervalTitleInput.error = getString(R.string.noTitleError)
     }
 
-    private fun handleInputError() {
-        binding.fragmentCreateIntervalTitleInput.error = getString(R.string.noTitleError)
+    private fun handleCompletionEvent() {
+        val action =
+            CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
+        findNavController().navigate(action)
     }
 }

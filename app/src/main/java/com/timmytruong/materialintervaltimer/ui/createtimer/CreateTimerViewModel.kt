@@ -12,12 +12,14 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
-import com.timmytruong.materialintervaltimer.utils.events.Error
+import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+internal const val COMPLETION_EVENT = "completion"
 
 @ActivityRetainedScoped
 class CreateTimerViewModel @Inject constructor(
@@ -64,7 +66,7 @@ class CreateTimerViewModel @Inject constructor(
         val curTimer = timer.value
 
         if (curTimer?.timer_intervals.isNullOrEmpty()) {
-            setEvent(event = Error.InputError(error = ErrorType.EMPTY_INPUT))
+            setEvent(INPUT_ERROR)
             return
         }
 
@@ -80,21 +82,21 @@ class CreateTimerViewModel @Inject constructor(
                 val id = timerLocalDataSource.saveNewTimer(timer = curTimer)
                 it.id = id.toInt()
                 _timer.value = it
-                setEvent(event = true)
+                setEvent(COMPLETION_EVENT)
             }
         }
     }
 
     fun setIntervalTitle(title: String) {
         if (title.isEmpty()) {
-            setEvent(event = Error.InputError(error = ErrorType.EMPTY_INPUT))
+            setEvent(INPUT_ERROR)
             return
         }
 
         val curInterval = interval.value
         curInterval?.interval_name = title
         _interval.value = curInterval
-        setEvent(true)
+        setEvent(COMPLETION_EVENT)
     }
 
     fun addToTime(newNumber: String) {
@@ -140,7 +142,7 @@ class CreateTimerViewModel @Inject constructor(
         }
 
         _timer.value = curTimer
-        setEvent(event = true)
+        setEvent(COMPLETION_EVENT)
         clearInterval()
     }
 
