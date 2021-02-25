@@ -13,6 +13,7 @@ import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.ui.createtimer.COMPLETION_EVENT
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
+import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_FULL
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,7 +46,7 @@ class CreateIntervalTimeFragment : BaseFragment<FragmentCreateIntervalTimeBindin
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
         bindView()
-        updateProgressBar(progress = 100)
+        updateProgressBar(progress = PROGRESS_FULL)
     }
 
     override fun bindView() {

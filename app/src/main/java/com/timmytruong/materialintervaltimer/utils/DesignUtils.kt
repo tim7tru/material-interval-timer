@@ -1,10 +1,16 @@
 package com.timmytruong.materialintervaltimer.utils
 
 import android.content.Context
+import android.content.DialogInterface
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.utils.constants.DATE_FORMAT
+import com.timmytruong.materialintervaltimer.utils.constants.SECS_IN_HOUR
+import com.timmytruong.materialintervaltimer.utils.constants.SECS_IN_MIN
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,21 +44,21 @@ object DesignUtils {
     }
 
     fun getCurrentDate(): String =
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
 
     fun getSecondsFromTime(time: String): Int {
         val filledTime = fillTime(time)
-        return (filledTime.subSequence(0, 2).toString().toInt() * 3600) +
-                (filledTime.subSequence(2, 4).toString().toInt() * 60) +
+        return (filledTime.subSequence(0, 2).toString().toInt() * SECS_IN_HOUR) +
+                (filledTime.subSequence(2, 4).toString().toInt() * SECS_IN_MIN) +
                 filledTime.subSequence(4, 6).toString().toInt()
     }
 
     fun getTimeFromSeconds(seconds: Int): String {
         var remainingSeconds = seconds
-        val hours = remainingSeconds / 3600
-        remainingSeconds -= hours * 3600
-        val mins = remainingSeconds / 60
-        remainingSeconds -= mins * 60
+        val hours = remainingSeconds / SECS_IN_HOUR
+        remainingSeconds -= hours * SECS_IN_HOUR
+        val mins = remainingSeconds / SECS_IN_MIN
+        remainingSeconds -= mins * SECS_IN_MIN
 
         val secsString = if (remainingSeconds < 10) "0$remainingSeconds" else "$remainingSeconds"
         val minsString = if (mins < 10) "0$mins" else "$mins"
@@ -87,16 +93,16 @@ object DesignUtils {
         var currentMins = filledTime.subSequence(2, 4).toString().toInt()
         var currentHours = filledTime.subSequence(0, 2).toString().toInt()
 
-        if (currentSecs >= 60) {
-            val mins = currentSecs / 60
-            val remainingSecs = currentSecs % 60
+        if (currentSecs >= SECS_IN_MIN) {
+            val mins = currentSecs / SECS_IN_MIN
+            val remainingSecs = currentSecs % SECS_IN_MIN
             currentMins += mins
             currentSecs = remainingSecs
         }
 
-        if (currentMins >= 60) {
-            val hours = currentMins / 60
-            val remainingMins = currentMins % 60
+        if (currentMins >= SECS_IN_MIN) {
+            val hours = currentMins / SECS_IN_MIN
+            val remainingMins = currentMins % SECS_IN_MIN
             currentHours += hours
             currentMins = remainingMins
         }
@@ -110,8 +116,8 @@ object DesignUtils {
 
     fun showSnackbarError(contextView: View, message: String) {
         Snackbar.make(contextView, message, Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(ContextCompat.getColor(contextView.context, R.color.colorRed))
-            .setTextColor(ContextCompat.getColor(contextView.context, R.color.colorWhite))
+            .setBackgroundTint(getColor(contextView.context, R.color.colorRed))
+            .setTextColor(getColor(contextView.context, R.color.colorWhite))
             .show()
     }
 
@@ -151,6 +157,25 @@ object DesignUtils {
         }
     }
 
-    fun getColour(context: Context, colorRes: Int) =
+    fun getColorList(context: Context, colorRes: Int) =
         ContextCompat.getColorStateList(context, colorRes)
+
+    fun getColor(context: Context, colorRes: Int) =
+        ContextCompat.getColor(context, colorRes)
+
+    fun showDialog(
+        context: Context,
+        title: String = "",
+        message: String = "",
+        neutralMessage: String = "",
+        negativeMessage: String = "",
+        positiveMessage: String = "",
+        clicks: DialogInterface.OnClickListener
+    ): AlertDialog = MaterialAlertDialogBuilder(context)
+        .setTitle(title)
+        .setMessage(message)
+        .setNeutralButton(neutralMessage, clicks)
+        .setNegativeButton(negativeMessage, clicks)
+        .setPositiveButton(positiveMessage, clicks)
+        .show()
 }

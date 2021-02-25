@@ -1,5 +1,7 @@
 package com.timmytruong.materialintervaltimer.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.MainActivity
-import com.timmytruong.materialintervaltimer.ui.reusable.BackButton
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
@@ -18,7 +19,7 @@ import com.timmytruong.materialintervaltimer.utils.events.ErrorHandler
 import com.timmytruong.materialintervaltimer.utils.events.Event
 
 abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, ProgressBar,
-    BackButton, BaseObserver {
+    BaseObserver {
 
     abstract fun bindView()
 
@@ -27,6 +28,10 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
     abstract val layoutId: Int
 
     protected lateinit var binding: B
+
+    protected val ctx: Context by lazy { requireContext() }
+
+    protected val act: Activity by lazy { requireActivity() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +70,4 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
             err.printStackTrace()
         }
     }
-
-    override fun onBackPressed(): Boolean = true
 }

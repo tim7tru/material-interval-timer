@@ -16,6 +16,8 @@ import javax.inject.Inject
 internal const val TIMER_STATE = "timer state"
 internal const val REMAINING_TIME = "remaining time"
 internal const val SOUND = "sound"
+internal const val EXIT = "exit"
+internal const val IS_SAVED = "is saved"
 
 @ActivityRetainedScoped
 class TimerViewModel @Inject constructor(
@@ -46,6 +48,7 @@ class TimerViewModel @Inject constructor(
                 if (this@TimerViewModel::timer.isInitialized) timer
                 else timerLocalDataSource.getTimerById(id = id)
             shouldRepeat = timer.timer_repeat
+            setEvent(IS_SAVED, timer.timer_saved)
             resetTimer()
         }
     }
@@ -80,6 +83,8 @@ class TimerViewModel @Inject constructor(
             timerLocalDataSource.setShouldSave(id = id, saved = save)
         }
     }
+
+    fun sendExitEvent() = setEvent(EXIT)
 
     private fun resetTimer() {
         clearCountDownTimer()

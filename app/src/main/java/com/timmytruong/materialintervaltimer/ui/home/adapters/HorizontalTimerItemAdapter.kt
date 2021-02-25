@@ -6,6 +6,7 @@ import com.timmytruong.materialintervaltimer.databinding.ItemTimerHorizontalBind
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_I
 
 class HorizontalTimerItemAdapter(
     private val homeViewModel: HomeViewModel
@@ -20,10 +21,9 @@ class HorizontalTimerItemAdapter(
     ) {
         holder.view.timer = list[position]
         holder.view.homeViewModel = homeViewModel
-        val time = DesignUtils.getTimeFromSeconds(list[position].timer_total_time_ms / 1000)
-        holder.view.time = DesignUtils.formatNormalizedTime(
-            time,
-            context.getString(R.string.timerTimeFormat)
-        )
+        val time =
+            DesignUtils.getTimeFromSeconds(list[position].timer_total_time_ms / MILLI_IN_SECS_I)
+        holder.view.time =
+            DesignUtils.formatNormalizedTime(time, context.getString(R.string.timerTimeFormat))
     }
 }
