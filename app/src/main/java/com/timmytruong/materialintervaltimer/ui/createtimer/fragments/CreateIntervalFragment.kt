@@ -37,7 +37,7 @@ class CreateIntervalFragment : BaseFragment<FragmentCreateIntervalBinding>(),
 
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            isEventHandled(event)?.let {
+            handleEvent(event) {
                 when (it.first) {
                     INPUT_ERROR -> handleInputError()
                     UNKNOWN_ERROR -> handleUnknownError()

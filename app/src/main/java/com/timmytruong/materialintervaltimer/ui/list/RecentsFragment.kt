@@ -41,7 +41,7 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
 
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            isEventHandled(event)?.let {
+            handleEvent(event) {
                 when (it.first) {
                     EMPTY_ERROR -> toggleEmptyListError(show = true)
                     TIMER -> handleTimerClick(timer = it.second as Timer)

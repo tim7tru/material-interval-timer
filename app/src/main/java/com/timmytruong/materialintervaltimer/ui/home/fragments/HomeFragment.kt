@@ -56,7 +56,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeClicks.Main {
 
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            isEventHandled(event)?.let {
+            handleEvent(event) {
                 when (it.first) {
                     TIMER -> handleTimerEvent(timer = it.second as Timer)
                 }

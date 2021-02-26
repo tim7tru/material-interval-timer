@@ -90,7 +90,7 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
 
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            isEventHandled(event)?.let {
+            handleEvent(event) {
                 when (it.first) {
                     TIMER_STATE -> handleTimerStateEvent(timerState = it.second as TimerState)
                     SOUND -> handleSoundEvent(sound = it.second as IntervalSound)

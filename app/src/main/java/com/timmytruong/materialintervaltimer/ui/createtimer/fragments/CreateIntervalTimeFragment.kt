@@ -33,7 +33,7 @@ class CreateIntervalTimeFragment : BaseFragment<FragmentCreateIntervalTimeBindin
 
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            isEventHandled(event)?.let {
+            handleEvent(event) {
                 when (it.first) {
                     COMPLETION_EVENT -> handleCompletionEvent()
                 }
