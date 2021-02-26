@@ -1,6 +1,5 @@
 package com.timmytruong.materialintervaltimer.base
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
 import com.timmytruong.materialintervaltimer.utils.events.ErrorHandler
 import com.timmytruong.materialintervaltimer.utils.events.Event
 
@@ -31,7 +29,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
 
     protected val ctx: Context by lazy { requireContext() }
 
-    protected val act: Activity by lazy { requireActivity() }
+    protected val v: View by lazy { requireView() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +42,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
 
     override fun handleUnknownError() {
         DesignUtils.showSnackbarError(
-            contextView = requireView(),
+            contextView = v,
             message = getString(R.string.somethingWentWrong)
         )
     }

@@ -16,6 +16,7 @@ import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
+import com.timmytruong.materialintervaltimer.utils.DesignUtils.showSnackbarError
 import com.timmytruong.materialintervaltimer.utils.events.Event
 import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
 import com.timmytruong.materialintervaltimer.utils.events.UNKNOWN_ERROR
@@ -122,12 +123,10 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
         binding.onClick = this
     }
 
-    override fun handleInputError() {
-        DesignUtils.showSnackbarError(
-            contextView = requireView(),
+    override fun handleInputError() = showSnackbarError(
+            contextView = v,
             message = getString(R.string.emptyIntervalListError)
         )
-    }
 
     private fun handleCompletionEvent() {
         timerId?.let { id -> goToTimer(id = id) }

@@ -159,7 +159,7 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
 
     private fun showCloseDialog(): AlertDialog =
         showDialog(
-            context = requireContext(),
+            context = ctx,
             title = getString(R.string.dialogCloseTimerTitle),
             message = getString(R.string.dialogCloseTimerMessage),
             negativeMessage = getString(R.string.cancel),
@@ -203,7 +203,7 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
 
     private fun handleSoundEvent(sound: IntervalSound) {
         if (sound.sound_id != -1) {
-            val player = MediaPlayer.create(requireContext(), sound.sound_id)
+            val player = MediaPlayer.create(ctx, sound.sound_id)
             player?.start()
         }
     }
@@ -214,7 +214,7 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
 
     private fun showFavouriteMenuIcon() {
         favouriteMenuItem = menu.findItem(R.id.favorite).apply {
-            iconTintList = getColorList(requireContext(), R.color.favourite_button_color)
+            iconTintList = getColorList(ctx, R.color.favourite_button_color)
             isCheckable = true
             setOnMenuItemClickListener(onFavouriteClicked)
         }

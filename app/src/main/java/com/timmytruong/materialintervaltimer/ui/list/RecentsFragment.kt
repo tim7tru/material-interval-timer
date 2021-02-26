@@ -43,7 +43,7 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
         get() = Observer { event ->
             handleEvent(event) {
                 when (it.first) {
-                    EMPTY_ERROR -> toggleEmptyListError(show = true)
+                    EMPTY_ERROR -> toggleEmptyListError(isEmpty = true)
                     TIMER -> handleTimerClick(timer = it.second as Timer)
                 }
             }
@@ -63,6 +63,7 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
 
     override fun bindView() {
         binding.fragmentRecentsRecycler.adapter = verticalTimerListAdapter
+        toggleEmptyListError(isEmpty = true)
     }
 
     private fun handleTimerClick(timer: Timer) {
@@ -72,8 +73,8 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
         findNavController().navigate(action)
     }
 
-    private fun toggleEmptyListError(show: Boolean) {
-
+    private fun toggleEmptyListError(isEmpty: Boolean) {
+        binding.isEmpty = isEmpty
     }
 }
 
