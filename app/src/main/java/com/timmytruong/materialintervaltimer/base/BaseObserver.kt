@@ -10,5 +10,9 @@ interface BaseObserver {
 
     fun subscribeObservers()
 
-    fun isEventHandled(event: Event<Pair<String, Any>>) = event.getContentIfNotHandled()
+    fun handleEvent(event: Event<Pair<String, Any>>, callback: (Pair<String, Any>) -> Unit) {
+        event.getContentIfNotHandled()?.let {
+            callback.invoke(it)
+        }
+    }
 }

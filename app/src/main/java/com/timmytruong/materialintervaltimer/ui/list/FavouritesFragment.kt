@@ -46,7 +46,7 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
 
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
-            isEventHandled(event)?.let {
+            handleEvent(event) {
                 when (it.first) {
                     EMPTY_ERROR -> toggleEmptyListError(true)
                     TIMER -> handleTimerClick(timer = it.second as Timer)
