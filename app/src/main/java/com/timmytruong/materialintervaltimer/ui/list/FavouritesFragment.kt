@@ -40,19 +40,20 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
     override val baseViewModel: BaseViewModel
         get() = timerListViewModel
 
-    override fun bindView() {
-        binding.fragmentFavouritesRecycler.adapter = verticalTimerListAdapter
-    }
-
     override val eventObserver: Observer<Event<Pair<String, Any>>>
         get() = Observer { event ->
             handleEvent(event) {
                 when (it.first) {
-                    EMPTY_ERROR -> toggleEmptyListError(true)
+                    EMPTY_ERROR -> toggleEmptyListError(isEmpty = true)
                     TIMER -> handleTimerClick(timer = it.second as Timer)
                 }
             }
         }
+
+    override fun bindView() {
+        binding.fragmentFavouritesRecycler.adapter = verticalTimerListAdapter
+        toggleEmptyListError(isEmpty = false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,8 +74,8 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
         findNavController().navigate(action)
     }
 
-    private fun toggleEmptyListError(show: Boolean) {
-
+    private fun toggleEmptyListError(isEmpty: Boolean) {
+        binding.isEmpty = isEmpty
     }
 }
 

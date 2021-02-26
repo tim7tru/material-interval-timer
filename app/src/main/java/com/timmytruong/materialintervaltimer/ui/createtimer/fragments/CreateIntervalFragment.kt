@@ -49,7 +49,7 @@ class CreateIntervalFragment : BaseFragment<FragmentCreateIntervalBinding>(),
     private val intervalObserver = Observer<Interval> { interval ->
         interval.interval_icon_id.let {
             val tag =
-                if (it != -1) DesignUtils.getTagFromDrawableId(context = requireContext(), id = it)
+                if (it != -1) DesignUtils.getTagFromDrawableId(context = ctx, id = it)
                 else it
             val grid = binding.fragmentCreateIntervalIconGrid
             for (i in 0 until grid.childCount) {
