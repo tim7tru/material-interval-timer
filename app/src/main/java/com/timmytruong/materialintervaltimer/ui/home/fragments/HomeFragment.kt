@@ -75,6 +75,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeClicks.Main {
         homeViewModel.recentTimers.observe(viewLifecycleOwner, recentTimersObserver)
     }
 
+    override fun onAddClicked(view: View) {
+        val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
+        action.clearViewModel = true
+        findNavController().navigate(action)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeObservers()
@@ -87,12 +93,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeClicks.Main {
         val action = HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet()
         action.timerId = timer.id
         action.isFavourited = timer.timer_saved
-        findNavController().navigate(action)
-    }
-
-    override fun onAddClicked(view: View) {
-        val action = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
-        action.clearViewModel = true
         findNavController().navigate(action)
     }
 }

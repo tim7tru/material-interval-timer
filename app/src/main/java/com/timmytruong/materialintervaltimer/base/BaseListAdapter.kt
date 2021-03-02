@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseListAdapter<B : ViewDataBinding, V> :
+abstract class BaseListAdapter<B : ViewDataBinding, T> :
     RecyclerView.Adapter<BaseListAdapter.BaseViewHolder<B>>() {
 
     class BaseViewHolder<B : ViewDataBinding>(val view: B) : RecyclerView.ViewHolder(view.root)
@@ -16,7 +16,7 @@ abstract class BaseListAdapter<B : ViewDataBinding, V> :
 
     protected val context: Context by lazy { binding.root.context }
 
-    protected val list: ArrayList<V> = arrayListOf()
+    protected val list: MutableList<T> = mutableListOf()
 
     private lateinit var binding: B
 
@@ -34,7 +34,7 @@ abstract class BaseListAdapter<B : ViewDataBinding, V> :
         return BaseViewHolder(view = binding)
     }
 
-    open fun addList(newList: List<V>) {
+    open fun addList(newList: List<T>) {
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()

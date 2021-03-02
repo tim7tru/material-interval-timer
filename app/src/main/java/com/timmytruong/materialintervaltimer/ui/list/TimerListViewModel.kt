@@ -36,7 +36,7 @@ class TimerListViewModel @Inject constructor(
         timerRepository.getRecentTimers().collectLatest(_recents::setValue)
     }
 
-    fun onEmptyList() = setEvent(EMPTY_ERROR, Unit)
+    fun onEmptyList() = setEvent(EMPTY_ERROR)
 
     fun onTimerClicked(timer: Timer) {
         currentTimer = timer

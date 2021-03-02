@@ -81,8 +81,7 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
     private val timeRemainingObserver = Observer<Int> {
         currentIntervalTimeRemaining = it.toFloat()
         val time = getTimeFromSeconds(currentIntervalTimeRemaining.toInt() / MILLI_IN_SECS_I)
-        binding.timeRemaining =
-            formatNormalizedTime(time, getString(R.string.timerTimeFormat))
+        binding.timeRemaining = formatNormalizedTime(time, getString(R.string.timerTimeFormat))
     }
 
     override val layoutId: Int

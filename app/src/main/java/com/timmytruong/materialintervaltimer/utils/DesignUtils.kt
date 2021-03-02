@@ -160,8 +160,7 @@ object DesignUtils {
     fun getColorList(context: Context, colorRes: Int) =
         ContextCompat.getColorStateList(context, colorRes)
 
-    fun getColor(context: Context, colorRes: Int) =
-        ContextCompat.getColor(context, colorRes)
+    fun getColor(context: Context, colorRes: Int) = ContextCompat.getColor(context, colorRes)
 
     fun showDialog(
         context: Context,
