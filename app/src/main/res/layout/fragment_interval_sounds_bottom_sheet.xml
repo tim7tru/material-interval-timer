@@ -2,13 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel" />
+    </data>
+
     <LinearLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:background="@color/colorBackgroundLight"
-        android:padding="@dimen/material"
+        android:orientation="vertical"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -16,6 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_sound"/>
+            tools:listitem="@layout/item_sound" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/close"
+            android:onClick="@{() -> viewModel.dismissSoundsBottomSheet()}"
+            android:textColor="@color/colorSecondaryDark" />
     </LinearLayout>
 </layout>

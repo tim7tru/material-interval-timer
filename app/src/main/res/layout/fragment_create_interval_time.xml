@@ -7,8 +7,8 @@
         <import type="com.timmytruong.materialintervaltimer.utils.DesignUtils"/>
 
         <variable
-            name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks.Time"/>
+            name="viewModel"
+            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel" />
 
         <variable
             name="interval"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/material"
             android:src="@drawable/ic_backspace_24px"
-            android:onClick="@{onClick::onBackClicked}"
+            android:onClick="@{() -> viewModel.removeFromTime()}"
             android:clickable="true"
             android:tint="@{interval.interval_time_format.length() == 0 ? @color/colorPrimaryDark : @color/colorBlack}"
             app:layout_constraintTop_toTopOf="@id/fragmentCreateIntervalTimeText"
@@ -74,21 +74,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/one"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/one)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/two"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/two)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/three"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/three)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
@@ -96,58 +96,63 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/four"
-                android:onClick="@{onClick::onNumberClicked}" />
+                android:onClick="@{() -> viewModel.addToTime(@string/four)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
+                android:id="@+id/fragmentCreateIntervalTime5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/five"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/five)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
+                android:id="@+id/fragmentCreateIntervalTime6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/six"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/six)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
+                android:id="@+id/fragmentCreateIntervalTime7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/seven"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/seven)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
+                android:id="@+id/fragmentCreateIntervalTime8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/eight"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/eight)}"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
+                android:id="@+id/fragmentCreateIntervalTime9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nine"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/nine)}"/>
 
             <Space
                 android:layout_columnWeight="1"/>
 
             <com.google.android.material.button.MaterialButton
                 style="@style/TimeButton"
+                android:id="@+id/fragmentCreateIntervalTime0"
                 android:text="@string/zero"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{onClick::onNumberClicked}"/>
+                android:onClick="@{() -> viewModel.addToTime(@string/zero)}"/>
 
             <Space
                 android:layout_columnWeight="1"/>
 
         </GridLayout>
-
 
         <com.google.android.material.button.MaterialButton
             style="@style/ContinueFlowButton"
@@ -156,7 +161,7 @@
             android:layout_height="wrap_content"
             android:text="@string/addInterval"
             android:clickable="@{interval.interval_time_format.length() != 0 ? true : false}"
-            android:onClick="@{onClick::onAddClicked}"
+            android:onClick="@{() -> viewModel.addInterval()}"
             android:backgroundTint="@{interval.interval_time_format.length() != 0 ? @color/colorSecondaryDark : @color/colorGray}"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

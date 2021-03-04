@@ -9,12 +9,12 @@
         <import type="android.view.View" />
 
         <variable
-            name="timer"
-            type="com.timmytruong.materialintervaltimer.model.Timer" />
+            name="viewModel"
+            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel" />
 
         <variable
-            name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks.Main" />
+            name="timer"
+            type="com.timmytruong.materialintervaltimer.model.Timer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,10 +83,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="@dimen/material"
-                        android:onClick="@{onClick::goToAddInterval}"
                         android:text="@string/add"
+                        android:onClick="@{() -> viewModel.onGoToAddIntervalClicked()}"
                         app:icon="@drawable/ic_add_24px"
                         app:iconTint="@color/colorSecondaryDark" />
+
                 </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -125,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/material"
                     android:layout_marginEnd="@dimen/material"
-                    android:onClick="@{onClick::onRepeatClicked}">
+                    android:onClick="@{() -> viewModel.setRepeat(!fragmentCreateTimerRepeatSwitch.isChecked())}">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerOptionsText"
@@ -161,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/material"
                     android:layout_marginEnd="@dimen/material"
-                    android:onClick="@{onClick::onSoundClicked}">
+                    android:onClick="@{() -> viewModel.onGoToSoundsBottomSheet()}">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerOptionsText"
@@ -202,7 +203,7 @@
                     android:layout_marginStart="@dimen/material"
                     android:layout_marginEnd="@dimen/material"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:onClick="@{onClick::onSaveClicked}">
+                    android:onClick="@{() -> viewModel.setSaved(!fragmentCreateTimerSavedSwitch.isChecked())}">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerOptionsText"
@@ -232,8 +233,8 @@
             style="@style/ContinueFlowButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{onClick::onStartTimerClicked}"
             android:text="@string/startTimer"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> viewModel.onGoToTimerClicked(fragmentCreateTimerTitleInput.getText().toString())}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
@@ -19,11 +21,17 @@ import com.timmytruong.materialintervaltimer.utils.events.Event
 abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, ProgressBar,
     BaseObserver {
 
-    abstract fun bindView()
-
-    abstract override val eventObserver: Observer<Event<Pair<String, Any>>>
+    abstract override val eventHandler: (Pair<String, Any>) -> Unit
 
     abstract val layoutId: Int
+
+    abstract fun bindView()
+
+    override val eventObserver: Observer<Event<Pair<String, Any>>> by lazy {
+        Observer {
+            handleEvent(it, eventHandler)
+        }
+    }
 
     protected lateinit var binding: B
 
@@ -31,11 +39,13 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
 
     protected val v: View by lazy { requireView() }
 
+    protected fun navigate(action: NavDirections) = findNavController().navigate(action)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         return binding.root
     }
@@ -60,12 +70,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), ErrorHandler, Pro
     }
 
     override fun updateProgressBar(progress: Int) {
-        try {
-            val act = activity as? MainActivity
-            act?.toggleProgressBarVisibility(show = true)
-            act?.updateProgressBar(progress)
-        } catch (err: Exception) {
-            err.printStackTrace()
-        }
+        toggleProgressBarVisibility(show = true)
+        (activity as? MainActivity)?.updateProgressBar(progress)
     }
 }

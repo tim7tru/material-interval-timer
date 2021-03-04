@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="material_xxxsmall">1dp</dimen>
     <dimen name="material_xxsmall">2dp</dimen>
     <dimen name="material_xsmall">4dp</dimen>
     <dimen name="material_small">8dp</dimen>

@@ -1,31 +1,52 @@
 package com.timmytruong.materialintervaltimer.ui.createtimer
 
 import android.content.Context
+import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.base.NAVIGATE
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.ui.createtimer.fragments.CreateIntervalFragmentDirections
+import com.timmytruong.materialintervaltimer.ui.createtimer.fragments.CreateIntervalTimeFragmentDirections
+import com.timmytruong.materialintervaltimer.ui.createtimer.fragments.CreateTimerFragmentDirections
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import com.timmytruong.materialintervaltimer.utils.enums.ErrorType
+import com.timmytruong.materialintervaltimer.utils.DesignUtils.getDrawableIdFromTag
 import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Qualifier
 
-internal const val COMPLETION_EVENT = "completion"
+internal const val SOUND_DESELECTED = "sound deselected"
+internal const val SOUND_SELECTED = "sound selected"
+internal const val CLOSE_SOUNDS = "close sounds"
 
 @ActivityRetainedScoped
 class CreateTimerViewModel @Inject constructor(
     private val timerLocalDataSource: TimerRepository,
-    @ApplicationContext private val context: Context
+    private val sounds: List<IntervalSound>,
+    @ApplicationContext private val context: Context,
+    private val navToTimer: CreateTimerFragmentDirections.ActionCreateTimerFragmentToTimerFragment,
+    @CreateToAddInterval private val navToAdd: NavDirections,
+    @CreateToSoundsBottomSheet private val navToSound: NavDirections,
+    @IntervalToIntervalTime private val navToIntervalTime: NavDirections,
+    private val navToCreateTimer: CreateIntervalTimeFragmentDirections.ActionCreateIntervalTimeFragmentToCreateTimerFragment
 ) : BaseViewModel() {
+
+    private var soundSelected: Int = 0
 
     private val _timer: MutableLiveData<Timer> = MutableLiveData(Timer())
     val timer: LiveData<Timer> get() = _timer
@@ -62,31 +83,6 @@ class CreateTimerViewModel @Inject constructor(
         _timer.value = curTimer
     }
 
-    fun validateTimer(title: String) {
-        val curTimer = timer.value
-
-        if (curTimer?.timer_intervals.isNullOrEmpty()) {
-            setEvent(INPUT_ERROR)
-            return
-        }
-
-        curTimer?.apply {
-            this.timer_title = title
-            this.timer_total_time_ms = getTotalTimeMilliseconds()
-            this.timer_created_date = DesignUtils.getCurrentDate()
-            this.timer_updated_date = DesignUtils.getCurrentDate()
-        }
-
-        viewModelScope.launch(Dispatchers.Main) {
-            curTimer?.let {
-                val id = timerLocalDataSource.saveNewTimer(timer = curTimer)
-                it.id = id.toInt()
-                _timer.value = it
-                setEvent(COMPLETION_EVENT)
-            }
-        }
-    }
-
     fun setIntervalTitle(title: String) {
         if (title.isEmpty()) {
             setEvent(INPUT_ERROR)
@@ -96,7 +92,7 @@ class CreateTimerViewModel @Inject constructor(
         val curInterval = interval.value
         curInterval?.interval_name = title
         _interval.value = curInterval
-        setEvent(COMPLETION_EVENT)
+        setEvent(NAVIGATE, navToIntervalTime)
     }
 
     fun addToTime(newNumber: String) {
@@ -116,6 +112,8 @@ class CreateTimerViewModel @Inject constructor(
             _interval.value = curInterval
         }
     }
+
+    fun dismissSoundsBottomSheet() = setEvent(CLOSE_SOUNDS)
 
     fun addInterval() {
         val curTimer = timer.value
@@ -142,14 +140,35 @@ class CreateTimerViewModel @Inject constructor(
         }
 
         _timer.value = curTimer
-        setEvent(COMPLETION_EVENT)
+        setEvent(NAVIGATE, navToCreateTimer)
         clearInterval()
     }
 
-    fun setIntervalIcon(id: Int?) {
+    fun setIntervalIcon(tag: String) {
+        val id = getDrawableIdFromTag(context, tag)
         val curInterval = interval.value
-        curInterval?.interval_icon_id = id ?: -1
+        curInterval?.interval_icon_id = id
         _interval.value = curInterval
+    }
+
+    fun onGoToAddIntervalClicked() = setEvent(NAVIGATE, navToAdd)
+
+    fun onGoToTimerClicked(title: String) {
+        if (validateTimer(title)) {
+            navToTimer.apply { timer.value?.let { timerId = it.id } }
+            setEvent(NAVIGATE, navToTimer)
+        } else {
+            setEvent(INPUT_ERROR)
+        }
+    }
+
+    fun onGoToSoundsBottomSheet() = setEvent(NAVIGATE, navToSound)
+
+    private fun playSound() {
+        val id = sounds[soundSelected].sound_id
+        if (id != -1) {
+            id.let { MediaPlayer.create(context, it).start() }
+        }
     }
 
     private fun clearInterval() {
@@ -160,11 +179,72 @@ class CreateTimerViewModel @Inject constructor(
         val curTimer = timer.value
         val curIntervals = curTimer?.timer_intervals
         var totalTimeMilliseconds = 0
-        curIntervals?.let {
-            for (interval in it) {
-                totalTimeMilliseconds += interval.interval_time_ms
+        curIntervals?.let { list ->
+            list.forEach {
+                totalTimeMilliseconds += it.interval_time_ms
             }
         }
         return totalTimeMilliseconds
     }
+
+    private fun validateTimer(title: String): Boolean {
+        val curTimer = timer.value
+
+        if (curTimer?.timer_intervals.isNullOrEmpty()) {
+            return false
+        }
+
+        curTimer?.apply {
+            this.timer_title = title
+            this.timer_total_time_ms = getTotalTimeMilliseconds()
+            this.timer_created_date = DesignUtils.getCurrentDate()
+            this.timer_updated_date = DesignUtils.getCurrentDate()
+        }
+
+        saveTimer(timer = curTimer)
+
+        return true
+    }
+
+    private fun saveTimer(timer: Timer?) = viewModelScope.launch {
+        timer?.let {
+            val id = timerLocalDataSource.saveNewTimer(timer = it)
+            it.id = id.toInt()
+            _timer.value = it
+            setEvent(NAVIGATE, navToIntervalTime)
+        }
+    }
+}
+
+@Qualifier private annotation class CreateToAddInterval
+@Qualifier private annotation class CreateToSoundsBottomSheet
+@Qualifier private annotation class IntervalToIntervalTime
+
+@InstallIn(ActivityRetainedComponent::class)
+@Module
+class CreateTimerViewModelModule {
+
+    @Provides
+    fun provideNavToTimer() =
+        CreateTimerFragmentDirections.actionCreateTimerFragmentToTimerFragment()
+
+    @Provides
+    fun provideNavBackToCreateTimer() =
+        CreateIntervalTimeFragmentDirections.actionCreateIntervalTimeFragmentToCreateTimerFragment()
+            .apply { clearViewModel = false }
+
+    @Provides
+    @CreateToAddInterval
+    fun provideNavToAddInterval() =
+        CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment()
+
+    @Provides
+    @CreateToSoundsBottomSheet
+    fun provideNavToSoundBottomSheet() =
+        CreateTimerFragmentDirections.actionCreateTimerFragmentToIntervalSoundsBottomSheet()
+
+    @Provides
+    @IntervalToIntervalTime
+    fun provideNavToIntervalTime() =
+        CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
 }

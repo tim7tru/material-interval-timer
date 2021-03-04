@@ -3,31 +3,25 @@ package com.timmytruong.materialintervaltimer.ui.createtimer.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.base.NAVIGATE
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.createtimer.COMPLETION_EVENT
-import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerClicks
 import com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.createtimer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.createtimer.views.IntervalSoundsBottomSheet
-import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.DesignUtils.showSnackbarError
-import com.timmytruong.materialintervaltimer.utils.events.Event
 import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
 import com.timmytruong.materialintervaltimer.utils.events.UNKNOWN_ERROR
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTimerClicks.Main {
-
-    @Inject
-    lateinit var bottomSheetFragment: IntervalSoundsBottomSheet
+class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>() {
 
     @Inject
     lateinit var intervalAdapter: IntervalItemAdapter
@@ -35,24 +29,18 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
     @Inject
     lateinit var createTimerViewModel: CreateTimerViewModel
 
-    override val layoutId: Int
-        get() = R.layout.fragment_create_timer
+    override val layoutId: Int = R.layout.fragment_create_timer
 
     override val baseViewModel: BaseViewModel
         get() = createTimerViewModel
 
-    override val eventObserver: Observer<Event<Pair<String, Any>>>
-        get() = Observer { event ->
-            handleEvent(event) {
-                when (it.first) {
-                    COMPLETION_EVENT -> handleCompletionEvent()
-                    INPUT_ERROR -> handleInputError()
-                    UNKNOWN_ERROR -> handleUnknownError()
-                }
-            }
+    override val eventHandler: (Pair<String, Any>) -> Unit = {
+        when (it.first) {
+            INPUT_ERROR -> handleInputError()
+            UNKNOWN_ERROR -> handleUnknownError()
+            NAVIGATE -> navigate(it.second as NavDirections)
         }
-
-    private var timerId: Int? = null
+    }
 
     private val args: CreateTimerFragmentArgs by navArgs()
 
@@ -60,15 +48,9 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
         timer?.let {
             binding.timer = it
 
-            if (it.id != 0) {
-                timerId = it.id
-            }
-
             it.timer_intervals.let { list ->
                 intervalAdapter.addList(list)
             }
-
-            dismissBottomSheet()
         }
     }
 
@@ -89,63 +71,22 @@ class CreateTimerFragment : BaseFragment<FragmentCreateTimerBinding>(), CreateTi
         createTimerViewModel.setTimerTitle(binding.fragmentCreateTimerTitleInput.text.toString())
     }
 
-    override fun goToAddInterval(view: View) {
-        val action =
-            CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment()
-        findNavController().navigate(action)
-    }
-
-    override fun onRepeatClicked(view: View) {
-        createTimerViewModel.setRepeat(checked = !binding.fragmentCreateTimerRepeatSwitch.isChecked)
-    }
-
-    override fun onSaveClicked(view: View) {
-        val newState = !binding.fragmentCreateTimerSavedSwitch.isChecked
-        createTimerViewModel.setSaved(checked = newState)
-    }
-
-    override fun onSoundClicked(view: View) {
-        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
-    }
-
-    override fun onStartTimerClicked(view: View) {
-        val title = binding.fragmentCreateTimerTitleInput.text.toString()
-        createTimerViewModel.validateTimer(title = title)
-    }
-
     override fun subscribeObservers() {
         super.subscribeObservers()
         createTimerViewModel.timer.observe(viewLifecycleOwner, timerObserver)
     }
 
     override fun bindView() {
+        binding.viewModel = createTimerViewModel
         binding.fragmentCreateTimerTaskList.adapter = intervalAdapter
-        binding.onClick = this
     }
 
     override fun handleInputError() = showSnackbarError(
-            contextView = v,
-            message = getString(R.string.emptyIntervalListError)
-        )
-
-    private fun handleCompletionEvent() {
-        timerId?.let { id -> goToTimer(id = id) }
-    }
-
-    private fun goToTimer(id: Int) {
-        val action =
-            CreateTimerFragmentDirections.actionCreateTimerFragmentToTimerFragment()
-        action.timerId = id
-        findNavController().navigate(action)
-    }
+        contextView = v,
+        message = getString(R.string.emptyIntervalListError)
+    )
 
     private fun checkArguments() {
         if (args.clearViewModel) createTimerViewModel.clearTimer()
-    }
-
-    private fun dismissBottomSheet() {
-        if (bottomSheetFragment.isVisible) {
-            bottomSheetFragment.dismiss()
-        }
     }
 }

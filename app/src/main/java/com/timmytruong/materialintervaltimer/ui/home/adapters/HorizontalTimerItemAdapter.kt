@@ -7,8 +7,9 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.home.HomeViewModel
 import com.timmytruong.materialintervaltimer.utils.DesignUtils
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_I
+import javax.inject.Inject
 
-class HorizontalTimerItemAdapter(
+class HorizontalTimerItemAdapter @Inject constructor(
     private val homeViewModel: HomeViewModel
 ) : BaseListAdapter<ItemTimerHorizontalBinding, Timer>() {
 

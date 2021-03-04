@@ -8,6 +8,8 @@ interface BaseObserver {
 
     val eventObserver: Observer<Event<Pair<String, Any>>>
 
+    val eventHandler: (Pair<String, Any>) -> Unit
+
     fun subscribeObservers()
 
     fun handleEvent(event: Event<Pair<String, Any>>, callback: (Pair<String, Any>) -> Unit) {

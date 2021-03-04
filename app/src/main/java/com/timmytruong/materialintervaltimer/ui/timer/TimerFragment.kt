@@ -84,21 +84,17 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
         binding.timeRemaining = formatNormalizedTime(time, getString(R.string.timerTimeFormat))
     }
 
-    override val layoutId: Int
-        get() = R.layout.fragment_timer
+    override val layoutId: Int = R.layout.fragment_timer
 
-    override val eventObserver: Observer<Event<Pair<String, Any>>>
-        get() = Observer { event ->
-            handleEvent(event) {
-                when (it.first) {
-                    TIMER_STATE -> handleTimerStateEvent(timerState = it.second as TimerState)
-                    SOUND -> handleSoundEvent(sound = it.second as IntervalSound)
-                    REMAINING_TIME -> handleTotalTimeEvent(totalTime = it.second as Int)
-                    EXIT -> goToHome()
-                    IS_SAVED -> favouriteMenuItem.isChecked = true
-                }
-            }
+    override val eventHandler: (Pair<String, Any>) -> Unit = {
+        when (it.first) {
+            TIMER_STATE -> handleTimerStateEvent(timerState = it.second as TimerState)
+            SOUND -> handleSoundEvent(sound = it.second as IntervalSound)
+            REMAINING_TIME -> handleTotalTimeEvent(totalTime = it.second as Int)
+            EXIT -> goToHome()
+            IS_SAVED -> favouriteMenuItem.isChecked = true
         }
+    }
 
     override val baseViewModel: BaseViewModel
         get() = timerViewModel

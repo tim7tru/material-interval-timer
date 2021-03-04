@@ -6,16 +6,16 @@
         <import type="android.view.View"/>
 
         <variable
-            name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeClicks.Main" />
-
-        <variable
             name="isRecentsEmpty"
             type="Boolean" />
 
         <variable
             name="isFavouritesEmpty"
             type="Boolean" />
+
+        <variable
+            name="viewModel"
+            type="com.timmytruong.materialintervaltimer.ui.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/material"
-            android:onClick="@{onClick::onAddClicked}"
+            android:onClick="@{() -> viewModel.onAddClicked()}"
             app:srcCompat="@drawable/ic_add_24px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -33,21 +33,17 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
     @Inject @Recents
     lateinit var recentsObserver: Observer<List<Timer>>
 
-    override val layoutId: Int
-        get() = R.layout.fragment_recents
+    override val layoutId: Int = R.layout.fragment_recents
 
     override val baseViewModel: BaseViewModel
         get() = timerListViewModel
 
-    override val eventObserver: Observer<Event<Pair<String, Any>>>
-        get() = Observer { event ->
-            handleEvent(event) {
-                when (it.first) {
-                    EMPTY_ERROR -> toggleEmptyListError(isEmpty = true)
-                    TIMER -> handleTimerClick(timer = it.second as Timer)
-                }
-            }
+    override val eventHandler: (Pair<String, Any>) -> Unit = {
+        when (it.first) {
+            EMPTY_ERROR -> toggleEmptyListError(isEmpty = true)
+            TIMER -> handleTimerClick(timer = it.second as Timer)
         }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

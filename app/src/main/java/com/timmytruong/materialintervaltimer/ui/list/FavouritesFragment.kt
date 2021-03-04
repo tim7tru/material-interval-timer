@@ -34,21 +34,17 @@ class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>() {
     @Favourites
     lateinit var timerListObserver: Observer<List<Timer>>
 
-    override val layoutId: Int
-        get() = R.layout.fragment_favourites
+    override val layoutId: Int = R.layout.fragment_favourites
 
     override val baseViewModel: BaseViewModel
         get() = timerListViewModel
 
-    override val eventObserver: Observer<Event<Pair<String, Any>>>
-        get() = Observer { event ->
-            handleEvent(event) {
-                when (it.first) {
-                    EMPTY_ERROR -> toggleEmptyListError(isEmpty = true)
-                    TIMER -> handleTimerClick(timer = it.second as Timer)
-                }
-            }
+    override val eventHandler: (Pair<String, Any>) -> Unit = {
+        when (it.first) {
+            EMPTY_ERROR -> toggleEmptyListError(isEmpty = true)
+            TIMER -> handleTimerClick(timer = it.second as Timer)
         }
+    }
 
     override fun bindView() {
         binding.fragmentFavouritesRecycler.adapter = verticalTimerListAdapter

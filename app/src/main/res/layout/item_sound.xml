@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
-            name="soundTitle"
+            name="name"
             type="String" />
         <variable
             name="isSelected"
             type="Boolean"/>
+        <variable
+            name="position"
+            type="Integer" />
     </data>
 
-    <com.google.android.material.button.MaterialButton
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@{soundTitle}"
-        android:textColor="@{isSelected ? @color/colorSecondaryAccent : @color/colorBlack}"
-        app:backgroundTint="@color/colorBackgroundLight"
-        app:rippleColor="@color/colorSecondaryAccent"
-        tools:text="fdnskf"
-        tools:textColor="@color/colorGray"/>
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextButton"
+            android:id="@+id/itemSoundButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{name}"
+            android:textColor="@{isSelected ? @color/colorSecondaryAccent : @color/colorGray}"
+            tools:text="Sound"
+            tools:textColor="@color/colorGray"/>
+
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/material"
+            android:layout_marginEnd="@dimen/material"
+            layout="@layout/separator_line"/>
+    </LinearLayout>
+
 </layout>

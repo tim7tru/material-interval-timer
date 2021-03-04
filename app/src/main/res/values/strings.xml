@@ -28,7 +28,7 @@
     <string name="options">Options</string>
     <string name="required">Required</string>
     <string name="noTitleError">Please enter a title for your interval</string>
-
+    <string name="close">Close</string>
     <string name="optional">Optional</string>
     <string name="intervalSound">Interval sound</string>
     <string name="title">Title</string>
