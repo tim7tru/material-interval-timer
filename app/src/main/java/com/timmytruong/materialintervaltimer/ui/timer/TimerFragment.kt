@@ -3,114 +3,96 @@ package com.timmytruong.materialintervaltimer.ui.timer
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.DialogInterface
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.*
 import android.view.animation.LinearInterpolator
 import androidx.activity.addCallback
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
-import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
-import com.timmytruong.materialintervaltimer.model.Interval
-import com.timmytruong.materialintervaltimer.model.IntervalSound
+import com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerFragment
+import com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerScreen
+import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemAdapter
+import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
-import com.timmytruong.materialintervaltimer.ui.timer.adapters.TimerIntervalAdapter
-import com.timmytruong.materialintervaltimer.utils.DesignUtils.formatNormalizedTime
-import com.timmytruong.materialintervaltimer.utils.DesignUtils.getColorList
-import com.timmytruong.materialintervaltimer.utils.DesignUtils.getTimeFromSeconds
-import com.timmytruong.materialintervaltimer.utils.DesignUtils.showDialog
-import com.timmytruong.materialintervaltimer.utils.constants.FULL_TIME_PROGRESS
-import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_I
+import com.timmytruong.materialintervaltimer.utils.*
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
-import com.timmytruong.materialintervaltimer.utils.enums.TimerState
-import com.timmytruong.materialintervaltimer.utils.events.Event
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.scopes.FragmentScoped
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
+class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBinding>(),
+    DialogInterface.OnClickListener {
 
     @Inject
-    lateinit var timerViewModel: TimerViewModel
+    lateinit var intervalItemAdapter: IntervalItemAdapter
 
     @Inject
-    lateinit var intervalItemAdapter: TimerIntervalAdapter
+    override lateinit var screen: TimerScreen
 
     @Inject
-    lateinit var dialogClicks: DialogInterface.OnClickListener
+    lateinit var linearInterpolator: LinearInterpolator
 
-    @Inject
-    lateinit var intervalsObserver: Observer<List<Interval>>
+    override val name: String = this.name()
 
-    private lateinit var menu: Menu
-
-    private var progressAnimation: ObjectAnimator? = null
-
-    private var currentIntervalTotalTime: Float = 0f
-
-    private var currentIntervalTimeRemaining: Float = 0f
-
-    private lateinit var favouriteMenuItem: MenuItem
-
-    private val args: TimerFragmentArgs by navArgs()
-
-    private val onSoundIconClicked = MenuItem.OnMenuItemClickListener {
-        menu.findItem(R.id.soundOn).isVisible = it.itemId != R.id.soundOn
-        menu.findItem(R.id.soundOff).isVisible = it.itemId == R.id.soundOn
-        timerViewModel.setShouldPlaySound(playSound = it.itemId == R.id.soundOn)
-        return@OnMenuItemClickListener true
-    }
-
-    private val onFavouriteClicked = MenuItem.OnMenuItemClickListener {
-        val isChecked = menu.findItem(R.id.favorite).isChecked
-        menu.findItem(R.id.favorite).isChecked = !isChecked
-        timerViewModel.setShouldSave(save = !isChecked)
-        return@OnMenuItemClickListener true
-    }
-
-    private val timeRemainingObserver = Observer<Int> {
-        currentIntervalTimeRemaining = it.toFloat()
-        val time = getTimeFromSeconds(currentIntervalTimeRemaining.toInt() / MILLI_IN_SECS_I)
-        binding.timeRemaining = formatNormalizedTime(time, getString(R.string.timerTimeFormat))
-    }
+    override val viewModel: TimerViewModel by viewModels()
 
     override val layoutId: Int = R.layout.fragment_timer
 
-    override val eventHandler: (Pair<String, Any>) -> Unit = {
-        when (it.first) {
-            TIMER_STATE -> handleTimerStateEvent(timerState = it.second as TimerState)
-            SOUND -> handleSoundEvent(sound = it.second as IntervalSound)
-            REMAINING_TIME -> handleTotalTimeEvent(totalTime = it.second as Int)
-            EXIT -> goToHome()
-            IS_SAVED -> favouriteMenuItem.isChecked = true
+    override val eventFlowHandler: suspend (Pair<String, Any>) -> Unit by lazy {
+        {
+            when (it.first) {
+                CANCEL_ANIMATION -> cancelProgressAnimation()
+                START_ANIMATION -> startProgressAnimation(it.second as Long)
+                IS_SAVED -> favouriteButton.isChecked = true
+            }
         }
     }
 
-    override val baseViewModel: BaseViewModel
-        get() = timerViewModel
+    private lateinit var menu: Menu
+
+    private val mutedButton: MenuItem by lazy { menu.findItem(R.id.soundOff) }
+
+    private val unmutedButton: MenuItem by lazy { menu.findItem(R.id.soundOn) }
+
+    private val favouriteButton: MenuItem by lazy { menu.findItem(R.id.favorite) }
+
+    private var progressAnimation: ObjectAnimator? = null
+
+    private val args: TimerFragmentArgs by navArgs()
+
+    private val onSoundIconClicked: MenuItem.OnMenuItemClickListener by lazy {
+        MenuItem.OnMenuItemClickListener {
+            unmutedButton.isVisible = it.itemId != R.id.soundOn
+            mutedButton.isVisible = it.itemId == R.id.soundOn
+            viewModel.isMuted = it.itemId == R.id.soundOff
+            return@OnMenuItemClickListener true
+        }
+    }
+
+    private val onFavouriteClicked: MenuItem.OnMenuItemClickListener by lazy {
+        MenuItem.OnMenuItemClickListener {
+            val event = !favouriteButton.isChecked
+            favouriteButton.isChecked = event
+            viewModel.setShouldSave(save = event)
+            return@OnMenuItemClickListener true
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            this.isEnabled = true
-            timerViewModel.setTimerState(newState = TimerState.PAUSED)
-            showCloseDialog()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -121,46 +103,36 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
         showSoundMenuIcon()
     }
 
-    override fun bindView() {
-        binding.onClick = this
-        binding.bottomSheetRecycler.adapter = intervalItemAdapter
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            this.isEnabled = true
+            viewModel.handlePause()
+            showExitDialog()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subscribeObservers()
+        viewModel.fetchTimer(id = args.timerId)
         bindView()
-        timerViewModel.fetchTimerFromRoom(id = args.timerId)
     }
 
-    override fun subscribeObservers() {
-        super.subscribeObservers()
-        timerViewModel.intervals.observe(viewLifecycleOwner, intervalsObserver)
-        timerViewModel.timeRemaining.observe(viewLifecycleOwner, timeRemainingObserver)
+    override fun onResume() {
+        super.onResume()
+        startSuspending { screen.intervals.collectLatest(intervalItemAdapter::addList) }
     }
 
-    override fun onPlayPauseClicked(view: View) {
-        val newState = when (binding.timerState) {
-            TimerState.RUNNING -> TimerState.PAUSED
-            else -> TimerState.RUNNING
-        }
-
-        timerViewModel.setTimerState(newState = newState)
+    override fun bindView() {
+        binding?.viewModel = viewModel
+        binding?.screen = screen
+        binding?.bottomSheetRecycler?.adapter = intervalItemAdapter
     }
 
-    override fun onStopClicked(view: View) {
-        timerViewModel.setTimerState(newState = TimerState.STOPPED)
+    override fun onDestroyView() {
+        binding?.bottomSheetRecycler?.adapter = null
+        super.onDestroyView()
     }
-
-    private fun showCloseDialog(): AlertDialog =
-        showDialog(
-            context = ctx,
-            title = getString(R.string.dialogCloseTimerTitle),
-            message = getString(R.string.dialogCloseTimerMessage),
-            negativeMessage = getString(R.string.cancel),
-            positiveMessage = getString(R.string.exit),
-            clicks = dialogClicks
-        )
 
     private fun cancelProgressAnimation() {
         if (progressAnimation?.isStarted == true) {
@@ -169,75 +141,54 @@ class TimerFragment : TimerClicks, BaseFragment<FragmentTimerBinding>() {
         }
     }
 
-    private fun handleTimerStateEvent(timerState: TimerState) {
-        cancelProgressAnimation()
-
-        when (timerState) {
-            TimerState.STOPPED -> {
-                updateProgressBar(
-                    from = binding.progress ?: FULL_TIME_PROGRESS,
-                    to = FULL_TIME_PROGRESS
-                )
-                binding.progress = FULL_TIME_PROGRESS
-            }
-            TimerState.PAUSED -> {
-                binding.progress =
-                    ((currentIntervalTimeRemaining / currentIntervalTotalTime) * MILLI_IN_SECS_I).toInt()
-            }
-            TimerState.RUNNING -> {
-                updateProgressBar(
-                    from = binding.progress ?: FULL_TIME_PROGRESS,
-                    to = 0,
-                    duration = currentIntervalTimeRemaining.toLong()
-                )
-            }
-        }
-
-        binding.timerState = timerState
-    }
-
-    private fun handleSoundEvent(sound: IntervalSound) {
-        if (sound.sound_id != -1) {
-            val player = MediaPlayer.create(ctx, sound.sound_id)
-            player?.start()
-        }
-    }
-
-    private fun handleTotalTimeEvent(totalTime: Int) {
-        currentIntervalTotalTime = totalTime.toFloat()
-    }
-
     private fun showFavouriteMenuIcon() {
-        favouriteMenuItem = menu.findItem(R.id.favorite).apply {
-            iconTintList = getColorList(ctx, R.color.favourite_button_color)
-            isCheckable = true
+        favouriteButton.apply {
+            iconTintList = ctx.colorList(R.color.favourite_button_color)
             setOnMenuItemClickListener(onFavouriteClicked)
         }
     }
 
     private fun showSoundMenuIcon() {
-        menu.findItem(R.id.soundOn).isVisible = true
-        menu.findItem(R.id.soundOn).setOnMenuItemClickListener(onSoundIconClicked)
-        menu.findItem(R.id.soundOff).setOnMenuItemClickListener(onSoundIconClicked)
+        unmutedButton.isVisible = true
+        unmutedButton.setOnMenuItemClickListener(onSoundIconClicked)
+        mutedButton.setOnMenuItemClickListener(onSoundIconClicked)
     }
 
-    private fun goToHome() {
-        val action = TimerFragmentDirections.actionTimerFragmentToHomeFragment()
-        findNavController().navigate(action)
-    }
+    private fun showExitDialog() = showDialog(
+        context = ctx,
+        title = string(R.string.dialogCloseTimerTitle),
+        message = string(R.string.dialogCloseTimerMessage),
+        positiveMessage = string(R.string.exit),
+        negativeMessage = string(R.string.cancel),
+        clicks = this@TimerFragment
+    )
 
-    private fun updateProgressBar(from: Int, to: Int, duration: Long = MILLI_IN_SECS_L) {
-        progressAnimation =
-            ObjectAnimator.ofInt(
-                binding.fragmentTimerProgressCircle,
-                PROGRESS_BAR_PROPERTY,
-                from,
-                to
-            )
-        progressAnimation?.interpolator = LinearInterpolator()
+    private fun startProgressAnimation(duration: Long = MILLI_IN_SECS_L) {
+        progressAnimation = ObjectAnimator.ofInt(
+            binding?.fragmentTimerProgressCircle,
+            PROGRESS_BAR_PROPERTY,
+            screen.progress.get(),
+            0
+        )
+        progressAnimation?.interpolator = linearInterpolator
         progressAnimation?.duration = duration
         progressAnimation?.start()
     }
+
+    override fun onClick(dialog: DialogInterface?, button: Int) {
+        if (button == DialogInterface.BUTTON_POSITIVE) viewModel.exit()
+        dialog?.dismiss()
+    }
+}
+
+data class TimerScreen(
+    val timerState: ObservableField<TimerState> = ObservableField(TimerState.STOPPED),
+    val timeRemaining: ObservableField<String> = ObservableField(""),
+    val progress: ObservableInt = ObservableInt(0),
+    var intervals: Flow<@JvmSuppressWildcards List<IntervalItemScreenBinding>> = emptyFlow(),
+): BaseScreen() {
+
+    fun navToHome() = TimerFragmentDirections.actionTimerFragmentToHomeFragment()
 }
 
 @InstallIn(FragmentComponent::class)
@@ -246,26 +197,5 @@ class TimerModule {
 
     @FragmentScoped
     @Provides
-    fun provideDialogClicks(
-        timerViewModel: TimerViewModel
-    ) = DialogInterface.OnClickListener { dialog, which ->
-        when (which) {
-            DialogInterface.BUTTON_POSITIVE -> {
-                timerViewModel.setTimerState(TimerState.STOPPED)
-                timerViewModel.sendExitEvent()
-                dialog.dismiss()
-            }
-            DialogInterface.BUTTON_NEGATIVE -> {
-                dialog.dismiss()
-            }
-        }
-    }
-
-    @FragmentScoped
-    @Provides
-    fun provideIntervalsObserver(
-        intervalItemAdapter: TimerIntervalAdapter
-    ) = Observer<List<Interval>> {
-        intervalItemAdapter.addList(it)
-    }
+    fun provideInterpolator() = LinearInterpolator()
 }

@@ -4,14 +4,8 @@
 
     <data>
         <variable
-            name="name"
-            type="String" />
-        <variable
-            name="isSelected"
-            type="Boolean"/>
-        <variable
-            name="position"
-            type="Integer" />
+            name="screen"
+            type="com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding" />
     </data>
 
     <LinearLayout
@@ -24,8 +18,9 @@
             android:id="@+id/itemSoundButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{name}"
-            android:textColor="@{isSelected ? @color/colorSecondaryAccent : @color/colorGray}"
+            android:text="@{screen.soundName}"
+            android:onClick="@{() -> screen.click(screen)}"
+            android:textColor="@{screen.isSelected ? @color/colorSecondaryAccent : @color/colorGray}"
             tools:text="Sound"
             tools:textColor="@color/colorGray"/>
 

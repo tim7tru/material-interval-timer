@@ -1,44 +1,99 @@
 package com.timmytruong.materialintervaltimer.ui.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import android.content.Context
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
+import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.data.TimerRepository
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.events.EMPTY_ERROR
+import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_I
+import com.timmytruong.materialintervaltimer.utils.formatNormalizedTime
+import com.timmytruong.materialintervaltimer.utils.getTimeFromSeconds
+import com.timmytruong.materialintervaltimer.utils.string
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal const val TIMER = "timer"
-
-@ActivityRetainedScoped
+@HiltViewModel
 class TimerListViewModel @Inject constructor(
-    private val timerRepository: TimerRepository
+    @ApplicationContext private val ctx: Context,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val timerRepository: TimerRepository,
+    private val screen: TimerListScreen,
+    private val bottomSheet: TimerActionBottomSheetScreen
 ) : BaseViewModel() {
 
-    private var currentTimer: Timer = Timer()
-        set(value) = setEvent(TIMER, value)
-
-    private val _recents = MutableLiveData<List<Timer>>()
-    val recents: LiveData<List<Timer>> get() = _recents
-
-    private val _favourites = MutableLiveData<List<Timer>>()
-    val favourites: LiveData<List<Timer>> get() = _favourites
-
-    fun fetchFavourites() = viewModelScope.launch {
-        timerRepository.getFavouriteTimers().collectLatest(_favourites::setValue)
+    fun fetchTimers() = startSuspending(ioDispatcher) {
+        screen.timers = when (screen.screenName) {
+            FavouritesFragment::class.java.simpleName -> timerRepository.getFavouriteTimers()
+                .map { it.map(::mapTimerToBinding) }
+            RecentsFragment::class.java.simpleName -> timerRepository.getRecentTimers()
+                .map { it.map(::mapTimerToBinding) }
+            else -> error("fragment type not found")
+        }
     }
 
-    fun fetchRecents() = viewModelScope.launch {
-        timerRepository.getRecentTimers().collectLatest(_recents::setValue)
-    }
+    private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
+        time = ObservableField(
+            formatNormalizedTime(
+                getTimeFromSeconds(timer.timer_total_time_ms / MILLI_IN_SECS_I),
+                ctx.string(R.string.timerTimeFormat)
+            )
+        ),
+        title = ObservableField(timer.timer_title),
+        intervalCount = ObservableField(
+            String.format(
+                ctx.string(R.string.number_of_intervals_format),
+                timer.timer_intervals_count
+            )
+        ),
+        timerId = timer.id,
+        clicks = ::onTimerCardClicked
+    )
 
-    fun onEmptyList() = setEvent(EMPTY_ERROR)
+    private fun onTimerCardClicked(binding: TimerListScreenBinding) =
+        startSuspending(ioDispatcher) {
+            val timer = timerRepository.getTimerById(binding.timerId)
+            bottomSheet.timerId.set(timer.id)
+            bottomSheet.isFavourited.set(timer.timer_saved)
+            navigateWith(screen.navToBottomSheet())
+        }
+}
 
-    fun onTimerClicked(timer: Timer) {
-        currentTimer = timer
+data class TimerListScreen(
+    val isEmpty: ObservableBoolean = ObservableBoolean(false),
+    var timers: Flow<@JvmSuppressWildcards List<TimerListScreenBinding>> = emptyFlow()
+) : BaseScreen() {
+
+    fun navToBottomSheet() = when (screenName) {
+        FavouritesFragment::class.java.simpleName -> FavouritesFragmentDirections.actionFavouritesFragmentToTimerActionBottomSheet()
+        RecentsFragment::class.java.simpleName -> RecentsFragmentDirections.actionRecentsFragmentToTimerActionBottomSheet()
+        else -> error("fragment type not found")
     }
+}
+
+@InstallIn(ActivityRetainedComponent::class)
+@Module
+class TimerListViewModelModule {
+
+    @ActivityRetainedScoped
+    @Provides
+    fun provideTimerListScreen() = TimerListScreen()
+
 }

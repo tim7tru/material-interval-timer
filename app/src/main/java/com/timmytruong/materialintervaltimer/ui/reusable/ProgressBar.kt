@@ -7,7 +7,6 @@ const val PROGRESS_HALF = 50
 const val PROGRESS_FULL = 100
 
 interface ProgressBar {
-    fun toggleProgressBarVisibility(show: Boolean)
 
-    fun updateProgressBar(progress: Int)
+    fun updateProgressBar(progress: Int, show: Boolean = true)
 }

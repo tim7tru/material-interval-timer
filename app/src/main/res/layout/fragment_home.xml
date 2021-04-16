@@ -6,12 +6,8 @@
         <import type="android.view.View"/>
 
         <variable
-            name="isRecentsEmpty"
-            type="Boolean" />
-
-        <variable
-            name="isFavouritesEmpty"
-            type="Boolean" />
+            name="screen"
+            type="com.timmytruong.materialintervaltimer.ui.home.HomeScreen" />
 
         <variable
             name="viewModel"
@@ -34,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/material_large"
-                android:visibility="@{isFavouritesEmpty ? View.GONE : View.VISIBLE}"
+                android:visibility="@{screen.isFavouritesEmpty ? View.GONE : View.VISIBLE}"
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
@@ -55,7 +51,7 @@
                 android:id="@+id/fragmentHomeRecentContainer"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/material_large"
-                android:visibility="@{isRecentsEmpty ? View.GONE : View.VISIBLE}"
+                android:visibility="@{screen.isRecentsEmpty ? View.GONE : View.VISIBLE}"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -81,7 +77,7 @@
             android:layout_height="wrap_content"
             android:text="@string/noTimersText"
             android:gravity="center"
-            android:visibility="@{isRecentsEmpty &amp;&amp; isFavouritesEmpty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{screen.isRecentsEmpty &amp;&amp; screen.isFavouritesEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

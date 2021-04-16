@@ -15,8 +15,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSounds(): List<IntervalSound> = listOf(
-        IntervalSound(-1, "None", true),
+    fun provideSounds(emptySound: IntervalSound): List<IntervalSound> = listOf(
+        emptySound,
         IntervalSound(R.raw.beep, "Beep", false),
         IntervalSound(R.raw.another_beep, "Another beep", false),
         IntervalSound(R.raw.censor, "Censor", false),
@@ -26,6 +26,10 @@ object AppModule {
         IntervalSound(R.raw.robot, "Robot", false),
         IntervalSound(R.raw.synth, "Synth", false),
     )
+
+    @Singleton
+    @Provides
+    fun provideEmptySound() = IntervalSound(-1, "None", true)
 }
 
 @Qualifier annotation class Recents

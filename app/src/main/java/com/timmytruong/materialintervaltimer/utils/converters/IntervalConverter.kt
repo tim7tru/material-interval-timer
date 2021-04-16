@@ -6,20 +6,16 @@ import com.timmytruong.materialintervaltimer.model.Interval
 
 class IntervalConverter {
     @TypeConverter
-    fun toList(json: String?): ArrayList<Interval> {
-        return try {
-            Gson().fromJson(json, Array<Interval>::class.java).toCollection(ArrayList())
-        } catch (err: Exception) {
-            ArrayList()
-        }
+    fun toList(json: String?): ArrayList<Interval> = try {
+        Gson().fromJson(json, Array<Interval>::class.java).toCollection(ArrayList())
+    } catch (err: Exception) {
+        ArrayList()
     }
 
     @TypeConverter
-    fun toJson(list: ArrayList<Interval>?): String {
-        return try {
-            Gson().toJson(list)
-        } catch (err: Exception) {
-            ""
-        }
+    fun toJson(list: ArrayList<Interval>?): String = try {
+        Gson().toJson(list)
+    } catch (err: Exception) {
+        ""
     }
 }

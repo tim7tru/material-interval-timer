@@ -8,7 +8,11 @@
 
         <variable
             name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel" />
+            type="com.timmytruong.materialintervaltimer.ui.create.interval.CreateIntervalViewModel" />
+
+        <variable
+            name="screen"
+            type="com.timmytruong.materialintervaltimer.ui.create.interval.CreateIntervalScreen" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,6 +49,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fragmentCreateIntervalTitleInput"
                 style="@style/TimerEditTextInput"
+                android:text="@{screen.intervalTitle}"
+                android:onTextChanged="@{(text, a, b, c) -> viewModel.onTitleChanged(text)}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +74,7 @@
             android:layout_marginTop="@dimen/material"
             android:layout_marginStart="@dimen/material"
             android:layout_marginEnd="@dimen/material"
+            android:onClick="@{() -> viewModel.setEnabled(!fragmentCreateIntervalIconSwitch.isChecked())}"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalIconTitle">
 
             <com.google.android.material.textview.MaterialTextView
@@ -85,6 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
+                android:checked="@{screen.enableIcon}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -99,7 +107,7 @@
             android:columnCount="4"
             android:rowCount="1"
             android:useDefaultMargins="true"
-            android:visibility="@{fragmentCreateIntervalIconSwitch.isChecked() ? View.VISIBLE : View.GONE}"
+            android:visibility="@{screen.enableIcon ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalSwitchContainer">
@@ -108,7 +116,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/fitnessTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/fitnessTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/fitnessTag)}"
                 android:src="@drawable/ic_fitness_center" />
@@ -117,7 +125,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/personTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/personTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/personTag)}"
                 android:src="@drawable/ic_accessibility_24px" />
@@ -126,7 +134,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/speedTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/speedTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/speedTag)}"
                 android:src="@drawable/ic_speed_24px"
@@ -136,7 +144,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/cafeTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/cafeTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/cafeTag)}"
                 android:src="@drawable/ic_local_cafe_24px"
@@ -146,7 +154,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/androidTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/androidTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/androidTag)}"
                 android:src="@drawable/ic_android_24px"
@@ -156,7 +164,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/musicTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/musicTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/musicTag)}"
                 android:src="@drawable/ic_audiotrack_24px"
@@ -166,7 +174,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/worldTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/worldTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/worldTag)}"
                 android:src="@drawable/ic_language_24px"
@@ -176,7 +184,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/emailTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/emailTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/emailTag)}"
                 android:src="@drawable/ic_email_24px"
@@ -186,7 +194,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/ecoTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/ecoTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/ecoTag)}"
                 android:src="@drawable/ic_eco_24px"
@@ -196,7 +204,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/phoneTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/phoneTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/phoneTag)}"
                 android:src="@drawable/ic_call_24px"
@@ -206,7 +214,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/playTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/playTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/playTag)}"
                 android:src="@drawable/ic_play"
@@ -216,7 +224,7 @@
                 style="@style/TimerIcon"
                 android:layout_width="@dimen/material_touch"
                 android:layout_height="@dimen/material_touch"
-                android:backgroundTint="@color/selected_icon_color"
+                android:backgroundTint="@{screen.intervalIconTag == @string/pauseTag ? @color/colorSecondaryAccent : @color/colorBackgroundDark}"
                 android:contentDescription="@string/pauseTag"
                 android:onClick="@{() -> viewModel.setIntervalIcon(@string/pauseTag)}"
                 android:src="@drawable/ic_pause_24px"
@@ -228,7 +236,9 @@
             style="@style/ContinueFlowButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.setIntervalTitle(fragmentCreateIntervalTitleInput.getText().toString())}"
+            android:enabled="@{!screen.intervalTitle.empty}"
+            android:backgroundTint="@{screen.intervalTitle.empty ? @color/colorGray : @color/colorSecondaryDark}"
+            android:onClick="@{() -> viewModel.validateTitle(fragmentCreateIntervalTitleInput.getText().toString())}"
             android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

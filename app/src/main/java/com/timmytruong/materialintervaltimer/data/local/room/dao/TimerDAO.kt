@@ -12,8 +12,8 @@ interface TimerDAO {
     @Query("SELECT * FROM Timers WHERE id = :id")
     suspend fun getTimerById(id: Int): Timer
 
-    @Query("UPDATE Timers SET timer_saved = :shouldSave WHERE id = :id")
-    suspend fun setSaveTimer(id: Int, shouldSave: Boolean)
+    @Query("UPDATE Timers SET timer_saved = :shouldSave, timer_updated_date = :date WHERE id = :id")
+    suspend fun setSaveTimer(id: Int, shouldSave: Boolean, date: String)
 
     @Query("UPDATE Timers SET timer_updated_date = :date WHERE id = :id")
     suspend fun setUpdatedDate(id: Int, date: String)

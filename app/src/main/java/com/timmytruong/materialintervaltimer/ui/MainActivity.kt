@@ -13,7 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ActivityMainBinding
-import com.timmytruong.materialintervaltimer.ui.home.fragments.HomeFragment
+import com.timmytruong.materialintervaltimer.ui.home.HomeFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_ANIMATION_DURATION_MS
 import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
@@ -93,11 +93,8 @@ class MainActivity : AppCompatActivity(), ProgressBar {
         return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
     }
 
-    override fun toggleProgressBarVisibility(show: Boolean) {
+    override fun updateProgressBar(progress: Int, show: Boolean) {
         binding.activityMainProgressBar.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    override fun updateProgressBar(progress: Int) {
         val animation =
             ObjectAnimator.ofInt(
                 binding.activityMainProgressBar,

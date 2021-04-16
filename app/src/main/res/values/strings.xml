@@ -76,6 +76,8 @@
     <string name="backspace">Backspace</string>
     <string name="play_pause">Play Pause</string>
     <string name="stop">Stop</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
     <string name="timer_circle">Timer Circle</string>
     <string name="timer_click">Timer Click</string>
     <string name="drag">Drag interval</string>
@@ -94,6 +96,9 @@
     <string name="pauseTag">Pause</string>
     <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
 
+    <string name="favourited">Timer favourited</string>
+    <string name="unfavourited">Timer unfavourited</string>
+    <string name="deleted">Timer deleted</string>
     <string name="timerTitle">Timer title</string>
     <string name="intervalTitle">Interval title</string>
     <string name="currentIntervalTitle">Current interval</string>

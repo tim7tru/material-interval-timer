@@ -4,15 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.timmytruong.materialintervaltimer.utils.DesignUtils"/>
-
         <variable
             name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel" />
+            type="com.timmytruong.materialintervaltimer.ui.create.interval.time.CreateIntervalTimeViewModel" />
 
         <variable
-            name="interval"
-            type="com.timmytruong.materialintervaltimer.model.Interval" />
+            name="screen"
+            type="com.timmytruong.materialintervaltimer.ui.create.interval.time.CreateIntervalTimeScreen" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,8 +26,8 @@
             android:layout_marginTop="@dimen/material"
             android:fontFamily="@font/quicksand_bold"
             android:textSize="@dimen/material_text_xxxlarge"
-            android:text="@{DesignUtils.INSTANCE.formatInputtedTime(interval.interval_time_format, @string/timeFormat)}"
-            android:textColor="@{interval.interval_time_format.length() == 0 ? @color/colorPrimaryDark : @color/colorSecondary}"
+            android:text="@{screen.intervalDisplayTime}"
+            android:textColor="@{screen.intervalTimeLengthValidity ? @color/colorSecondary : @color/colorPrimaryDark}"
             app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="99h 99m 99s"/>
@@ -42,7 +40,7 @@
             android:src="@drawable/ic_backspace_24px"
             android:onClick="@{() -> viewModel.removeFromTime()}"
             android:clickable="true"
-            android:tint="@{interval.interval_time_format.length() == 0 ? @color/colorPrimaryDark : @color/colorBlack}"
+            android:tint="@{screen.intervalTimeLengthValidity ? @color/colorBlack : @color/colorPrimaryDark}"
             app:layout_constraintTop_toTopOf="@id/fragmentCreateIntervalTimeText"
             app:layout_constraintBottom_toBottomOf="@id/fragmentCreateIntervalTimeText"
             app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
@@ -160,9 +158,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/addInterval"
-            android:clickable="@{interval.interval_time_format.length() != 0 ? true : false}"
+            android:clickable="@{screen.intervalTimeLengthValidity}"
             android:onClick="@{() -> viewModel.addInterval()}"
-            android:backgroundTint="@{interval.interval_time_format.length() != 0 ? @color/colorSecondaryDark : @color/colorGray}"
+            android:backgroundTint="@{screen.intervalTimeLengthValidity ? @color/colorSecondaryDark : @color/colorGray}"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

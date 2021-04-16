@@ -5,25 +5,16 @@
 
     <data>
         <variable
-            name="time"
-            type="String" />
-
-        <variable
-            name="timer"
-            type="com.timmytruong.materialintervaltimer.model.Timer" />
-
-        <variable
-            name="homeViewModel"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeViewModel" />
+            name="screen"
+            type="com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding" />
     </data>
-
 
     <com.google.android.material.card.MaterialCardView
         style="@style/TimerCard"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:layout_marginEnd="@dimen/material"
-        android:onClick="@{() -> homeViewModel.onTimerCardClicked(timer)}">
+        android:onClick="@{() -> screen.click(screen)}"
+        android:layout_marginEnd="@dimen/material">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/material_small"
-                android:text="@{timer.timer_title}"
+                android:text="@{screen.title}"
                 tools:text="Title If applicable" />
 
             <include
@@ -67,14 +58,14 @@
                         style="@style/TimerCardSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.format(@string/number_of_intervals_format, timer.timer_intervals_count)}"
+                        android:text="@{screen.intervalCount}"
                         tools:text="XX Intervals" />
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerCardDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{time}"
+                        android:text="@{screen.time}"
                         tools:text="00h 00m 00s" />
                 </LinearLayout>
 
@@ -88,6 +79,5 @@
 
             </LinearLayout>
         </LinearLayout>
-
     </com.google.android.material.card.MaterialCardView>
 </layout>

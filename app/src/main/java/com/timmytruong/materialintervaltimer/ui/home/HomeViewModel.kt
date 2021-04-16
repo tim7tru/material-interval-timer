@@ -1,95 +1,88 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import android.content.Context
+import androidx.databinding.ObservableField
+import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.base.NAVIGATE
 import com.timmytruong.materialintervaltimer.data.TimerRepository
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.home.fragments.HomeFragmentDirections
+import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
+import com.timmytruong.materialintervaltimer.utils.*
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_I
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-@ActivityRetainedScoped
+@HiltViewModel
 class HomeViewModel @Inject constructor(
+    @ApplicationContext private val ctx: Context,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
-    private val homeToCreate: HomeFragmentDirections.ActionHomeFragmentToCreateTimerFragment,
-    private val homeToBottomSheet: HomeFragmentDirections.ActionHomeFragmentToTimerActionBottomSheet
+    private val screen: HomeScreen,
+    private val bottomSheet: TimerActionBottomSheetScreen
 ) : BaseViewModel() {
 
-    private var currentTimer: Timer = Timer()
-        set(value) {
-            homeToBottomSheet.apply {
-                isFavourited = value.timer_saved
-                timerId = value.id
-            }
-            setEvent(NAVIGATE, homeToBottomSheet)
-            field = value
-        }
-
-    private val _favouriteTimers = MutableLiveData<List<Timer>>()
-    val favouriteTimers: LiveData<List<Timer>> get() = _favouriteTimers
-
-    private val _recentTimers = MutableLiveData<List<Timer>>()
-    val recentTimers: LiveData<List<Timer>> get() = _recentTimers
-
-    fun onTimerCardClicked(timer: Timer) {
-        currentTimer = timer
+    fun fetchRecentTimers() {
+        screen.recents = timerRepository.getRecentTimers().map(::mapTimerList)
     }
 
-    fun getRecentTimers() {
-        viewModelScope.launch {
-            timerRepository.getRecentTimers().collect {
-                when {
-                    it.size < 7 -> _recentTimers.value = it.subList(0, it.size)
-                    else -> _recentTimers.value = it.subList(0, 7)
-                }
-            }
+    fun fetchFavouriteTimers() {
+        screen.favourites = timerRepository.getFavouriteTimers().map(::mapTimerList)
+    }
+
+    fun onAddClicked() = navigateWith(screen.navToCreateTimer())
+
+    private suspend fun mapTimerList(list: List<Timer>) = withContext(ioDispatcher) {
+        return@withContext when {
+            list.size < 7 -> list.subList(0, list.size).map(::mapTimerToBinding)
+            else -> list.map(::mapTimerToBinding)
         }
     }
 
-    fun getFavouriteTimers() {
-        viewModelScope.launch {
-            timerRepository.getFavouriteTimers().collect {
-                when {
-                    it.size < 7 -> _favouriteTimers.value = it.subList(0, it.size)
-                    else -> _favouriteTimers.value = it.subList(0, 7)
-                }
-            }
-        }
-    }
+    private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
+        time = ObservableField(
+            formatNormalizedTime(
+                getTimeFromSeconds(timer.timer_total_time_ms / MILLI_IN_SECS_I),
+                ctx.string(R.string.timerTimeFormat)
+            )
+        ),
+        title = ObservableField(timer.timer_title),
+        intervalCount = ObservableField(
+            String.format(
+                ctx.string(R.string.number_of_intervals_format),
+                timer.timer_intervals_count
+            )
+        ),
+        timerId = timer.id,
+        clicks = ::onTimerCardClicked
+    )
 
-    fun onFavouritedClicked(id: Int, isFavourited: Boolean) {
-        viewModelScope.launch {
-            timerRepository.setShouldSave(id = id, saved = isFavourited)
+    private fun onTimerCardClicked(binding: TimerListScreenBinding) =
+        startSuspending(ioDispatcher) {
+            val timer = timerRepository.getTimerById(binding.timerId)
+            bottomSheet.timerId.set(timer.id)
+            bottomSheet.isFavourited.set(timer.timer_saved)
+            navigateWith(screen.navToBottomSheet())
         }
-    }
-
-    fun onDeleteClicked(id: Int) {
-        viewModelScope.launch {
-            timerRepository.deleteTimer(id = id)
-        }
-    }
-
-    fun onAddClicked() = setEvent(NAVIGATE, homeToCreate)
 }
 
 @InstallIn(ActivityRetainedComponent::class)
 @Module
 class HomeViewModelModule {
 
+    @ActivityRetainedScoped
     @Provides
-    fun provideNavToBottomSheet() = HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet()
-
-    @Provides
-    fun provideNavToCreateTimer() = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment().apply {
-            clearViewModel = true
-        }
+    fun provideHomeScreen() = HomeScreen()
 }
