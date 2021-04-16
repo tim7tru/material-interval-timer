@@ -3,42 +3,33 @@ package com.timmytruong.materialintervaltimer.data.local
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDAO
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.DesignUtils
-import kotlinx.coroutines.Dispatchers
+import com.timmytruong.materialintervaltimer.utils.getCurrentDate
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class TimerLocalDataSource @Inject constructor(
-    private val timerDao: TimerDAO
-): TimerRepository {
-    override suspend fun saveNewTimer(timer: Timer): Long = withContext(Dispatchers.IO) {
+class TimerLocalDataSource(
+    private val timerDao: TimerDAO,
+    private val ioDispatcher: CoroutineDispatcher
+) : TimerRepository {
+    override suspend fun saveNewTimer(timer: Timer): Long = withContext(ioDispatcher) {
         return@withContext timerDao.insert(timer)
     }
 
-    override suspend fun getTimerById(id: Int): Timer = withContext(Dispatchers.IO) {
+    override suspend fun getTimerById(id: Int): Timer = withContext(ioDispatcher) {
         return@withContext timerDao.getTimerById(id = id)
     }
 
-    override suspend fun setShouldSave(id: Int, saved: Boolean) {
-        timerDao.setSaveTimer(id = id, shouldSave = saved)
-        setUpdatedDate(id = id)
+    override suspend fun setShouldSave(id: Int, saved: Boolean) = withContext(ioDispatcher) {
+        timerDao.setSaveTimer(id = id, shouldSave = saved, date = getCurrentDate())
     }
 
-    override suspend fun deleteTimer(id: Int) {
+    override suspend fun deleteTimer(id: Int) = withContext(ioDispatcher) {
         val timer = getTimerById(id = id)
         timerDao.deleteTimer(timer = timer)
     }
 
-    override fun getRecentTimers(): Flow<List<Timer>> {
-        return timerDao.getRecentTimers()
-    }
+    override fun getRecentTimers(): Flow<List<Timer>> = timerDao.getRecentTimers()
 
-    override fun getFavouriteTimers(): Flow<List<Timer>> {
-        return timerDao.getSavedTimers()
-    }
-
-    private suspend fun setUpdatedDate(id: Int) = withContext(Dispatchers.IO) {
-        timerDao.setUpdatedDate(id = id, date = DesignUtils.getCurrentDate())
-    }
+    override fun getFavouriteTimers(): Flow<List<Timer>> = timerDao.getSavedTimers()
 }

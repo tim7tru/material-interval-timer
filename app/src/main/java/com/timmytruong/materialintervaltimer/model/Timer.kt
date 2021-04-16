@@ -6,9 +6,8 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalConverter
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalSoundConverter
-import com.timmytruong.materialintervaltimer.utils.constants.RoomConstants
 
-@Entity(tableName = RoomConstants.TIMER_TABLE_NAME)
+@Entity(tableName = "Timers")
 data class Timer(
     @ColumnInfo
     var timer_title: String = "",
@@ -41,4 +40,25 @@ data class Timer(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
+
+    fun clear() {
+        timer_title = ""
+        timer_created_date = ""
+        timer_updated_date = ""
+        timer_saved = false
+        timer_repeat = false
+        timer_intervals = arrayListOf()
+        timer_intervals_count = 0
+        timer_total_time_ms = 0
+        timer_interval_sound = IntervalSound(-1)
+        id = 0
+    }
+
+    fun setTotalTime() {
+        var totalTimeMilli = 0
+        timer_intervals.forEach {
+            totalTimeMilli += it.interval_time_ms
+        }
+        timer_total_time_ms = totalTimeMilli
+    }
 }

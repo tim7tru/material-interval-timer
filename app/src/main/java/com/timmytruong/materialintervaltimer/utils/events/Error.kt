@@ -5,7 +5,7 @@ const val UNKNOWN_ERROR = "unknown error"
 const val EMPTY_ERROR = "empty error"
 
 interface ErrorHandler {
-    fun handleInputError()
-    fun handleEmptyError()
-    fun handleUnknownError()
+    fun handleInputError() {}
+    fun handleEmptyError() {}
+    fun handleUnknownError() {}
 }

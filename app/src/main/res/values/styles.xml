@@ -97,6 +97,12 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
+    <style name="SelectableItemBackgroundBorderless">
+        <item name="android:clickable">true</item>
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
     <style name="SelectableItemTheme">
         <item name="colorControlHighlight">@color/colorSecondaryAccent</item>
     </style>

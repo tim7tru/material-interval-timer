@@ -5,11 +5,12 @@
 
     <data>
         <variable
-            name="isFavourited"
-            type="Boolean" />
+            name="viewModel"
+            type="com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionViewModel" />
+
         <variable
-            name="onClick"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeClicks.BottomSheet" />
+            name="screen"
+            type="com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen" />
     </data>
 
     <LinearLayout
@@ -25,7 +26,7 @@
             android:layout_height="match_parent"
             android:textColor="@color/colorSecondaryDark"
             android:text="@string/startTimer"
-            android:onClick="@{onClick::onStartClicked}"
+            android:onClick="@{() -> viewModel.onStartClicked(screen.timerId)}"
             app:icon="@drawable/ic_timer_24px"
             app:rippleColor="@color/colorSecondaryAccent"
             app:iconTint="@color/colorSecondaryDark" />
@@ -36,12 +37,12 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@{isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
+            android:textColor="@{screen.isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
             android:text="@string/favorite"
-            android:onClick="@{onClick::onFavouriteClicked}"
+            android:onClick="@{() -> viewModel.onFavouritedClicked(screen.timerId, !screen.isFavourited)}"
             app:icon="@drawable/ic_grade_24px"
-            app:rippleColor="@{isFavourited ? @color/colorGoldenAccent : @color/colorSecondaryAccent}"
-            app:iconTint="@{isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
+            app:rippleColor="@{screen.isFavourited ? @color/colorGoldenAccent : @color/colorSecondaryAccent}"
+            app:iconTint="@{screen.isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
             tools:iconTint="@color/colorGolden"
             tools:textColor="@color/colorSecondaryDark"/>
 
@@ -53,7 +54,7 @@
             android:layout_height="match_parent"
             android:textColor="@color/colorRed"
             android:text="@string/delete"
-            android:onClick="@{onClick::onDeleteClicked}"
+            android:onClick="@{() -> viewModel.onDeleteClicked(screen.timerId)}"
             app:rippleColor="@color/colorRed"
             app:icon="@drawable/ic_delete_24px"
             app:iconTint="@color/colorRed"/>

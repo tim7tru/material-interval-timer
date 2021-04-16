@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.createtimer.CreateTimerViewModel" />
+            type="com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerViewModel" />
     </data>
 
     <LinearLayout

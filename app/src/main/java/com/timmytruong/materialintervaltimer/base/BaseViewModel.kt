@@ -1,21 +1,38 @@
 package com.timmytruong.materialintervaltimer.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.timmytruong.materialintervaltimer.utils.events.Event
-import javax.inject.Inject
-
-const val NAVIGATE = "navigate"
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
-    private val eventItem = Event<Pair<String, Any>>()
 
-    private val _event = MutableLiveData<Event<Pair<String, Any>>>()
-    val event: LiveData<Event<Pair<String, Any>>> get() = _event
+    abstract val mainDispatcher: CoroutineDispatcher
 
-    protected fun setEvent(key: String, value: Any = Unit) {
-        eventItem.value = Pair(key, value)
-        _event.value = eventItem
+    private val _navigateFlow = MutableSharedFlow<NavDirections>()
+    val navigateFlow: Flow<NavDirections> = _navigateFlow
+
+    private val _eventFlow = MutableSharedFlow<Pair<String, Any>>()
+    val eventFlow: SharedFlow<Pair<String, Any>> = _eventFlow
+
+    protected fun fireEvent(key: String, value: Any = Unit) = startSuspending(mainDispatcher) {
+        _eventFlow.emit(Pair(key, value))
     }
+
+    protected fun navigateWith(action: NavDirections) = startSuspending(mainDispatcher) {
+        _navigateFlow.emit(action)
+    }
+
+    protected fun ViewModel.startSuspending(
+        context: CoroutineContext = EmptyCoroutineContext,
+        block: suspend (CoroutineScope) -> Unit
+    ) { viewModelScope.launch(context, CoroutineStart.DEFAULT, block) }
 }

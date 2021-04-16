@@ -1,20 +1,14 @@
 package com.timmytruong.materialintervaltimer.base
 
-import androidx.lifecycle.Observer
-import com.timmytruong.materialintervaltimer.utils.events.Event
+import androidx.navigation.NavDirections
+import kotlinx.coroutines.Job
 
-interface BaseObserver {
-    val baseViewModel: BaseViewModel
+interface BaseObserver<V: BaseViewModel> {
+    val viewModel: V
 
-    val eventObserver: Observer<Event<Pair<String, Any>>>
+    val uiStateJobs: ArrayList<Job>
 
-    val eventHandler: (Pair<String, Any>) -> Unit
+    val eventFlowHandler: suspend (Pair<String, Any>) -> Unit
 
-    fun subscribeObservers()
-
-    fun handleEvent(event: Event<Pair<String, Any>>, callback: (Pair<String, Any>) -> Unit) {
-        event.getContentIfNotHandled()?.let {
-            callback.invoke(it)
-        }
-    }
+    fun navigationHandler(action: NavDirections): Unit? = null
 }
