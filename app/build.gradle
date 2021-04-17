@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-allopen'
 
 android {
     compileSdkVersion 30
@@ -41,6 +42,16 @@ android {
     buildFeatures {
         dataBinding = true
     }
+
+    android.testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
+    allOpen {
+        annotation('com.timmytruong.materialintervaltimer.utils.Open')
+    }
 }
 
 dependencies {
@@ -69,7 +80,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0-alpha02'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-rc01'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.browser:browser:1.3.0'
@@ -81,11 +92,11 @@ dependencies {
     kapt "androidx.room:room-compiler:2.3.0-rc01"
 
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.3.4"
-    implementation "androidx.navigation:navigation-ui-ktx:2.3.4"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     // Preferences
     implementation "androidx.preference:preference-ktx:1.1.1"
@@ -100,7 +111,11 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
-    testImplementation 'junit:junit:4.12'
+    // Testing
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
+    testImplementation 'io.kotest:kotest-runner-junit5:4.4.3'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:3.1.0"
+//    testImplementation "org.mockito:mockito-core:3.9.3"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
