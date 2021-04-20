@@ -34,12 +34,22 @@ class HomeViewModel @Inject constructor(
     private val bottomSheet: TimerActionBottomSheetScreen
 ) : BaseViewModel() {
 
-    fun fetchRecentTimers() {
-        screen.recents = timerRepository.getRecentTimers().map(::mapTimerList)
+    private val _recents = MutableSharedFlow<List<TimerListScreenBinding>>()
+    val recents: Flow<List<TimerListScreenBinding>> = _recents
+
+    private val _favourites = MutableSharedFlow<List<TimerListScreenBinding>>()
+    val favourites: Flow<List<TimerListScreenBinding>> = _favourites
+
+    fun fetchRecentTimers() = startSuspending(ioDispatcher) {
+        timerRepository.getRecentTimers().map(::mapTimerList).collect {
+            _recents.emit(it)
+        }
     }
 
-    fun fetchFavouriteTimers() {
-        screen.favourites = timerRepository.getFavouriteTimers().map(::mapTimerList)
+    fun fetchFavouriteTimers() = startSuspending(ioDispatcher) {
+        timerRepository.getFavouriteTimers().map(::mapTimerList).collect {
+            _favourites.emit(it)
+        }
     }
 
     fun onAddClicked() = navigateWith(screen.navToCreateTimer())
