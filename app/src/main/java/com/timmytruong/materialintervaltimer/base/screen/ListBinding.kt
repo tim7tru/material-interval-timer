@@ -7,6 +7,6 @@ object EmptyClicks: Clicks<Any> {
 }
 
 abstract class ListBinding<T> {
-    abstract val clicks: Clicks<T>
+    open val clicks: Clicks<T> = {}
     open fun click(item: T): Unit = clicks.invoke(item)
 }
