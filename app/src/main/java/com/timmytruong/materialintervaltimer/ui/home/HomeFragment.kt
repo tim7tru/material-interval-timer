@@ -11,8 +11,8 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.ui.reusable.HorizontalTimerItemAdapter
-import com.timmytruong.materialintervaltimer.ui.reusable.TimerActionBottomSheetDirections
 import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
+import com.timmytruong.materialintervaltimer.utils.Open
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -81,6 +81,7 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
     }
 }
 
+@Open
 data class HomeScreen(
     var recents: Flow<@JvmSuppressWildcards List<TimerListScreenBinding>> = emptyFlow(),
     var favourites: Flow<@JvmSuppressWildcards List<TimerListScreenBinding>> = emptyFlow(),
@@ -90,8 +91,6 @@ data class HomeScreen(
 
     fun navToBottomSheet() = HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet()
     fun navToCreateTimer() = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
-    fun navToTimer(id: Int) =
-        TimerActionBottomSheetDirections.actionTimerActionBottomSheetToTimerFragment(id)
 }
 
 @InstallIn(FragmentComponent::class)
