@@ -11,6 +11,7 @@ import com.timmytruong.materialintervaltimer.ui.home.HomeFragment
 import com.timmytruong.materialintervaltimer.ui.home.HomeFragmentDirections
 import com.timmytruong.materialintervaltimer.ui.list.FavouritesFragment
 import com.timmytruong.materialintervaltimer.ui.list.FavouritesFragmentDirections
+import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.name
 import com.timmytruong.materialintervaltimer.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +52,7 @@ class TimerActionBottomSheet :
     }
 }
 
+@Open
 data class TimerActionBottomSheetScreen(
     val timerId: ObservableInt = ObservableInt(-1),
     val isFavourited: ObservableBoolean = ObservableBoolean(false)

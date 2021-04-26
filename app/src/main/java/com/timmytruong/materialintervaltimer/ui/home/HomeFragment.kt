@@ -11,15 +11,12 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.ui.reusable.HorizontalTimerItemAdapter
-import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
 import com.timmytruong.materialintervaltimer.utils.Open
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.FragmentComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -62,12 +59,12 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
         viewModel.fetchRecentTimers()
 
         startSuspending {
-            screen.recents.onEach { list ->
+            viewModel.recents.onEach { list ->
                 screen.isRecentsEmpty.set(list.isEmpty())
                 recentsAdapter.addList(list)
             }.launchIn(it)
 
-            screen.favourites.onEach { list ->
+            viewModel.favourites.onEach { list ->
                 screen.isFavouritesEmpty.set(list.isEmpty())
                 favouritesAdapter.addList(list)
             }.launchIn(it)
@@ -83,8 +80,6 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
 
 @Open
 data class HomeScreen(
-    var recents: Flow<@JvmSuppressWildcards List<TimerListScreenBinding>> = emptyFlow(),
-    var favourites: Flow<@JvmSuppressWildcards List<TimerListScreenBinding>> = emptyFlow(),
     val isRecentsEmpty: ObservableBoolean = ObservableBoolean(false),
     val isFavouritesEmpty: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
