@@ -6,35 +6,35 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.base.DISMISS
+import com.timmytruong.materialintervaltimer.base.DISMISS_EVENT
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
+import com.timmytruong.materialintervaltimer.di.WeakContext
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
-import com.timmytruong.materialintervaltimer.utils.*
-import com.timmytruong.materialintervaltimer.utils.events.INPUT_ERROR
+import com.timmytruong.materialintervaltimer.utils.getCurrentDate
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateTimerViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @WeakContext private val ctx: WeakReference<Context>,
     @TimerStore private val timerStore: Store<Timer>,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -47,11 +47,11 @@ class CreateTimerViewModel @Inject constructor(
     init {
         startSuspending(ioDispatcher) {
             timerStore.observe.collectLatest {
-                screen.intervals = mapIntervals(it.timer_intervals)
-                screen.timerIntervalCount.set(it.timer_intervals_count)
-                screen.timerTitle.set(it.timer_title)
-                screen.timerSelectedSound.set(it.timer_interval_sound.sound_name)
-                setSoundSelected { binding -> binding.soundName.get() == it.timer_interval_sound.sound_name }
+                screen.intervals = mapIntervals(it.intervals)
+                screen.timerIntervalCount.set(it.intervalCount)
+                screen.timerTitle.set(it.title)
+                screen.timerSelectedSound.set(it.intervalSound.name)
+                setSoundSelected { binding -> binding.soundName.get() == it.intervalSound.name }
                 soundsBottomSheet.list = soundBindings
             }
         }
@@ -60,8 +60,8 @@ class CreateTimerViewModel @Inject constructor(
     private var soundBindings: List<IntervalSoundScreenBinding> =
         sounds.mapIndexed { position, sound ->
             IntervalSoundScreenBinding(
-                soundName = ObservableField<String>(sound.sound_name),
-                isSelected = ObservableBoolean(sound.sound_is_selected),
+                soundName = ObservableField<String>(sound.name),
+                isSelected = ObservableBoolean(sound.isSelected),
                 position = position,
                 clicks = ::onSoundClicked
             )
@@ -72,36 +72,31 @@ class CreateTimerViewModel @Inject constructor(
     fun clearTimer() = startSuspending(ioDispatcher) { timerStore.update { it.clear() } }
 
     fun setTimerTitle(title: String) = startSuspending(ioDispatcher) {
-        timerStore.update { it.timer_title = title }
+        timerStore.update { it.title = title }
     }
 
     fun setRepeat(checked: Boolean) = startSuspending(ioDispatcher) {
-        timerStore.update { it.timer_repeat = checked }
+        timerStore.update { it.shouldRepeat = checked }
         screen.timerIsRepeated.set(checked)
     }
 
-    fun setSaved(checked: Boolean) = startSuspending(ioDispatcher) {
-        timerStore.update { it.timer_saved = checked }
+    fun setFavourite(checked: Boolean) = startSuspending(ioDispatcher) {
+        timerStore.update { it.isFavourited = checked }
         screen.timerIsSaved.set(checked)
     }
 
     fun validateTimer(title: String) = startSuspending(ioDispatcher) {
-        if (timerStore.get().timer_intervals.isNullOrEmpty()) {
-            fireEvent(INPUT_ERROR)
-            return@startSuspending
-        }
-
         timerStore.update {
-            it.timer_title = title
-            it.timer_created_date = getCurrentDate()
-            it.timer_updated_date = getCurrentDate()
+            it.title = title
+            it.createdDate = getCurrentDate()
+            it.updatedDate = getCurrentDate()
             it.setTotalTime()
         }
 
         saveTimer()
     }
 
-    fun dismissSoundsBottomSheet() = fireEvent(DISMISS)
+    fun dismissSoundsBottomSheet() = fireEvents(DISMISS_EVENT)
 
     fun onGoToAddIntervalClicked() = navigateWith(screen.navToAddInterval())
 
@@ -111,19 +106,16 @@ class CreateTimerViewModel @Inject constructor(
         if (it == binding) {
             val position = it.position
             startSuspending(Dispatchers.IO) {
-                timerStore.update { timer ->
-                    timer.timer_interval_sound = sounds[position]
-                }
+                timerStore.update { timer -> timer.intervalSound = sounds[position] }
             }
-            if (sounds[position].sound_id != -1) {
-                MediaPlayer.create(context, sounds[position].sound_id).start()
+            if (sounds[position].id != -1) {
+                MediaPlayer.create(ctx.get(), sounds[position].id).start()
             }
             soundsBottomSheet.list = soundBindings
             true
         } else {
             false
         }
-
     }
 
     private suspend fun saveTimer() {
@@ -133,9 +125,9 @@ class CreateTimerViewModel @Inject constructor(
 
     private fun mapIntervals(list: ArrayList<Interval>) = list.map {
         IntervalItemScreenBinding(
-            iconId = ObservableInt(it.interval_icon_id),
-            title = ObservableField(it.interval_name),
-            description = ObservableField(it.interval_time_format)
+            iconId = ObservableInt(it.iconId),
+            title = ObservableField(it.name),
+            description = ObservableField(it.timeFormat)
         )
     }
 

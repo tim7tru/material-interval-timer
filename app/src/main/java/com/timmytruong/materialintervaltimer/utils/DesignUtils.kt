@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
+import java.lang.ref.WeakReference
+import kotlin.reflect.KClass
 
 fun showSnackbarError(contextView: View, message: String) {
     Snackbar.make(contextView, message, Snackbar.LENGTH_SHORT)
@@ -82,14 +84,11 @@ fun showToast(context: Context, message: String, short: Boolean = true) {
 }
 
 fun Context.colorList(@ColorRes colorRes: Int) = ContextCompat.getColorStateList(this, colorRes)
-fun View.colorList(@ColorRes colorRes: Int) = this.context.colorList(colorRes)
 
 fun Context.color(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
 fun View.color(@ColorRes colorRes: Int) = this.context.color(colorRes)
 
-fun Context.string(@StringRes id: Int) = this.getString(id)
+fun WeakReference<Context>.string(@StringRes id: Int) = this.get()?.getString(id) ?: ""
 fun Fragment.string(@StringRes id: Int) = getString(id)
 
 fun Fragment.name(): String = this::class.java.simpleName
-
-fun formatString(a: String, vararg fillers: String) = String.format(a, *fillers)

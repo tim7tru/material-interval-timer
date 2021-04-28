@@ -29,8 +29,6 @@ class TimerActionBottomSheet :
 
     override val layoutId: Int = R.layout.fragment_timer_action_bottom_sheet
 
-    override val name: String = this.name()
-
     override val viewModel: TimerActionViewModel by viewModels()
 
     override fun bindView() {
@@ -38,13 +36,12 @@ class TimerActionBottomSheet :
         binding?.screen = screen
     }
 
-    override val eventFlowHandler: suspend (Pair<String, Any>) -> Unit
-        get() = {
-            when (it.first) {
-                FAVOURITE -> toastAndDismiss(it.second as String)
-                DELETE -> toastAndDismiss(it.second as String)
-            }
+    override fun eventHandler(event: Pair<String, Any>) {
+        when (event.first) {
+            FAVOURITE -> toastAndDismiss(event.second as String)
+            DELETE -> toastAndDismiss(event.second as String)
         }
+    }
 
     private fun toastAndDismiss(message: String) {
         showToast(ctx, message)
@@ -55,17 +52,9 @@ class TimerActionBottomSheet :
 @Open
 data class TimerActionBottomSheetScreen(
     val timerId: ObservableInt = ObservableInt(-1),
-    val isFavourited: ObservableBoolean = ObservableBoolean(false)
+    val isFavourite: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 
-    fun navToTimer(id: Int) = when (screenName) {
-        HomeFragment::class.java.simpleName -> HomeFragmentDirections.actionHomeFragmentToTimerFragment(
-            id
-        )
-        FavouritesFragment::class.java.simpleName -> FavouritesFragmentDirections.actionFavouritesFragmentToTimerFragment(
-            id
-        )
-        HomeFragment::class.java.simpleName -> TODO()
-        else -> error("fragment type not found")
-    }
+    fun navToTimer(id: Int) =
+        TimerActionBottomSheetDirections.actionTimerActionBottomSheetToTimerFragment(id)
 }

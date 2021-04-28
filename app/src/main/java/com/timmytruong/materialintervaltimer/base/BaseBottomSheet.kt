@@ -21,34 +21,27 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-const val DISMISS = "dismiss"
+private const val DISMISS = "dismiss"
+internal val DISMISS_EVENT = DISMISS to Unit
 
 abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, Binding : ViewDataBinding> :
     BottomSheetDialogFragment(),
     BaseObserver<ViewModel>,
     ErrorHandler {
 
-    override var uiStateJobs: ArrayList<Job> = arrayListOf()
+    abstract val screen: Screen
+
+    abstract val layoutId: Int
 
     protected var binding: Binding? = null
+
+    override var uiStateJobs: ArrayList<Job> = arrayListOf()
 
     protected val ctx: Context by lazy { requireContext() }
 
     protected val v: View by lazy { requireView() }
 
-    abstract val screen: Screen
-
-    abstract val name: String
-
-    abstract val layoutId: Int
-
     abstract fun bindView()
-
-    override val eventFlowHandler: suspend (Pair<String, Any>) -> Unit = {
-        when (it.first) {
-            DISMISS -> close()
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,17 +52,11 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
         return binding!!.root
     }
 
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        screen.screenName = name
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startSuspending {
             viewModel.navigateFlow.onEach(::navigationHandler).launchIn(it)
-            viewModel.eventFlow.onEach(eventFlowHandler).launchIn(it)
+            viewModel.eventFlow.onEach(::eventHandler).launchIn(it)
         }
     }
 
@@ -79,8 +66,8 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
     }
 
     override fun onPause() {
-        super.onPause()
         uiStateJobs.forEach { it.cancel() }
+        super.onPause()
     }
 
     override fun onDestroyView() {

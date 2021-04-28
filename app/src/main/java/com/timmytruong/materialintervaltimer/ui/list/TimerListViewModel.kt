@@ -9,6 +9,7 @@ import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.materialintervaltimer.di.WeakContext
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
@@ -27,11 +28,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 @HiltViewModel
 class TimerListViewModel @Inject constructor(
-    @ApplicationContext private val ctx: Context,
+    @WeakContext private val ctx: WeakReference<Context>,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
@@ -41,7 +43,7 @@ class TimerListViewModel @Inject constructor(
 
     fun fetchTimers() = startSuspending(ioDispatcher) {
         screen.timers = when (screen.screenName) {
-            FavouritesFragment::class.java.simpleName -> timerRepository.getFavouriteTimers()
+            FavouritesFragment::class.java.simpleName -> timerRepository.getFavouritedTimers()
                 .map { it.map(::mapTimerToBinding) }
             RecentsFragment::class.java.simpleName -> timerRepository.getRecentTimers()
                 .map { it.map(::mapTimerToBinding) }
@@ -52,28 +54,26 @@ class TimerListViewModel @Inject constructor(
     private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
         time = ObservableField(
             formatNormalizedTime(
-                getTimeFromSeconds(timer.timer_total_time_ms / MILLI_IN_SECS_I),
+                getTimeFromSeconds(timer.totalTimeMs / MILLI_IN_SECS_I),
                 ctx.string(R.string.timerTimeFormat)
             )
         ),
-        title = ObservableField(timer.timer_title),
+        title = ObservableField(timer.title),
         intervalCount = ObservableField(
             String.format(
                 ctx.string(R.string.number_of_intervals_format),
-                timer.timer_intervals_count
+                timer.intervalCount
             )
         ),
         timerId = timer.id,
-        clicks = ::onTimerCardClicked
-    )
-
-    private fun onTimerCardClicked(binding: TimerListScreenBinding) =
-        startSuspending(ioDispatcher) {
-            val timer = timerRepository.getTimerById(binding.timerId)
-            bottomSheet.timerId.set(timer.id)
-            bottomSheet.isFavourited.set(timer.timer_saved)
-            navigateWith(screen.navToBottomSheet())
+        clicks = {
+            startSuspending(ioDispatcher) {
+                bottomSheet.timerId.set(timer.id)
+                bottomSheet.isFavourite.set(timer.isFavourited)
+                navigateWith(screen.navToBottomSheet())
+            }
         }
+    )
 }
 
 data class TimerListScreen(

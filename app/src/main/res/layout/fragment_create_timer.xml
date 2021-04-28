@@ -202,7 +202,7 @@
                     android:layout_marginStart="@dimen/material"
                     android:layout_marginEnd="@dimen/material"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:onClick="@{() -> viewModel.setSaved(!fragmentCreateTimerSavedSwitch.isChecked())}">
+                    android:onClick="@{() -> viewModel.setFavourite(!fragmentCreateTimerSavedSwitch.isChecked())}">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerOptionsText"

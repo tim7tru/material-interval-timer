@@ -10,6 +10,7 @@ import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.materialintervaltimer.di.WeakContext
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemScreenBinding
@@ -20,10 +21,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 internal const val IS_SAVED = "is saved"
@@ -32,7 +33,7 @@ internal const val START_ANIMATION = "start animation"
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(
-    @ApplicationContext private val ctx: Context,
+    @WeakContext private val ctx: WeakReference<Context>,
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val intervalTimer: IntervalTimer,
@@ -61,7 +62,7 @@ class TimerViewModel @Inject constructor(
 
         screen.intervals = intervalBindings
         intervalTimer.currentTimeRemaining.map { it.toInt() }.collectLatest(::updateTimeRemaining)
-        fireEvent(IS_SAVED, timer.timer_saved)
+        fireEvents(IS_SAVED to timer.isFavourited)
         handleStop()
     }
 
@@ -69,7 +70,7 @@ class TimerViewModel @Inject constructor(
         cancelAnimation()
         screen.timerState.set(TimerState.RUNNING)
         intervalTimer.start()
-        fireEvent(START_ANIMATION, currentIntervalTimeRemaining.toLong())
+        fireEvents(START_ANIMATION to currentIntervalTimeRemaining.toLong())
     }
 
     fun handlePause() = startSuspending(ioDispatcher) {
@@ -86,8 +87,8 @@ class TimerViewModel @Inject constructor(
         setNewIntervalList()
     }
 
-    fun setShouldSave(save: Boolean) = startSuspending(ioDispatcher) {
-        timerLocalDataSource.setShouldSave(id = timer.id, saved = save)
+    fun setShouldSave(favourite: Boolean) = startSuspending(ioDispatcher) {
+        timerLocalDataSource.setFavourite(id = timer.id, favourite = favourite)
     }
 
     fun exit() {
@@ -95,14 +96,14 @@ class TimerViewModel @Inject constructor(
         navigateWith(screen.navToHome())
     }
 
-    private fun cancelAnimation() = fireEvent(CANCEL_ANIMATION)
+    private fun cancelAnimation() = fireEvents(CANCEL_ANIMATION to Unit)
 
     private fun resetProgress() {
         screen.progress.set(((currentIntervalTimeRemaining / currentIntervalTotalTime) * MILLI_IN_SECS_I).toInt())
     }
 
     private suspend fun setNewInterval() {
-        val intervalTime = intervals.first().interval_time_ms
+        val intervalTime = intervals.first().timeMs
         intervalTimer.buildIntervalTimer(intervalTime.toLong())
         currentIntervalTimeRemaining = intervalTime.toFloat()
         currentIntervalTotalTime = currentIntervalTimeRemaining
@@ -110,7 +111,7 @@ class TimerViewModel @Inject constructor(
     }
 
     private fun addRepeatIntervals() {
-        intervals.addAll(timer.timer_intervals)
+        intervals.addAll(timer.intervals)
         updateIntervalBindings()
     }
 
@@ -125,9 +126,9 @@ class TimerViewModel @Inject constructor(
                         else -> ""
                     }
                 ),
-                iconId = ObservableInt(interval.interval_icon_id),
-                title = ObservableField(interval.interval_name),
-                description = ObservableField(interval.interval_time_format)
+                iconId = ObservableInt(interval.iconId),
+                title = ObservableField(interval.name),
+                description = ObservableField(interval.timeFormat)
             )
         }
     }
@@ -135,7 +136,7 @@ class TimerViewModel @Inject constructor(
     private fun updateTimeRemaining(timeRemaining: Int) {
         setTimeRemaining(timeRemaining)
 
-        if (timer.timer_repeat && (intervals.size <= timer.timer_intervals_count / 2 || intervals.size == 1)) {
+        if (timer.shouldRepeat && (intervals.size <= timer.intervalCount / 2 || intervals.size == 1)) {
             addRepeatIntervals()
         }
 
@@ -168,15 +169,15 @@ class TimerViewModel @Inject constructor(
     }
 
     private fun playSound() {
-        val soundId = timer.timer_interval_sound.sound_id
+        val soundId = timer.intervalSound.id
         if (!isMuted && soundId != -1) {
-            MediaPlayer.create(ctx, soundId).start()
+            MediaPlayer.create(ctx.get(), soundId).start()
         }
     }
 
     private suspend fun setNewIntervalList() {
         intervals.clear()
-        intervals.addAll(timer.timer_intervals)
+        intervals.addAll(timer.intervals)
         updateIntervalBindings()
         setNewInterval()
     }

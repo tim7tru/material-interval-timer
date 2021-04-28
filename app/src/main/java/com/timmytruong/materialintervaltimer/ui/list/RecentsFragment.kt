@@ -21,12 +21,13 @@ class RecentsFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fragme
 
     override val layoutId: Int = R.layout.fragment_recents
 
-    override val name: String = name()
+    override val name: String = this.name()
 
     override val viewModel: TimerListViewModel by viewModels()
 
-    override fun bindView() {
-        binding?.fragmentRecentsRecycler?.adapter = verticalTimerListAdapter
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchTimers()
         startSuspending {
             screen.timers.collectLatest {
                 if (it.isEmpty()) screen.isEmpty.set(true)
@@ -35,8 +36,7 @@ class RecentsFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fragme
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchTimers()
+    override fun bindView() {
+        binding?.fragmentRecentsRecycler?.adapter = verticalTimerListAdapter
     }
 }

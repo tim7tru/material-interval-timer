@@ -1,7 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
-import android.os.Bundle
-import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
@@ -12,6 +10,7 @@ import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.ui.reusable.HorizontalTimerItemAdapter
 import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.materialintervaltimer.utils.name
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +34,7 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
     @Favourites
     lateinit var favouritesAdapter: HorizontalTimerItemAdapter
 
-    override val name: String = this::class.java.simpleName
+    override val name: String = this.name()
 
     override val layoutId: Int = R.layout.fragment_home
 
@@ -48,13 +47,8 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
         binding?.fragmentHomeFavouritesFrag?.horizontalRecycler?.adapter = favouritesAdapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindView()
-    }
-
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         viewModel.fetchFavouriteTimers()
         viewModel.fetchRecentTimers()
 

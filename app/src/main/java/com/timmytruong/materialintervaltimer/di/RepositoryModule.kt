@@ -3,7 +3,7 @@ package com.timmytruong.materialintervaltimer.di
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.data.local.TimerLocalDataSource
-import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDAO
+import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
 import dagger.Module
@@ -31,9 +31,9 @@ object RepositoryModule {
     @ActivityRetainedScoped
     @Provides
     fun provideTimerRepository(
-        timerDAO: TimerDAO,
+        timerDao: TimerDao,
         @BackgroundDispatcher dispatcher: CoroutineDispatcher
-    ): TimerRepository = TimerLocalDataSource(timerDAO, dispatcher)
+    ): TimerRepository = TimerLocalDataSource(timerDao, dispatcher)
 }
 
 @Qualifier

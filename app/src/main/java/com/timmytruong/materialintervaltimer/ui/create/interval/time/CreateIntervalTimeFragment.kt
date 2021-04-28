@@ -27,13 +27,8 @@ class CreateIntervalTimeFragment :
 
     override val viewModel: CreateIntervalTimeViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindView()
-    }
-
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         updateProgressBar(PROGRESS_FULL)
         viewModel.fetchTime()
     }

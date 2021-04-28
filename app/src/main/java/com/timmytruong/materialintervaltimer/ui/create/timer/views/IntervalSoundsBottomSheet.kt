@@ -24,8 +24,6 @@ class IntervalSoundsBottomSheet :
     @Inject
     override lateinit var screen: IntervalSoundsBottomSheetScreen
 
-    override val name: String = this.name()
-
     override val viewModel: CreateTimerViewModel by viewModels()
 
     override val layoutId: Int get() = R.layout.fragment_interval_sounds_bottom_sheet
@@ -45,6 +43,8 @@ class IntervalSoundsBottomSheet :
         binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = null
         super.onDestroyView()
     }
+
+    override fun eventHandler(event: Pair<String, Any>) {}
 }
 
 data class IntervalSoundsBottomSheetScreen(

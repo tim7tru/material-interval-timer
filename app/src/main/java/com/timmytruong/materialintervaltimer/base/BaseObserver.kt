@@ -8,7 +8,7 @@ interface BaseObserver<V: BaseViewModel> {
 
     val uiStateJobs: ArrayList<Job>
 
-    val eventFlowHandler: suspend (Pair<String, Any>) -> Unit
+    fun eventHandler(event: Pair<String, Any>)
 
     fun navigationHandler(action: NavDirections): Unit? = null
 }

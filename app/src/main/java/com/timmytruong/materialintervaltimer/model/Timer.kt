@@ -10,55 +10,53 @@ import com.timmytruong.materialintervaltimer.utils.converters.IntervalSoundConve
 @Entity(tableName = "Timers")
 data class Timer(
     @ColumnInfo
-    var timer_title: String = "",
+    var title: String = "",
 
-    @ColumnInfo
-    var timer_created_date: String = "",
+    @ColumnInfo(name = "created_date")
+    var createdDate: String = "",
 
-    @ColumnInfo
-    var timer_updated_date: String = "",
+    @ColumnInfo(name = "updated_date")
+    var updatedDate: String = "",
 
-    @ColumnInfo
-    var timer_saved: Boolean = false,
+    @ColumnInfo(name = "is_favourite")
+    var isFavourited: Boolean = false,
 
-    @ColumnInfo
-    var timer_repeat: Boolean = false,
+    @ColumnInfo(name = "should_repeat")
+    var shouldRepeat: Boolean = false,
 
     @ColumnInfo
     @TypeConverters(IntervalConverter::class)
-    var timer_intervals: ArrayList<Interval> = arrayListOf(),
+    var intervals: ArrayList<Interval> = arrayListOf(),
 
-    @ColumnInfo
-    var timer_intervals_count: Int = 0,
+    @ColumnInfo(name = "interval_count")
+    var intervalCount: Int = 0,
 
-    @ColumnInfo
-    var timer_total_time_ms: Int = 0,
+    @ColumnInfo(name = "total_time_ms")
+    var totalTimeMs: Int = 0,
 
-    @ColumnInfo
+    @ColumnInfo(name = "interval_sound")
     @TypeConverters(IntervalSoundConverter::class)
-    var timer_interval_sound: IntervalSound = IntervalSound(-1, "None", true)
+    var intervalSound: IntervalSound = IntervalSound(-1, "None", true)
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
     fun clear() {
-        timer_title = ""
-        timer_created_date = ""
-        timer_updated_date = ""
-        timer_saved = false
-        timer_repeat = false
-        timer_intervals = arrayListOf()
-        timer_intervals_count = 0
-        timer_total_time_ms = 0
-        timer_interval_sound = IntervalSound(-1)
+        title = ""
+        createdDate = ""
+        updatedDate = ""
+        isFavourited = false
+        shouldRepeat = false
+        intervals = arrayListOf()
+        intervalCount = 0
+        totalTimeMs = 0
+        intervalSound = IntervalSound(-1)
         id = 0
     }
 
     fun setTotalTime() {
         var totalTimeMilli = 0
-        timer_intervals.forEach {
-            totalTimeMilli += it.interval_time_ms
-        }
-        timer_total_time_ms = totalTimeMilli
+        intervals.forEach { totalTimeMilli += it.timeMs }
+        totalTimeMs = totalTimeMilli
     }
 }
