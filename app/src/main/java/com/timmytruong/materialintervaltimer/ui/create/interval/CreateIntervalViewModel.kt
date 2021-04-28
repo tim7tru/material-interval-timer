@@ -6,6 +6,7 @@ import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.IntervalStore
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.materialintervaltimer.di.WeakContext
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.utils.getDrawableIdFromTag
 import com.timmytruong.materialintervaltimer.utils.getTagFromDrawableId
@@ -14,15 +15,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collectLatest
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateIntervalViewModel @Inject constructor(
-    @ApplicationContext private val ctx: Context,
+    @WeakContext private val ctx: WeakReference<Context>,
     @IntervalStore private val intervalStore: Store<Interval>,
     private val screen: CreateIntervalScreen,
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -31,27 +32,27 @@ class CreateIntervalViewModel @Inject constructor(
 
     init {
         startSuspending(ioDispatcher) {
-            intervalStore.observe.collectLatest {
-                screen.intervalIconTag.set(getTagFromDrawableId(ctx, it.interval_icon_id))
-                screen.intervalTitle.set(it.interval_name)
+            intervalStore.observe.collectLatest { interval ->
+                screen.intervalIconTag.set(ctx.get()?.let {getTagFromDrawableId(it, interval.iconId) })
+                screen.intervalTitle.set(interval.name)
             }
         }
     }
 
     fun setIntervalIcon(tag: String) = startSuspending(ioDispatcher) {
-        val id = getDrawableIdFromTag(context = ctx, tag = tag)
-        intervalStore.update { it.interval_icon_id = id }
-        screen.intervalIconTag.set(getTagFromDrawableId(context = ctx, id = id))
+        val id = ctx.get()?.let { getDrawableIdFromTag(context = it, tag = tag) } ?: -1
+        intervalStore.update { it.iconId = id }
+        screen.intervalIconTag.set(ctx.get()?.let { getTagFromDrawableId(context = it, id = id) })
     }
 
     fun setEnabled(checked: Boolean) = screen.enableIcon.set(checked)
 
     fun onTitleChanged(text: CharSequence) = startSuspending(ioDispatcher) {
-        intervalStore.update { it.interval_name = text.toString() }
+        intervalStore.update { it.name = text.toString() }
     }
 
     fun validateTitle(title: String) = startSuspending(ioDispatcher) {
-        intervalStore.update { it.interval_name = title }
+        intervalStore.update { it.name = title }
         navigateWith(action = screen.nextAction())
     }
 

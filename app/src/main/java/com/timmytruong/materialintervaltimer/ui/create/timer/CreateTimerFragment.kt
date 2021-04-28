@@ -39,11 +39,10 @@ class CreateTimerFragment : BaseFragment<CreateTimerScreen, CreateTimerViewModel
         if (args.clearViewModel) viewModel.clearTimer()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         viewModel.fetchCurrentTimer()
         updateProgressBar(progress = 0, show = false)
-        bindView()
     }
 
     override fun onPause() {

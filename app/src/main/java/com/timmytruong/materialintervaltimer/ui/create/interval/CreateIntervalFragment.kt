@@ -28,16 +28,15 @@ class CreateIntervalFragment :
 
     override val layoutId: Int = R.layout.fragment_create_interval
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchInterval()
-        updateProgressBar(PROGRESS_HALF)
-        bindView()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.clearStore()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchInterval()
+        updateProgressBar(PROGRESS_HALF)
     }
 
     override fun onPause() {

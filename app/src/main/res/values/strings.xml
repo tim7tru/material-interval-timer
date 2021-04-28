@@ -4,6 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="favorite">Favourite</string>
+    <string name="unfavorite">Unfavourite</string>
     <string name="favoriteDescription">Favorite this timer</string>
 
     <string name="soundOn">Sound On</string>
@@ -20,7 +21,7 @@
     <string name="timerCardTotalCycles">Total cycles:</string>
     <string name="timerCardTasksInCycle">Tasks in cycle:</string>
     <string name="timerCardLastUsed">Last used:</string>
-    <string name="ellipses">...</string>
+    <string name="ellipses">…</string>
     <string name="intervalIcon">Interval icon</string>
     <string name="intervals">Intervals</string>
     <string name="add">Add</string>

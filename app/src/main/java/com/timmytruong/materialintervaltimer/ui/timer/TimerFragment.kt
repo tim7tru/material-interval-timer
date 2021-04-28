@@ -50,16 +50,6 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
 
     override val layoutId: Int = R.layout.fragment_timer
 
-    override val eventFlowHandler: suspend (Pair<String, Any>) -> Unit by lazy {
-        {
-            when (it.first) {
-                CANCEL_ANIMATION -> cancelProgressAnimation()
-                START_ANIMATION -> startProgressAnimation(it.second as Long)
-                IS_SAVED -> favouriteButton.isChecked = true
-            }
-        }
-    }
-
     private lateinit var menu: Menu
 
     private val mutedButton: MenuItem by lazy { menu.findItem(R.id.soundOff) }
@@ -85,7 +75,7 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         MenuItem.OnMenuItemClickListener {
             val event = !favouriteButton.isChecked
             favouriteButton.isChecked = event
-            viewModel.setShouldSave(save = event)
+            viewModel.setShouldSave(favourite = event)
             return@OnMenuItemClickListener true
         }
     }
@@ -112,14 +102,9 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         viewModel.fetchTimer(id = args.timerId)
-        bindView()
-    }
-
-    override fun onResume() {
-        super.onResume()
         startSuspending { screen.intervals.collectLatest(intervalItemAdapter::addList) }
     }
 
@@ -178,6 +163,15 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
     override fun onClick(dialog: DialogInterface?, button: Int) {
         if (button == DialogInterface.BUTTON_POSITIVE) viewModel.exit()
         dialog?.dismiss()
+    }
+
+    override fun eventHandler(event: Pair<String, Any>) {
+        super.eventHandler(event)
+        when (event.first) {
+            CANCEL_ANIMATION -> cancelProgressAnimation()
+            START_ANIMATION -> startProgressAnimation(event.second as Long)
+            IS_SAVED -> favouriteButton.isChecked = true
+        }
     }
 }
 

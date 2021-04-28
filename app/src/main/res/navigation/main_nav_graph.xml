@@ -26,9 +26,6 @@
         android:name="com.timmytruong.materialintervaltimer.ui.list.FavouritesFragment"
         android:label="@string/favourites" >
         <action
-            android:id="@+id/action_favouritesFragment_to_timerFragment"
-            app:destination="@id/timerFragment" />
-        <action
             android:id="@+id/action_favouritesFragment_to_timerActionBottomSheet"
             app:destination="@id/timerActionBottomSheet" />
     </fragment>
@@ -46,9 +43,6 @@
                 android:defaultValue="true"
                 app:argType="boolean" />
         </action>
-        <action
-            android:id="@+id/action_homeFragment_to_timerFragment"
-            app:destination="@id/timerFragment" />
         <action
             android:id="@+id/action_homeFragment_to_timerActionBottomSheet"
             app:destination="@id/timerActionBottomSheet">
@@ -72,7 +66,7 @@
 
     <dialog
         android:id="@+id/timerActionBottomSheet"
-        android:name="com.timmytruong.materialintervaltimer.ui.reusable.TimerActionBottomSheet"
+        android:name="com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheet"
         android:label="TimerActionBottomSheet" >
         <argument
             android:name="timerId"

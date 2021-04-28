@@ -25,8 +25,9 @@ class FavouritesFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fra
 
     override val viewModel: TimerListViewModel by viewModels()
 
-    override fun bindView() {
-        binding?.fragmentFavouritesRecycler?.adapter = verticalTimerListAdapter
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchTimers()
         startSuspending {
             screen.timers.collectLatest {
                 if (it.isEmpty()) screen.isEmpty.set(true)
@@ -35,9 +36,7 @@ class FavouritesFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fra
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        bindView()
-        viewModel.fetchTimers()
+    override fun bindView() {
+        binding?.fragmentFavouritesRecycler?.adapter = verticalTimerListAdapter
     }
 }

@@ -52,21 +52,12 @@ class MainActivity : AppCompatActivity(), ProgressBar {
     }
 
     private fun setupAppBar() {
-        appBarConfig = AppBarConfiguration(
-            setOf(R.id.homeFragment),
-            binding.activityMainDrawerLayout
-        )
+        appBarConfig =
+            AppBarConfiguration(setOf(R.id.homeFragment), binding.activityMainDrawerLayout)
 
-        NavigationUI.setupActionBarWithNavController(
-            this,
-            navController,
-            appBarConfig
-        )
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)
 
-        NavigationUI.setupWithNavController(
-            binding.activityMainNavDrawer,
-            navController
-        )
+        NavigationUI.setupWithNavController(binding.activityMainNavDrawer, navController)
     }
 
     private fun getForegorundFragment(): Fragment? {
@@ -77,12 +68,11 @@ class MainActivity : AppCompatActivity(), ProgressBar {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             getForegorundFragment()?.let {
-                if (it is HomeFragment)
-                    return@let
-                else {
-                    onBackPressedDispatcher.onBackPressed()
-                    return true
+                when (it) {
+                    is HomeFragment -> return@let
+                    else -> onBackPressedDispatcher.onBackPressed()
                 }
+                return true
             }
         }
 
@@ -95,15 +85,15 @@ class MainActivity : AppCompatActivity(), ProgressBar {
 
     override fun updateProgressBar(progress: Int, show: Boolean) {
         binding.activityMainProgressBar.visibility = if (show) View.VISIBLE else View.GONE
-        val animation =
-            ObjectAnimator.ofInt(
-                binding.activityMainProgressBar,
-                PROGRESS_BAR_PROPERTY,
-                binding.activityMainProgressBar.progress,
-                progress
-            )
-        animation.duration = PROGRESS_BAR_ANIMATION_DURATION_MS
-        animation.interpolator = DecelerateInterpolator()
-        animation.start()
+        ObjectAnimator.ofInt(
+            binding.activityMainProgressBar,
+            PROGRESS_BAR_PROPERTY,
+            binding.activityMainProgressBar.progress,
+            progress
+        ).apply {
+            duration = PROGRESS_BAR_ANIMATION_DURATION_MS
+            interpolator = DecelerateInterpolator()
+            start()
+        }
     }
 }

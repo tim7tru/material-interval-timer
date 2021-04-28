@@ -23,8 +23,8 @@ abstract class BaseViewModel : ViewModel() {
     private val _eventFlow = MutableSharedFlow<Pair<String, Any>>()
     val eventFlow: SharedFlow<Pair<String, Any>> = _eventFlow
 
-    protected fun fireEvent(key: String, value: Any = Unit) = startSuspending(mainDispatcher) {
-        _eventFlow.emit(Pair(key, value))
+    protected fun fireEvents(vararg events: Pair<String, Any>) = startSuspending(mainDispatcher) {
+        events.forEach { _eventFlow.emit(it) }
     }
 
     protected fun navigateWith(action: NavDirections) = startSuspending(mainDispatcher) {
@@ -34,5 +34,7 @@ abstract class BaseViewModel : ViewModel() {
     protected fun ViewModel.startSuspending(
         context: CoroutineContext = EmptyCoroutineContext,
         block: suspend (CoroutineScope) -> Unit
-    ) { viewModelScope.launch(context, CoroutineStart.DEFAULT, block) }
+    ) {
+        viewModelScope.launch(context, CoroutineStart.DEFAULT, block)
+    }
 }

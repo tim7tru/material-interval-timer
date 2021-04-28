@@ -3,7 +3,7 @@ package com.timmytruong.materialintervaltimer.data.local
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-class Store<out T>(private var item: T) {
+class Store<out T>(private val item: T) {
 
     private val store = MutableSharedFlow<T>()
     val observe: Flow<@JvmSuppressWildcards T> = store

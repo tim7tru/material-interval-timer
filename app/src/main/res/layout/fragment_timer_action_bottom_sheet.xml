@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -29,7 +28,7 @@
             android:onClick="@{() -> viewModel.onStartClicked(screen.timerId)}"
             app:icon="@drawable/ic_timer_24px"
             app:rippleColor="@color/colorSecondaryAccent"
-            app:iconTint="@color/colorSecondaryDark" />
+            app:iconTint="@color/colorSecondaryDark"/>
 
         <include layout="@layout/separator_line"/>
 
@@ -37,14 +36,12 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@{screen.isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
-            android:text="@string/favorite"
-            android:onClick="@{() -> viewModel.onFavouritedClicked(screen.timerId, !screen.isFavourited)}"
+            android:textColor="@{screen.isFavourite ? @color/colorGolden : @color/colorSecondaryDark}"
+            android:text="@{screen.isFavourite ? @string/unfavorite : @string/favorite}"
+            android:onClick="@{() -> viewModel.onFavouritedClicked(screen.timerId, !screen.isFavourite)}"
             app:icon="@drawable/ic_grade_24px"
-            app:rippleColor="@{screen.isFavourited ? @color/colorGoldenAccent : @color/colorSecondaryAccent}"
-            app:iconTint="@{screen.isFavourited ? @color/colorGolden : @color/colorSecondaryDark}"
-            tools:iconTint="@color/colorGolden"
-            tools:textColor="@color/colorSecondaryDark"/>
+            app:rippleColor="@{screen.isFavourite ? @color/colorGoldenAccent : @color/colorSecondaryAccent}"
+            app:iconTint="@{screen.isFavourite ? @color/colorGolden : @color/colorSecondaryDark}"/>
 
         <include layout="@layout/separator_line"/>
 
@@ -52,12 +49,12 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textColor="@color/colorRed"
-            android:text="@string/delete"
             android:onClick="@{() -> viewModel.onDeleteClicked(screen.timerId)}"
-            app:rippleColor="@color/colorRed"
+            android:text="@string/delete"
+            android:textColor="@color/colorRed"
             app:icon="@drawable/ic_delete_24px"
-            app:iconTint="@color/colorRed"/>
+            app:iconTint="@color/colorRed"
+            app:rippleColor="@color/colorRed" />
 
     </LinearLayout>
 </layout>

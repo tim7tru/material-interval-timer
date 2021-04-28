@@ -5,23 +5,23 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TimerDAO {
+interface TimerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(timer: Timer): Long
 
     @Query("SELECT * FROM Timers WHERE id = :id")
     suspend fun getTimerById(id: Int): Timer
 
-    @Query("UPDATE Timers SET timer_saved = :shouldSave, timer_updated_date = :date WHERE id = :id")
-    suspend fun setSaveTimer(id: Int, shouldSave: Boolean, date: String)
+    @Query("UPDATE Timers SET is_favourite = :isFavourite, updated_date = :date WHERE id = :id")
+    suspend fun setFavourite(id: Int, isFavourite: Boolean, date: String)
 
-    @Query("UPDATE Timers SET timer_updated_date = :date WHERE id = :id")
+    @Query("UPDATE Timers SET updated_date = :date WHERE id = :id")
     suspend fun setUpdatedDate(id: Int, date: String)
 
-    @Query("SELECT * FROM Timers WHERE timer_saved = 1")
-    fun getSavedTimers(): Flow<List<Timer>>
+    @Query("SELECT * FROM Timers WHERE is_favourite = 1")
+    fun getFavouritedTimers(): Flow<List<Timer>>
 
-    @Query("SELECT * FROM Timers ORDER BY timer_updated_date DESC")
+    @Query("SELECT * FROM Timers ORDER BY updated_date DESC")
     fun getRecentTimers(): Flow<List<Timer>>
 
     @Delete
