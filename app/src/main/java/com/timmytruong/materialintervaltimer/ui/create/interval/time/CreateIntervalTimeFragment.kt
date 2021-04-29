@@ -1,7 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval.time
 
-import android.os.Bundle
-import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
@@ -9,10 +7,11 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_FULL
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
+private const val PROGRESS_FULL = 100
 
 @AndroidEntryPoint
 class CreateIntervalTimeFragment :
@@ -42,7 +41,7 @@ class CreateIntervalTimeFragment :
 data class CreateIntervalTimeScreen(
     val intervalDisplayTime: ObservableField<String> = ObservableField(""),
     val intervalTimeLengthValidity: ObservableBoolean = ObservableBoolean(false)
-): BaseScreen() {
+) : BaseScreen() {
 
     fun navBackToCreateTimer() = CreateIntervalTimeFragmentDirections
         .actionCreateIntervalTimeFragmentToCreateTimerFragment(false)
