@@ -1,11 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.timer
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
-import android.view.animation.LinearInterpolator
 import androidx.activity.addCallback
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -15,19 +13,12 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
-import com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerFragment
-import com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerScreen
+import com.timmytruong.materialintervaltimer.di.CircularProgress
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemScreenBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
+import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.utils.*
-import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.components.FragmentComponent
-import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -42,7 +33,8 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
     override lateinit var screen: TimerScreen
 
     @Inject
-    lateinit var linearInterpolator: LinearInterpolator
+    @CircularProgress
+    lateinit var progressBar: ProgressAnimation
 
     override val name: String = this.name()
 
@@ -58,27 +50,7 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
 
     private val favouriteButton: MenuItem by lazy { menu.findItem(R.id.favorite) }
 
-    private var progressAnimation: ObjectAnimator? = null
-
     private val args: TimerFragmentArgs by navArgs()
-
-    private val onSoundIconClicked: MenuItem.OnMenuItemClickListener by lazy {
-        MenuItem.OnMenuItemClickListener {
-            unmutedButton.isVisible = it.itemId != R.id.soundOn
-            mutedButton.isVisible = it.itemId == R.id.soundOn
-            viewModel.isMuted = it.itemId == R.id.soundOff
-            return@OnMenuItemClickListener true
-        }
-    }
-
-    private val onFavouriteClicked: MenuItem.OnMenuItemClickListener by lazy {
-        MenuItem.OnMenuItemClickListener {
-            val event = !favouriteButton.isChecked
-            favouriteButton.isChecked = event
-            viewModel.setShouldSave(favourite = event)
-            return@OnMenuItemClickListener true
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,24 +91,48 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         super.onDestroyView()
     }
 
-    private fun cancelProgressAnimation() {
-        if (progressAnimation?.isStarted == true) {
-            progressAnimation?.cancel()
-            progressAnimation = null
+    override fun onClick(dialog: DialogInterface?, button: Int) {
+        if (button == DialogInterface.BUTTON_POSITIVE) viewModel.exit()
+        dialog?.dismiss()
+    }
+
+    override fun eventHandler(event: Pair<String, Any>) {
+        super.eventHandler(event)
+        when (event.first) {
+            CANCEL_ANIMATION -> progressBar.cancelAnimation()
+            START_ANIMATION -> progressBar.startAnimation(
+                target = binding?.fragmentTimerProgressCircle,
+                start = screen.progress.get(),
+                end = 0,
+                duration = event.second as Long
+            )
+            IS_SAVED -> favouriteButton.isChecked = true
         }
     }
 
     private fun showFavouriteMenuIcon() {
         favouriteButton.apply {
             iconTintList = ctx.colorList(R.color.favourite_button_color)
-            setOnMenuItemClickListener(onFavouriteClicked)
+            setOnMenuItemClickListener {
+                val event = !favouriteButton.isChecked
+                favouriteButton.isChecked = event
+                viewModel.setShouldSave(favourite = event)
+                true
+            }
         }
     }
 
     private fun showSoundMenuIcon() {
         unmutedButton.isVisible = true
-        unmutedButton.setOnMenuItemClickListener(onSoundIconClicked)
-        mutedButton.setOnMenuItemClickListener(onSoundIconClicked)
+        MenuItem.OnMenuItemClickListener {
+            unmutedButton.isVisible = it.itemId != R.id.soundOn
+            mutedButton.isVisible = it.itemId == R.id.soundOn
+            viewModel.isMuted = it.itemId == R.id.soundOff
+            return@OnMenuItemClickListener true
+        }.apply {
+            unmutedButton.setOnMenuItemClickListener(this)
+            mutedButton.setOnMenuItemClickListener(this)
+        }
     }
 
     private fun showExitDialog() = showDialog(
@@ -147,32 +143,6 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         negativeMessage = string(R.string.cancel),
         clicks = this@TimerFragment
     )
-
-    private fun startProgressAnimation(duration: Long = MILLI_IN_SECS_L) {
-        progressAnimation = ObjectAnimator.ofInt(
-            binding?.fragmentTimerProgressCircle,
-            PROGRESS_BAR_PROPERTY,
-            screen.progress.get(),
-            0
-        )
-        progressAnimation?.interpolator = linearInterpolator
-        progressAnimation?.duration = duration
-        progressAnimation?.start()
-    }
-
-    override fun onClick(dialog: DialogInterface?, button: Int) {
-        if (button == DialogInterface.BUTTON_POSITIVE) viewModel.exit()
-        dialog?.dismiss()
-    }
-
-    override fun eventHandler(event: Pair<String, Any>) {
-        super.eventHandler(event)
-        when (event.first) {
-            CANCEL_ANIMATION -> cancelProgressAnimation()
-            START_ANIMATION -> startProgressAnimation(event.second as Long)
-            IS_SAVED -> favouriteButton.isChecked = true
-        }
-    }
 }
 
 data class TimerScreen(
@@ -180,16 +150,7 @@ data class TimerScreen(
     val timeRemaining: ObservableField<String> = ObservableField(""),
     val progress: ObservableInt = ObservableInt(0),
     var intervals: Flow<@JvmSuppressWildcards List<IntervalItemScreenBinding>> = emptyFlow(),
-): BaseScreen() {
+) : BaseScreen() {
 
     fun navToHome() = TimerFragmentDirections.actionTimerFragmentToHomeFragment()
-}
-
-@InstallIn(FragmentComponent::class)
-@Module
-class TimerModule {
-
-    @FragmentScoped
-    @Provides
-    fun provideInterpolator() = LinearInterpolator()
 }

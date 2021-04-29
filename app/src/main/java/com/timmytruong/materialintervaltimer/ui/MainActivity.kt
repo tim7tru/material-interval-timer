@@ -1,10 +1,8 @@
 package com.timmytruong.materialintervaltimer.ui
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,14 +11,19 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ActivityMainBinding
+import com.timmytruong.materialintervaltimer.di.HorizontalProgress
 import com.timmytruong.materialintervaltimer.ui.home.HomeFragment
-import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_ANIMATION_DURATION_MS
-import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_BAR_PROPERTY
+import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ProgressBar {
+
+    @Inject
+    @HorizontalProgress
+    lateinit var progressAnimation: ProgressAnimation
 
     private lateinit var binding: ActivityMainBinding
 
@@ -30,20 +33,13 @@ class MainActivity : AppCompatActivity(), ProgressBar {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment
-
         navController = navHostFragment.navController
-
         setSupportActionBar(binding.activityMainNavToolBar)
-
         supportActionBar?.title = getString(R.string.home)
-
         setupNavDrawer()
-
         setupAppBar()
     }
 
@@ -54,9 +50,7 @@ class MainActivity : AppCompatActivity(), ProgressBar {
     private fun setupAppBar() {
         appBarConfig =
             AppBarConfiguration(setOf(R.id.homeFragment), binding.activityMainDrawerLayout)
-
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)
-
         NavigationUI.setupWithNavController(binding.activityMainNavDrawer, navController)
     }
 
@@ -85,15 +79,10 @@ class MainActivity : AppCompatActivity(), ProgressBar {
 
     override fun updateProgressBar(progress: Int, show: Boolean) {
         binding.activityMainProgressBar.visibility = if (show) View.VISIBLE else View.GONE
-        ObjectAnimator.ofInt(
-            binding.activityMainProgressBar,
-            PROGRESS_BAR_PROPERTY,
-            binding.activityMainProgressBar.progress,
-            progress
-        ).apply {
-            duration = PROGRESS_BAR_ANIMATION_DURATION_MS
-            interpolator = DecelerateInterpolator()
-            start()
-        }
+        progressAnimation.startAnimation(
+            target = binding.activityMainProgressBar,
+            start = binding.activityMainProgressBar.progress,
+            end = progress
+        )
     }
 }

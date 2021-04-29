@@ -9,11 +9,12 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_HALF
-import com.timmytruong.materialintervaltimer.ui.reusable.PROGRESS_ZERO
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
+private const val PROGRESS_ZERO = 0
+private const val PROGRESS_HALF = 50
 
 @AndroidEntryPoint
 class CreateIntervalFragment :
@@ -54,7 +55,7 @@ data class CreateIntervalScreen(
     val enableIcon: ObservableBoolean = ObservableBoolean(false),
     val intervalIconTag: ObservableField<String> = ObservableField(""),
     val intervalTitle: ObservableField<String> = ObservableField("")
-): BaseScreen() {
+) : BaseScreen() {
 
     fun nextAction() =
         CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
