@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.create.timer
+ package com.timmytruong.materialintervaltimer.ui.create.timer
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -44,6 +44,16 @@ class CreateTimerViewModel @Inject constructor(
     private val sounds: List<IntervalSound>,
 ) : BaseViewModel() {
 
+    private var soundBindings: List<IntervalSoundScreenBinding> =
+        sounds.mapIndexed { position, sound ->
+            IntervalSoundScreenBinding(
+                soundName = ObservableField<String>(sound.name),
+                isSelected = ObservableBoolean(sound.isSelected),
+                position = position,
+                clicks = ::onSoundClicked
+            )
+        }
+
     init {
         startSuspending(ioDispatcher) {
             timerStore.observe.collectLatest {
@@ -56,16 +66,6 @@ class CreateTimerViewModel @Inject constructor(
             }
         }
     }
-
-    private var soundBindings: List<IntervalSoundScreenBinding> =
-        sounds.mapIndexed { position, sound ->
-            IntervalSoundScreenBinding(
-                soundName = ObservableField<String>(sound.name),
-                isSelected = ObservableBoolean(sound.isSelected),
-                position = position,
-                clicks = ::onSoundClicked
-            )
-        }
 
     fun fetchCurrentTimer() = startSuspending(ioDispatcher) { timerStore.forceEmit() }
 
@@ -93,7 +93,8 @@ class CreateTimerViewModel @Inject constructor(
             it.setTotalTime()
         }
 
-        saveTimer()
+        val id = timerLocalDataSource.saveNewTimer(timer = timerStore.get())
+        navigateWith(screen.navToTimer(id.toInt()))
     }
 
     fun dismissSoundsBottomSheet() = fireEvents(DISMISS_EVENT)
@@ -116,11 +117,6 @@ class CreateTimerViewModel @Inject constructor(
         } else {
             false
         }
-    }
-
-    private suspend fun saveTimer() {
-        val id = timerLocalDataSource.saveNewTimer(timer = timerStore.get())
-        navigateWith(screen.navToTimer(id.toInt()))
     }
 
     private fun mapIntervals(list: ArrayList<Interval>) = list.map {
