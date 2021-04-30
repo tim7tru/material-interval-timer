@@ -11,11 +11,12 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.verify
+import java.lang.ref.WeakReference
 
 @ExperimentalCoroutinesApi
 class HomeViewModelTest : BehaviorSpec({
 
-    val context: Context = mock()
+    val context: WeakReference<Context> = mock()
     val mainDispatcher: CoroutineDispatcher = TestCoroutineDispatcher()
     val backgroundDispatcher: CoroutineDispatcher = TestCoroutineDispatcher()
     val timerRepository: TimerRepository = mock()
@@ -41,7 +42,7 @@ class HomeViewModelTest : BehaviorSpec({
     Given("fetch favourite timers is called") {
         viewModel.fetchFavouriteTimers()
         Then("timers is fetched from repo") {
-            verify(timerRepository).getFavouriteTimers()
+            verify(timerRepository).getFavouritedTimers()
         }
     }
 

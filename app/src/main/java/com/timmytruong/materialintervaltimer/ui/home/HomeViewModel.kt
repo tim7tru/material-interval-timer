@@ -49,10 +49,6 @@ class HomeViewModel @Inject constructor(
     private val _favourites = MutableSharedFlow<List<TimerListScreenBinding>>()
     val favourites: Flow<List<TimerListScreenBinding>> = _favourites
 
-    init {
-        bottomSheet.screenName = screen.screenName
-    }
-
     fun fetchRecentTimers() = startSuspending(ioDispatcher) {
         timerRepository.getRecentTimers().map {
             val list = if (it.size < NUM_TIMERS_SHOWN) it.subList(0, it.size) else it
