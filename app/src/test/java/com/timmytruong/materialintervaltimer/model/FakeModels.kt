@@ -11,6 +11,9 @@ internal const val ONE_SEC_HOUR = "00"
 internal const val ONE_SEC_MIN = "00"
 internal const val ONE_SEC_SEC = "01"
 internal const val ONE_SEC_NORM = "000001"
+internal const val FULL_TIME = "111111"
+internal const val FULL_TIME_SPLIT = "11"
+
 
 val TIME = Time(totalMs = ONE_SEC)
 
