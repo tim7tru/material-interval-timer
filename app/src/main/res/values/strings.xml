@@ -1,7 +1,9 @@
 <resources>
+
+    <!-- App Names -->
     <string name="app_name">Material Interval Timer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="database_name">TimerDB</string>
+
 
     <string name="favorite">Favourite</string>
     <string name="unfavorite">Unfavourite</string>
@@ -68,8 +70,8 @@
 
     <string name="addInterval">Add Interval</string>
     <string name="emptyTime">00h 00m 00s</string>
-    <string name="timerTimeFormat">%s:%s:%s</string>
-    <string name="timeFormat">%sh %sm %ss</string>
+    <string name="timerTimeFormat">%1$s:%2$s:%3$s</string>
+    <string name="timeFormat">%1$sh %2$sm %3$ss</string>
     <string name="createInterval">Create interval</string>
     <string name="number_of_intervals_format">%s intervals</string>
     <string name="repeat">Repeat</string>
@@ -109,4 +111,13 @@
     <string name="dialogCloseTimerTitle">Exit timer?</string>
     <string name="dialogCloseTimerMessage">Are you sure you want to exit this timer?</string>
     <string name="exit">Exit</string>
+
+    <string name="beep">Beep</string>
+    <string name="another_beep">Another Beep</string>
+    <string name="censor">Censor</string>
+    <string name="ding">Ding</string>
+    <string name="elevator">Elevator</string>
+    <string name="error">Error</string>
+    <string name="robot">Robot</string>
+    <string name="synth">Synth</string>
 </resources>

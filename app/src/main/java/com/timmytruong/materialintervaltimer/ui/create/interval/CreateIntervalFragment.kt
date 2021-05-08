@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
@@ -29,14 +30,12 @@ class CreateIntervalFragment :
 
     override val layoutId: Int = R.layout.fragment_create_interval
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.clearStore()
-    }
+    private val args: CreateIntervalFragmentArgs by navArgs()
 
     override fun onStart() {
         super.onStart()
-        viewModel.fetchInterval()
+        if (args.clearStores) { viewModel.clearStore() }
+        viewModel.observe()
         updateProgressBar(PROGRESS_HALF)
     }
 
@@ -46,8 +45,8 @@ class CreateIntervalFragment :
     }
 
     override fun bindView() {
-        binding?.screen = screen
-        binding?.viewModel = viewModel
+        binding.screen = screen
+        binding.viewModel = viewModel
     }
 }
 

@@ -13,27 +13,32 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
-import com.timmytruong.materialintervaltimer.utils.events.ErrorHandler
-import com.timmytruong.materialintervaltimer.utils.showSnackbarError
-import com.timmytruong.materialintervaltimer.utils.string
+import com.timmytruong.materialintervaltimer.ui.reusable.MITSnackbar
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 private const val DISMISS = "dismiss"
 internal val DISMISS_EVENT = DISMISS to Unit
 
 abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, Binding : ViewDataBinding> :
     BottomSheetDialogFragment(),
-    BaseObserver<ViewModel>,
-    ErrorHandler {
+    BaseObserver<ViewModel> {
 
     abstract val screen: Screen
 
     abstract val layoutId: Int
 
-    protected var binding: Binding? = null
+    @Inject
+    lateinit var resources: ResourceProvider
+
+    @Inject
+    lateinit var snackbar: MITSnackbar
+
+    protected lateinit var binding: Binding
 
     override var uiStateJobs: ArrayList<Job> = arrayListOf()
 
@@ -49,7 +54,7 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
         savedInstanceState: Bundle?
     ): View? {
         binding = inflate(inflater, layoutId, container, false)
-        return binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,11 +76,15 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
     }
 
     override fun onDestroyView() {
-        binding = null
+        binding.unbind()
         super.onDestroyView()
     }
 
-    override fun handleUnknownError() = showSnackbarError(v, string(R.string.somethingWentWrong))
+    override fun eventHandler(event: Pair<String, Any>) {
+        when (event.first) {
+            UNKNOWN_ERROR -> snackbar.showError(v, R.string.somethingWentWrong)
+        }
+    }
 
     override fun navigationHandler(action: NavDirections) = with(findNavController()) {
         currentDestination?.getAction(action.actionId)?.let { navigate(action) }

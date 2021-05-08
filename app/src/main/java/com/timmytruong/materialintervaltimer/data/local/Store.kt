@@ -14,8 +14,8 @@ class Store<T>(private val item: T) {
 
     suspend fun update(change: (T) -> Unit) {
         change.invoke(item)
-        forceEmit()
+        refresh()
     }
 
-    suspend fun forceEmit() = store.emit(item)
+    suspend fun refresh() = store.emit(item)
 }
