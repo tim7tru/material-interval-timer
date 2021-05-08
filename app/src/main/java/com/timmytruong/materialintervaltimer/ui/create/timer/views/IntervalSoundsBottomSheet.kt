@@ -35,12 +35,12 @@ class IntervalSoundsBottomSheet :
     }
 
     override fun bindView() {
-        binding?.viewModel = viewModel
-        binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = intervalSoundsAdapter
+        binding.viewModel = viewModel
+        binding.fragmentIntervalsSoundsBottomSheetRecycler.adapter = intervalSoundsAdapter
     }
 
     override fun onDestroyView() {
-        binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = null
+        binding.fragmentIntervalsSoundsBottomSheetRecycler.adapter = null
         super.onDestroyView()
     }
 

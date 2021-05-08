@@ -132,9 +132,13 @@
             android:id="@+id/createIntervalFragment"
             android:name="com.timmytruong.materialintervaltimer.ui.create.interval.CreateIntervalFragment"
             android:label="@string/createInterval">
+            <argument
+                android:name="clearStores"
+                android:defaultValue="true"
+                app:argType="boolean" />
             <action
                 android:id="@+id/action_createIntervalFragment_to_createIntervalTimeFragment"
-                app:destination="@id/createIntervalTimeFragment" />
+                app:destination="@id/createIntervalTimeFragment"/>
         </fragment>
         <dialog
             android:id="@+id/intervalSoundsBottomSheet"

@@ -5,6 +5,7 @@ import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.data.local.TimerLocalDataSource
 import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
 import com.timmytruong.materialintervaltimer.model.Interval
+import com.timmytruong.materialintervaltimer.model.Time
 import com.timmytruong.materialintervaltimer.model.Timer
 import dagger.Module
 import dagger.Provides
@@ -20,13 +21,15 @@ object RepositoryModule {
 
     @ActivityRetainedScoped
     @Provides
-    @TimerStore
-    fun provideTimerStore() = Store(Timer())
+    fun provideTimerStore(): Store<Timer> = Store(Timer())
 
     @ActivityRetainedScoped
     @Provides
-    @IntervalStore
-    fun provideIntervalStore() = Store(Interval())
+    fun provideIntervalStore(): Store<Interval> = Store(Interval())
+
+    @ActivityRetainedScoped
+    @Provides
+    fun provideTimeStore(): Store<Time> = Store(Time())
 
     @ActivityRetainedScoped
     @Provides
@@ -35,8 +38,3 @@ object RepositoryModule {
         @BackgroundDispatcher dispatcher: CoroutineDispatcher
     ): TimerRepository = TimerLocalDataSource(timerDao, dispatcher)
 }
-
-@Qualifier
-annotation class TimerStore
-@Qualifier
-annotation class IntervalStore

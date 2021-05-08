@@ -3,7 +3,7 @@ package com.timmytruong.materialintervaltimer.data.local
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.getCurrentDate
+import com.timmytruong.materialintervaltimer.utils.currentDate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -21,7 +21,7 @@ class TimerLocalDataSource(
     }
 
     override suspend fun setFavourite(id: Int, favourite: Boolean) = withContext(ioDispatcher) {
-        timerDao.setFavourite(id = id, isFavourite = favourite, date = getCurrentDate())
+        timerDao.setFavourite(id = id, isFavourite = favourite, date = currentDate())
     }
 
     override suspend fun deleteTimer(id: Int) = withContext(ioDispatcher) {

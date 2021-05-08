@@ -7,13 +7,14 @@ import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalConverter
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalSoundConverter
+import com.timmytruong.materialintervaltimer.utils.converters.TimeConverter
 
 @Database(
     entities = [Timer::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(IntervalConverter::class, IntervalSoundConverter::class)
+@TypeConverters(IntervalConverter::class, IntervalSoundConverter::class, TimeConverter::class)
 abstract class TimerDatabase : RoomDatabase() {
     abstract fun timerDAO(): TimerDao
 }

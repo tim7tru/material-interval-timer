@@ -1,6 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.timer
 
-import android.content.Context
 import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.R
@@ -9,6 +8,7 @@ import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.model.*
 import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.mockito.kotlin.*
-import java.lang.ref.WeakReference
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -25,7 +24,7 @@ import kotlin.time.ExperimentalTime
 class CreateTimerViewModelTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
-    val ctx: WeakReference<Context> = mock()
+    val resources: ResourceProvider = mock()
     val timerStore: Store<Timer> = mock()
     val mainDispatcher = TestCoroutineDispatcher()
     val backgroundDispatcher = TestCoroutineDispatcher()
@@ -45,21 +44,21 @@ class CreateTimerViewModelTest : BehaviorSpec({
     )
 
     fun create(timerScreen: CreateTimerScreen = screen) = CreateTimerViewModel(
-        ctx = ctx,
         timerStore = timerStore,
         mainDispatcher = mainDispatcher,
         ioDispatcher = backgroundDispatcher,
         screen = timerScreen,
         soundsBottomSheet = bottomSheet,
         timerLocalDataSource = timerRepository,
-        sounds = sounds
+        sounds = sounds,
+        resources = resources
     )
 
     stub { on { timerStore.observe }.doReturn(emptyFlow()) }
 
     Given("store is updated with timer") {
         stub { on { timerStore.observe }.doReturn(flowOf(TIMER)) }
-        create()
+        create().observe()
         Then("timer count is set") {
             assert(screen.timerIntervalCount.get() == INTERVAL_COUNT)
         }

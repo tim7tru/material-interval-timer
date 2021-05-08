@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+const val UNKNOWN_ERROR = "unknown error"
+
 abstract class BaseViewModel : ViewModel() {
 
     abstract val mainDispatcher: CoroutineDispatcher
