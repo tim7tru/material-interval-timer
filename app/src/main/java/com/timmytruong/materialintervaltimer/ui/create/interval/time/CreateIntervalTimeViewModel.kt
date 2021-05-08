@@ -36,9 +36,9 @@ class CreateIntervalTimeViewModel @Inject constructor(
             screen.intervalDisplayTime.set(
                 resources.string(
                     R.string.timeFormat,
-                    it.hours(normalized = false),
-                    it.minutes(normalized = false),
-                    it.seconds(normalized = false)
+                    it.hours(fromTotal = false),
+                    it.minutes(fromTotal = false),
+                    it.seconds(fromTotal = false)
                 )
             )
         }
