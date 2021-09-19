@@ -39,7 +39,7 @@ class CreateTimerViewModel @Inject constructor(
             screen.timerSelectedSound.set(it.intervalSound.name)
         }
 
-        timerStore.forceEmit()
+        timerStore.refresh()
     }
 
     fun clearTimer() = startSuspending(ioDispatcher) { timerStore.update { it.clear() } }

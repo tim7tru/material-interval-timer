@@ -42,24 +42,23 @@ class CreateTimerFragment : BaseFragment<CreateTimerScreen, CreateTimerViewModel
 
     override fun onStart() {
         super.onStart()
-        viewModel.observe()
         updateProgressBar(progress = 0, show = false)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.setTimerTitle(binding.fragmentCreateTimerTitleInput.text.toString())
+        viewModel.setTimerTitle(binding?.fragmentCreateTimerTitleInput?.text.toString())
     }
 
     override fun bindView() {
-        binding.viewModel = viewModel
-        binding.screen = screen
-        binding.fragmentCreateTimerTaskList.adapter = intervalAdapter
+        binding?.viewModel = viewModel
+        binding?.screen = screen
+        binding?.fragmentCreateTimerTaskList?.adapter = intervalAdapter
         intervalAdapter.addList(screen.intervals)
     }
 
     override fun onDestroyView() {
-        binding.fragmentCreateTimerTaskList.adapter = null
+        binding?.fragmentCreateTimerTaskList?.adapter = null
         super.onDestroyView()
     }
 }

@@ -1,7 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
-import android.os.Bundle
-import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
@@ -35,7 +33,7 @@ class CreateIntervalFragment :
     override fun onStart() {
         super.onStart()
         if (args.clearStores) { viewModel.clearStore() }
-        viewModel.observe()
+        viewModel.fetchInterval()
         updateProgressBar(PROGRESS_HALF)
     }
 
@@ -45,8 +43,8 @@ class CreateIntervalFragment :
     }
 
     override fun bindView() {
-        binding.screen = screen
-        binding.viewModel = viewModel
+        binding?.screen = screen
+        binding?.viewModel = viewModel
     }
 }
 

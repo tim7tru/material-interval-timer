@@ -49,7 +49,7 @@ class CreateIntervalViewModel @Inject constructor(
             screen.intervalTitle.set(interval.name)
         }
 
-        intervalStore.forceEmit()
+        intervalStore.refresh()
     }
 }
 

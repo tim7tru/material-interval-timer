@@ -41,10 +41,10 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
     override val viewModel: HomeViewModel by viewModels()
 
     override fun bindView() {
-        binding.screen = screen
-        binding.viewModel = viewModel
-        binding.fragmentHomeRecentFrag.horizontalRecycler.adapter = recentsAdapter
-        binding.fragmentHomeFavouritesFrag.horizontalRecycler.adapter = favouritesAdapter
+        binding?.screen = screen
+        binding?.viewModel = viewModel
+        binding?.fragmentHomeRecentFrag?.horizontalRecycler?.adapter = recentsAdapter
+        binding?.fragmentHomeFavouritesFrag?.horizontalRecycler?.adapter = favouritesAdapter
     }
 
     override fun onStart() {
@@ -66,8 +66,8 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
     }
 
     override fun onDestroyView() {
-        binding.fragmentHomeRecentFrag.horizontalRecycler.adapter = null
-        binding.fragmentHomeFavouritesFrag.horizontalRecycler.adapter = null
+        binding?.fragmentHomeRecentFrag?.horizontalRecycler?.adapter = null
+        binding?.fragmentHomeFavouritesFrag?.horizontalRecycler?.adapter = null
         super.onDestroyView()
     }
 }

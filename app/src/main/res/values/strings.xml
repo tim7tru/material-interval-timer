@@ -109,4 +109,6 @@
     <string name="dialogCloseTimerTitle">Exit timer?</string>
     <string name="dialogCloseTimerMessage">Are you sure you want to exit this timer?</string>
     <string name="exit">Exit</string>
+
+    <string name="database_name">TimerDB</string>
 </resources>
