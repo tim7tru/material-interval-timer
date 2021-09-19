@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.create.timer.adapters
+package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -9,14 +9,12 @@ import com.timmytruong.materialintervaltimer.base.screen.Clicks
 import com.timmytruong.materialintervaltimer.base.screen.EmptyClicks
 import com.timmytruong.materialintervaltimer.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
-import com.timmytruong.materialintervaltimer.model.Interval
-import dagger.hilt.android.scopes.ActivityRetainedScoped
-import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @FragmentScoped
-class IntervalItemAdapter @Inject constructor(): BaseListAdapter<ItemIntervalBinding, IntervalItemScreenBinding>() {
+class IntervalItemAdapter @Inject constructor():
+    BaseListAdapter<ItemIntervalBinding, IntervalItemScreenBinding>() {
 
     override val bindingLayout: Int
         get() = R.layout.item_interval

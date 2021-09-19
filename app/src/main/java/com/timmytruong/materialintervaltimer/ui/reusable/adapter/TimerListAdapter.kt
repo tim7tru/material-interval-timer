@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.reusable
+package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 
 import androidx.databinding.ObservableField
 import com.timmytruong.materialintervaltimer.R

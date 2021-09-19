@@ -8,7 +8,7 @@ import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.di.Recents
-import com.timmytruong.materialintervaltimer.ui.reusable.HorizontalTimerItemAdapter
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.HorizontalTimerItemAdapter
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.Module
@@ -34,7 +34,7 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
     @Favourites
     lateinit var favouritesAdapter: HorizontalTimerItemAdapter
 
-    override val name: String = this.name()
+    override val name: String = name()
 
     override val layoutId: Int = R.layout.fragment_home
 

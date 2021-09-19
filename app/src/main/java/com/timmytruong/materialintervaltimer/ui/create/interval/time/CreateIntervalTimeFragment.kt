@@ -29,12 +29,11 @@ class CreateIntervalTimeFragment :
     override fun onStart() {
         super.onStart()
         updateProgressBar(PROGRESS_FULL)
-        viewModel.observe()
     }
 
     override fun bindView() {
-        binding.screen = screen
-        binding.viewModel = viewModel
+        binding?.screen = screen
+        binding?.viewModel = viewModel
     }
 }
 

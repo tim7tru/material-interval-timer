@@ -11,10 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
-import com.timmytruong.materialintervaltimer.ui.reusable.MITSnackbar
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -32,19 +30,15 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
 
     abstract val layoutId: Int
 
-    @Inject
-    lateinit var resources: ResourceProvider
-
-    @Inject
-    lateinit var snackbar: MITSnackbar
-
-    protected lateinit var binding: Binding
+    protected var binding: Binding? = null
 
     override var uiStateJobs: ArrayList<Job> = arrayListOf()
 
     protected val ctx: Context by lazy { requireContext() }
 
     protected val v: View by lazy { requireView() }
+
+    @Inject lateinit var popUpProvider: PopUpProvider
 
     abstract fun bindView()
 
@@ -54,7 +48,7 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
         savedInstanceState: Bundle?
     ): View? {
         binding = inflate(inflater, layoutId, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,13 +70,13 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
     }
 
     override fun onDestroyView() {
-        binding.unbind()
+        binding = null
         super.onDestroyView()
     }
 
     override fun eventHandler(event: Pair<String, Any>) {
         when (event.first) {
-            UNKNOWN_ERROR -> snackbar.showError(v, R.string.somethingWentWrong)
+            DISMISS -> close()
         }
     }
 
