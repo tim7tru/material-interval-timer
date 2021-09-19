@@ -16,8 +16,8 @@ class IntervalTimer @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) {
 
-    private val _currentTimeRemaining = MutableStateFlow(0f)
-    val currentTimeRemaining: StateFlow<Float> = _currentTimeRemaining
+    private val _currentTimeRemaining = MutableStateFlow(0L)
+    val currentTimeRemaining: StateFlow<Long> = _currentTimeRemaining
 
     private var countDownTimer: CountDownTimer? = null
 
@@ -30,18 +30,18 @@ class IntervalTimer @Inject constructor(
 
     suspend fun onTimerPaused() = withContext(mainDispatcher) {
         clearTimer()
-        buildIntervalTimer(_currentTimeRemaining.value.toLong())
+        buildIntervalTimer(_currentTimeRemaining.value)
     }
 
     suspend fun buildIntervalTimer(time: Long) = withContext(mainDispatcher) {
-        _currentTimeRemaining.value = time.toFloat()
+        _currentTimeRemaining.value = time
         countDownTimer = object : CountDownTimer(time, TICK_INTERVAL_MS) {
             override fun onTick(millisUntilFinished: Long) {
-                _currentTimeRemaining.value = millisUntilFinished.toFloat()
+                _currentTimeRemaining.value = millisUntilFinished
             }
 
             override fun onFinish() {
-                _currentTimeRemaining.value = 0f
+                _currentTimeRemaining.value = 0L
             }
         }
     }

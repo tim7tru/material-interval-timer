@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.di
+package com.timmytruong.materialintervaltimer.di.modules
 
 import android.content.Context
 import androidx.room.Room

@@ -9,9 +9,10 @@ import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerListScreenBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.toDisplayTime
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,12 +27,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerListViewModel @Inject constructor(
-    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
-    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val resources: ResourceProvider,
     private val timerRepository: TimerRepository,
     private val screen: TimerListScreen,
-    private val bottomSheet: TimerActionBottomSheetScreen
+    private val bottomSheet: TimerActionBottomSheetScreen,
+    private val resources: ResourceProvider
 ) : BaseViewModel() {
 
     fun fetchTimers() = startSuspending(ioDispatcher) {
@@ -45,21 +44,9 @@ class TimerListViewModel @Inject constructor(
     }
 
     private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
-        time = ObservableField(
-            resources.string(
-                R.string.timerTimeFormat,
-                timer.totalTime.hours(true),
-                timer.totalTime.minutes(true),
-                timer.totalTime.seconds(true)
-            )
-        ),
+        time = ObservableField(timer.totalTimeMs.toDisplayTime(resources)),
         title = ObservableField(timer.title),
-        intervalCount = ObservableField(
-            resources.string(
-                R.string.number_of_intervals_format,
-                timer.intervalCount.toString()
-            )
-        ),
+        intervalCount = ObservableField(resources.string(R.string.number_of_intervals_format, timer.intervalCount)),
         timerId = timer.id,
         clicks = {
             startSuspending(ioDispatcher) {

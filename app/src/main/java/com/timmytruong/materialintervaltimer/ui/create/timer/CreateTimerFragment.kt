@@ -11,8 +11,8 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
-import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemAdapter
-import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemScreenBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint

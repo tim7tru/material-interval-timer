@@ -3,6 +3,8 @@ package com.timmytruong.materialintervaltimer.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -10,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -17,7 +20,13 @@ const val UNKNOWN_ERROR = "unknown error"
 
 abstract class BaseViewModel : ViewModel() {
 
-    abstract val mainDispatcher: CoroutineDispatcher
+    @MainDispatcher
+    @Inject
+    lateinit var mainDispatcher: CoroutineDispatcher
+
+    @BackgroundDispatcher
+    @Inject
+    lateinit var ioDispatcher: CoroutineDispatcher
 
     private val _navigateFlow = MutableSharedFlow<NavDirections>()
     val navigateFlow: Flow<NavDirections> = _navigateFlow

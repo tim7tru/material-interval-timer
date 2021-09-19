@@ -1,12 +1,13 @@
-package com.timmytruong.materialintervaltimer.di
+package com.timmytruong.materialintervaltimer.di.modules
 
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -23,6 +24,3 @@ object DispatchersModule {
     @Provides
     fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 }
-
-@Qualifier annotation class BackgroundDispatcher
-@Qualifier annotation class MainDispatcher

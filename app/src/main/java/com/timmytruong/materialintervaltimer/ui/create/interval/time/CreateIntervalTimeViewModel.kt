@@ -4,11 +4,13 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.IntervalStore
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Interval
-import com.timmytruong.materialintervaltimer.model.Time
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.constants.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,55 +18,81 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateIntervalTimeViewModel @Inject constructor(
-    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
-    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val resources: ResourceProvider,
-    private val timerStore: Store<Timer>,
-    private val intervalStore: Store<Interval>,
-    private val timeStore: Store<Time>,
+    @TimerStore private val timerStore: Store<Timer>,
+    @IntervalStore private val intervalStore: Store<Interval>,
     private val screen: CreateIntervalTimeScreen
 ) : BaseViewModel() {
 
-    fun observe() = startSuspending(ioDispatcher) {
-        timeStore.observe.collectLatest {
-            screen.intervalTimeLengthValidity.set(it.isInputValid())
-            screen.intervalDisplayTime.set(
-                resources.string(
-                    R.string.timeFormat,
-                    it.hours(fromTotal = false),
-                    it.minutes(fromTotal = false),
-                    it.seconds(fromTotal = false)
-                )
-            )
+    private var time: String = ""
+        set(value) {
+            field = value
+            screen.intervalTimeLengthValidity.set(field.isNotEmpty())
         }
-        timeStore.refresh()
+
+    init {
+        screen.intervalDisplayTime.set(getDisplayTime())
     }
 
-    fun addToTime(newNumber: String) = startSuspending(ioDispatcher) {
-        timeStore.update { it.addToInput(newNumber) }
+    fun addToTime(newNumber: String) {
+        if (time.length <= 6) {
+            time = "$time$newNumber"
+            screen.intervalDisplayTime.set(getDisplayTime())
+        }
     }
 
-    fun removeFromTime() = startSuspending(ioDispatcher) {
-        timeStore.update { it.removeFromInput() }
+    fun removeFromTime() {
+        if (time.isNotEmpty()) {
+            time = time.dropLast(1)
+            screen.intervalDisplayTime.set(getDisplayTime())
+        }
     }
 
     fun addInterval() = startSuspending(ioDispatcher) {
-        timeStore.update { it.finalize() }
-
-        intervalStore.update { it.time = timeStore.get().copy() }
+        intervalStore.update { it.timeMs = getTimeMs() }
 
         timerStore.update {
             it.intervals.add(intervalStore.get().copy())
             it.intervalCount = it.intervals.size
         }
 
-        timeStore.update { it.clear() }
         navigateWith(screen.navBackToCreateTimer())
+    }
+
+    private fun getDisplayTime(): String {
+        val temp = fillTime()
+        return resources.string(
+            R.string.inputTimeFormat,
+            temp.subSequence(0, 2),
+            temp.subSequence(2, 4),
+            temp.subSequence(4, 6)
+        )
+    }
+
+    private fun fillTime(): String {
+        var temp = time
+        return when (temp.length >= 6) {
+            true -> temp
+            false -> {
+                while (temp.length < 6) {
+                    temp = "0${temp}"
+                }
+                temp
+            }
+        }
+    }
+
+    private fun getTimeMs(): Long {
+        val temp = if (time.length < 6) fillTime() else time
+        var milliseconds = 0L
+        milliseconds += temp.subSequence(4, 6).toString().toLong() * MILLI_IN_SECS_L
+        milliseconds += temp.subSequence(2, 4).toString().toLong() * MILLI_IN_MINS_L
+        milliseconds += temp.subSequence(0, 2).toString().toLong() * MILLI_IN_HOUR_L
+        return milliseconds
     }
 }
 

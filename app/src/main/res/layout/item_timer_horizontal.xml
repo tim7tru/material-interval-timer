@@ -6,7 +6,7 @@
     <data>
         <variable
             name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding" />
+            type="com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerListScreenBinding" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

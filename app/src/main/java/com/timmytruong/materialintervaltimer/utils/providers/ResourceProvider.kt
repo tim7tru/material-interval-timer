@@ -1,9 +1,7 @@
-package com.timmytruong.materialintervaltimer.utils.providers
+package com.timmytruong.materialintervaltimer.utils
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.media.MediaPlayer
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -11,23 +9,19 @@ import androidx.core.content.ContextCompat
 import com.timmytruong.materialintervaltimer.R
 
 interface ResourceProvider {
+    val ctx: Context
 
-    val icons: Map<String, Int>
-
-    @ColorInt
-    fun color(@ColorRes id: Int): Int
-    fun colorStateList(@ColorRes id: Int): ColorStateList?
     fun string(@StringRes id: Int): String
-    fun string(@StringRes id: Int, vararg args: Any): String
-    fun tagFromDrawableId(@DrawableRes id: Int): String?
+    fun string(@StringRes id: Int, vararg format: Any): String
+    fun colorList(@ColorRes id: Int): ColorStateList?
+    fun color(@ColorRes id: Int): Int
     fun drawableIdFromTag(tag: String): Int?
-    fun playSound(id: Int)
-    fun context(): Context
+    fun tagFromDrawableId(@DrawableRes id: Int): String?
 }
 
-class AppResourceProvider(private val context: Context) : ResourceProvider {
+class ResourceProviderImpl(override val ctx: Context) : ResourceProvider {
 
-    override val icons: Map<String, Int> = mapOf(
+    private val icons = mapOf(
         string(R.string.fitnessTag) to R.drawable.ic_fitness_center,
         string(R.string.personTag) to R.drawable.ic_accessibility_24px,
         string(R.string.speedTag) to R.drawable.ic_speed_24px,
@@ -42,31 +36,15 @@ class AppResourceProvider(private val context: Context) : ResourceProvider {
         string(R.string.pauseTag) to R.drawable.ic_pause_24px
     )
 
-    override fun color(@ColorRes id: Int): Int = ContextCompat.getColor(context, id)
+    override fun string(@StringRes id: Int) = ctx.getString(id)
 
-    override fun colorStateList(@ColorRes id: Int): ColorStateList? =
-        ContextCompat.getColorStateList(context, id)
+    override fun string(@StringRes id: Int, vararg format: Any) = ctx.getString(id, *format)
 
-    override fun string(@StringRes id: Int): String = context.getString(id)
+    override fun colorList(@ColorRes id: Int) = ContextCompat.getColorStateList(ctx, id)
 
-    override fun string(@StringRes id: Int, vararg args: Any): String {
-        return context.getString(id, *args)
-    }
-
-    override fun tagFromDrawableId(id: Int): String? {
-        for (key in icons.keys) {
-            if (id == icons[key]) {
-                return key
-            }
-        }
-        return null
-    }
+    override fun color(@ColorRes id: Int) = ContextCompat.getColor(ctx, id)
 
     override fun drawableIdFromTag(tag: String): Int? = icons[tag]
 
-    override fun playSound(id: Int) {
-        if (id != -1) MediaPlayer.create(context, id).start()
-    }
-
-    override fun context(): Context = context
+    override fun tagFromDrawableId(@DrawableRes id: Int): String? = icons.keys.find { id == icons[it] }
 }

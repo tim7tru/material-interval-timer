@@ -4,7 +4,7 @@ import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.databinding.FragmentFavouritesBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.VerticalTimerListAdapter
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.VerticalTimerListAdapter
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +30,7 @@ class FavouritesFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fra
         viewModel.fetchTimers()
         startSuspending {
             screen.timers.collectLatest {
-                if (it.isEmpty()) screen.isEmpty.set(true)
+                screen.isEmpty.set(it.isEmpty())
                 verticalTimerListAdapter.addList(it)
             }
         }
@@ -42,6 +42,16 @@ class FavouritesFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fra
 
     override fun onDestroyView() {
         binding.fragmentFavouritesRecycler.adapter = null
+        super.onDestroyView()
+    }
+
+    override fun onDestroyView() {
+        binding?.fragmentFavouritesRecycler?.adapter = null
+        super.onDestroyView()
+    }
+
+    override fun onDestroyView() {
+        binding?.fragmentFavouritesRecycler?.adapter = null
         super.onDestroyView()
     }
 }
