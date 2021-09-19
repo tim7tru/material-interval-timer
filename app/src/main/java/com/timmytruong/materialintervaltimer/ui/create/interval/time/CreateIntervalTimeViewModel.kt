@@ -1,16 +1,16 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval.time
 
-import android.content.Context
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.local.Store
-import com.timmytruong.materialintervaltimer.di.*
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.IntervalStore
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.formatInputtedTime
-import com.timmytruong.materialintervaltimer.utils.formatNormalizedTime
-import com.timmytruong.materialintervaltimer.utils.getSecondsFromTime
-import com.timmytruong.materialintervaltimer.utils.string
+import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.constants.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,52 +18,42 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collectLatest
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateIntervalTimeViewModel @Inject constructor(
-    @WeakContext private val ctx: WeakReference<Context>,
+    private val resources: ResourceProvider,
     @TimerStore private val timerStore: Store<Timer>,
     @IntervalStore private val intervalStore: Store<Interval>,
-    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
-    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val screen: CreateIntervalTimeScreen
 ) : BaseViewModel() {
 
+    private var time: String = ""
+        set(value) {
+            field = value
+            screen.intervalTimeLengthValidity.set(field.isNotEmpty())
+        }
+
     init {
-        startSuspending(ioDispatcher) {
-            intervalStore.observe.collectLatest {
-                screen.intervalTimeLengthValidity.set(it.timeFormat.isNotBlank())
-                screen.intervalDisplayTime.set(
-                    formatInputtedTime(it.timeFormat, ctx.string(R.string.timeFormat))
-                )
-            }
+        screen.intervalDisplayTime.set(getDisplayTime())
+    }
+
+    fun addToTime(newNumber: String) {
+        if (time.length <= 6) {
+            time = "$time$newNumber"
+            screen.intervalDisplayTime.set(getDisplayTime())
         }
     }
 
-    fun fetchTime() = startSuspending(ioDispatcher) { intervalStore.forceEmit() }
-
-    fun addToTime(newNumber: String) = startSuspending(ioDispatcher) {
-        val curTime = intervalStore.get().timeFormat
-        if (curTime.length < 6) {
-            intervalStore.update { it.timeFormat = "${curTime}${newNumber}" }
-        }
-    }
-
-    fun removeFromTime() = startSuspending(ioDispatcher) {
-        val curTime = intervalStore.get().timeFormat
-        if (curTime.isNotEmpty()) {
-            intervalStore.update { it.timeFormat = curTime.dropLast(1) }
+    fun removeFromTime() {
+        if (time.isNotEmpty()) {
+            time = time.dropLast(1)
+            screen.intervalDisplayTime.set(getDisplayTime())
         }
     }
 
     fun addInterval() = startSuspending(ioDispatcher) {
-        intervalStore.update {
-            it.timeMs = getSecondsFromTime(time = it.timeFormat) * 1000
-            it.timeFormat = formatNormalizedTime(it.timeFormat, ctx.string(R.string.timeFormat))
-        }
+        intervalStore.update { it.timeMs = getTimeMs() }
 
         timerStore.update {
             it.intervals.add(intervalStore.get().copy())
@@ -71,6 +61,38 @@ class CreateIntervalTimeViewModel @Inject constructor(
         }
 
         navigateWith(screen.navBackToCreateTimer())
+    }
+
+    private fun getDisplayTime(): String {
+        val temp = fillTime()
+        return resources.string(
+            R.string.inputTimeFormat,
+            temp.subSequence(0, 2),
+            temp.subSequence(2, 4),
+            temp.subSequence(4, 6)
+        )
+    }
+
+    private fun fillTime(): String {
+        var temp = time
+        return when (temp.length >= 6) {
+            true -> temp
+            false -> {
+                while (temp.length < 6) {
+                    temp = "0${temp}"
+                }
+                temp
+            }
+        }
+    }
+
+    private fun getTimeMs(): Long {
+        val temp = if (time.length < 6) fillTime() else time
+        var milliseconds = 0L
+        milliseconds += temp.subSequence(4, 6).toString().toLong() * MILLI_IN_SECS_L
+        milliseconds += temp.subSequence(2, 4).toString().toLong() * MILLI_IN_MINS_L
+        milliseconds += temp.subSequence(0, 2).toString().toLong() * MILLI_IN_HOUR_L
+        return milliseconds
     }
 }
 

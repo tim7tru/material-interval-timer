@@ -1,46 +1,37 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
-import android.content.Context
 import androidx.databinding.ObservableField
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
-import com.timmytruong.materialintervaltimer.di.WeakContext
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.reusable.TimerListScreenBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerListScreenBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
-import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_I
-import com.timmytruong.materialintervaltimer.utils.formatNormalizedTime
-import com.timmytruong.materialintervaltimer.utils.getTimeFromSeconds
-import com.timmytruong.materialintervaltimer.utils.string
+import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.toDisplayTime
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import java.lang.String.format
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 private const val NUM_TIMERS_SHOWN = 7
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    @WeakContext private val ctx: WeakReference<Context>,
-    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
-    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
     private val screen: HomeScreen,
-    private val bottomSheet: TimerActionBottomSheetScreen
+    private val bottomSheet: TimerActionBottomSheetScreen,
+    private val resources: ResourceProvider
 ) : BaseViewModel() {
 
     private val _recents = MutableSharedFlow<List<TimerListScreenBinding>>()
@@ -70,14 +61,9 @@ class HomeViewModel @Inject constructor(
     fun onAddClicked() = navigateWith(screen.navToCreateTimer())
 
     private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
-        time = ObservableField(
-            formatNormalizedTime(
-                getTimeFromSeconds(timer.totalTimeMs / MILLI_IN_SECS_I),
-                ctx.string(R.string.timerTimeFormat)
-            )
-        ),
+        time = ObservableField(timer.totalTimeMs.toDisplayTime(resources)),
         title = ObservableField(timer.title),
-        intervalCount = ObservableField(format(ctx.string(R.string.number_of_intervals_format), timer.intervalCount)),
+        intervalCount = ObservableField(resources.string(R.string.number_of_intervals_format, timer.intervalCount)),
         timerId = timer.id,
         clicks = {
             startSuspending(ioDispatcher) {

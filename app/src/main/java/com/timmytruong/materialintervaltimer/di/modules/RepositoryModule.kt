@@ -1,18 +1,21 @@
-package com.timmytruong.materialintervaltimer.di
+package com.timmytruong.materialintervaltimer.di.modules
 
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.data.local.TimerLocalDataSource
 import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.IntervalStore
+import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Qualifier
 
 @InstallIn(ActivityRetainedComponent::class)
 @Module
@@ -32,11 +35,7 @@ object RepositoryModule {
     @Provides
     fun provideTimerRepository(
         timerDao: TimerDao,
-        @BackgroundDispatcher dispatcher: CoroutineDispatcher
-    ): TimerRepository = TimerLocalDataSource(timerDao, dispatcher)
+        @BackgroundDispatcher dispatcher: CoroutineDispatcher,
+        date: DateProvider
+    ): TimerRepository = TimerLocalDataSource(timerDao, dispatcher, date)
 }
-
-@Qualifier
-annotation class TimerStore
-@Qualifier
-annotation class IntervalStore

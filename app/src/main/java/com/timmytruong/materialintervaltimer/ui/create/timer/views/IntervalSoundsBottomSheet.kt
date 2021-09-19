@@ -7,16 +7,14 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseBottomSheet
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsBottomSheetBinding
-import com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerViewModel
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundsAdapter
-import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class IntervalSoundsBottomSheet :
-    BaseBottomSheet<IntervalSoundsBottomSheetScreen, CreateTimerViewModel, FragmentIntervalSoundsBottomSheetBinding>() {
+    BaseBottomSheet<IntervalSoundsBottomSheetScreen, IntervalSoundsViewModel, FragmentIntervalSoundsBottomSheetBinding>() {
 
     @Inject
     lateinit var intervalSoundsAdapter: IntervalSoundsAdapter
@@ -24,7 +22,7 @@ class IntervalSoundsBottomSheet :
     @Inject
     override lateinit var screen: IntervalSoundsBottomSheetScreen
 
-    override val viewModel: CreateTimerViewModel by viewModels()
+    override val viewModel: IntervalSoundsViewModel by viewModels()
 
     override val layoutId: Int get() = R.layout.fragment_interval_sounds_bottom_sheet
 
@@ -32,6 +30,7 @@ class IntervalSoundsBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         bindView()
         intervalSoundsAdapter.addList(screen.list)
+        viewModel.observeStore()
     }
 
     override fun bindView() {
@@ -43,8 +42,6 @@ class IntervalSoundsBottomSheet :
         binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = null
         super.onDestroyView()
     }
-
-    override fun eventHandler(event: Pair<String, Any>) {}
 }
 
 data class IntervalSoundsBottomSheetScreen(

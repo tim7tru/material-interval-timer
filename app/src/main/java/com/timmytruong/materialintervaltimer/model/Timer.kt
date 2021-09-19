@@ -32,7 +32,7 @@ data class Timer(
     var intervalCount: Int = 0,
 
     @ColumnInfo(name = "total_time_ms")
-    var totalTimeMs: Int = 0,
+    var totalTimeMs: Long = 0L,
 
     @ColumnInfo(name = "interval_sound")
     @TypeConverters(IntervalSoundConverter::class)
@@ -49,14 +49,10 @@ data class Timer(
         shouldRepeat = false
         intervals = arrayListOf()
         intervalCount = 0
-        totalTimeMs = 0
+        totalTimeMs = 0L
         intervalSound = IntervalSound(-1)
         id = 0
     }
 
-    fun setTotalTime() {
-        var totalTimeMilli = 0
-        intervals.forEach { totalTimeMilli += it.timeMs }
-        totalTimeMs = totalTimeMilli
-    }
+    fun setTotalTime() = intervals.forEach { totalTimeMs += it.timeMs }
 }

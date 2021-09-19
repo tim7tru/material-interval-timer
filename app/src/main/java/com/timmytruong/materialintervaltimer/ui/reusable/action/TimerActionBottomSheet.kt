@@ -7,13 +7,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseBottomSheet
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerActionBottomSheetBinding
-import com.timmytruong.materialintervaltimer.ui.home.HomeFragment
-import com.timmytruong.materialintervaltimer.ui.home.HomeFragmentDirections
-import com.timmytruong.materialintervaltimer.ui.list.FavouritesFragment
-import com.timmytruong.materialintervaltimer.ui.list.FavouritesFragmentDirections
 import com.timmytruong.materialintervaltimer.utils.Open
-import com.timmytruong.materialintervaltimer.utils.name
-import com.timmytruong.materialintervaltimer.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,13 +32,13 @@ class TimerActionBottomSheet :
 
     override fun eventHandler(event: Pair<String, Any>) {
         when (event.first) {
-            FAVOURITE -> toastAndDismiss(event.second as String)
-            DELETE -> toastAndDismiss(event.second as String)
+            FAVOURITE -> toastAndDismiss(event.second as Int)
+            DELETE -> toastAndDismiss(event.second as Int)
         }
     }
 
-    private fun toastAndDismiss(message: String) {
-        showToast(ctx, message)
+    private fun toastAndDismiss(message: Int) {
+        popUpProvider.showToast(message)
         close()
     }
 }

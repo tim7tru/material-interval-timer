@@ -1,94 +1,31 @@
 package com.timmytruong.materialintervaltimer.utils
 
-import android.content.Context
-import android.content.DialogInterface
-import android.view.View
-import android.widget.Toast
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
-import java.lang.ref.WeakReference
-import kotlin.reflect.KClass
-
-fun showSnackbarError(contextView: View, message: String) {
-    Snackbar.make(contextView, message, Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(contextView.color(R.color.colorRed))
-        .setTextColor(contextView.color(R.color.colorWhite))
-        .show()
-}
-
-fun getTagFromDrawableId(context: Context, @DrawableRes id: Int): String? {
-    return when (id) {
-        R.drawable.ic_fitness_center -> context.getString(R.string.fitnessTag)
-        R.drawable.ic_accessibility_24px -> context.getString(R.string.personTag)
-        R.drawable.ic_speed_24px -> context.getString(R.string.speedTag)
-        R.drawable.ic_local_cafe_24px -> context.getString(R.string.cafeTag)
-        R.drawable.ic_android_24px -> context.getString(R.string.androidTag)
-        R.drawable.ic_audiotrack_24px -> context.getString(R.string.musicTag)
-        R.drawable.ic_language_24px -> context.getString(R.string.worldTag)
-        R.drawable.ic_email_24px -> context.getString(R.string.emailTag)
-        R.drawable.ic_eco_24px -> context.getString(R.string.ecoTag)
-        R.drawable.ic_call_24px -> context.getString(R.string.phoneTag)
-        R.drawable.ic_play -> context.getString(R.string.playTag)
-        R.drawable.ic_pause_24px -> context.getString(R.string.pauseTag)
-        else -> null
-    }
-}
-
-fun getDrawableIdFromTag(context: Context, tag: String): Int {
-    return when (tag) {
-        context.getString(R.string.fitnessTag) -> R.drawable.ic_fitness_center
-        context.getString(R.string.personTag) -> R.drawable.ic_accessibility_24px
-        context.getString(R.string.speedTag) -> R.drawable.ic_speed_24px
-        context.getString(R.string.cafeTag) -> R.drawable.ic_local_cafe_24px
-        context.getString(R.string.androidTag) -> R.drawable.ic_android_24px
-        context.getString(R.string.musicTag) -> R.drawable.ic_audiotrack_24px
-        context.getString(R.string.worldTag) -> R.drawable.ic_language_24px
-        context.getString(R.string.emailTag) -> R.drawable.ic_email_24px
-        context.getString(R.string.ecoTag) -> R.drawable.ic_eco_24px
-        context.getString(R.string.phoneTag) -> R.drawable.ic_call_24px
-        context.getString(R.string.playTag) -> R.drawable.ic_play
-        context.getString(R.string.pauseTag) -> R.drawable.ic_pause_24px
-        else -> 0
-    }
-}
-
-fun showDialog(
-    context: Context,
-    title: String = "",
-    message: String = "",
-    neutralMessage: String = "",
-    negativeMessage: String = "",
-    positiveMessage: String = "",
-    clicks: DialogInterface.OnClickListener
-): AlertDialog = MaterialAlertDialogBuilder(context)
-    .setTitle(title)
-    .setMessage(message)
-    .setNeutralButton(neutralMessage, clicks)
-    .setNegativeButton(negativeMessage, clicks)
-    .setPositiveButton(positiveMessage, clicks)
-    .show()
-
-fun showToast(context: Context, message: String, short: Boolean = true) {
-    Toast.makeText(
-        context,
-        message,
-        if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG
-    ).show()
-}
-
-fun Context.colorList(@ColorRes colorRes: Int) = ContextCompat.getColorStateList(this, colorRes)
-
-fun Context.color(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
-fun View.color(@ColorRes colorRes: Int) = this.context.color(colorRes)
-
-fun WeakReference<Context>.string(@StringRes id: Int) = this.get()?.getString(id) ?: ""
-fun Fragment.string(@StringRes id: Int) = getString(id)
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
 
 fun Fragment.name(): String = this::class.java.simpleName
+
+fun Long.toDisplayTime(res: ResourceProvider): String {
+    var time = this
+
+    val hours = time / MILLI_IN_HOUR_L
+    time %= MILLI_IN_HOUR_L
+
+    val mins = time / MILLI_IN_MINS_L
+    time %= MILLI_IN_MINS_L
+
+    val secs = time / MILLI_IN_SECS_L
+
+    val secsString = if (secs < 10) "0$secs" else "$secs"
+    val minsString = if (mins < 10) "0$mins" else "$mins"
+
+    return when {
+        hours != 0L -> res.string(R.string.fullTimeFormat, hours, minsString, secsString)
+        hours == 0L && mins > 0L -> res.string(R.string.noHourTimeFormat, mins, secsString)
+        hours == 0L && mins == 0L -> res.string(R.string.secondsTimeFormat, secs)
+        else -> ""
+    }
+}

@@ -29,7 +29,6 @@ class CreateIntervalTimeFragment :
     override fun onStart() {
         super.onStart()
         updateProgressBar(PROGRESS_FULL)
-        viewModel.fetchTime()
     }
 
     override fun bindView() {

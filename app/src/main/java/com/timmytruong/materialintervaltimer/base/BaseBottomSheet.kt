@@ -11,23 +11,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
-import com.timmytruong.materialintervaltimer.utils.events.ErrorHandler
-import com.timmytruong.materialintervaltimer.utils.showSnackbarError
-import com.timmytruong.materialintervaltimer.utils.string
+import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 private const val DISMISS = "dismiss"
 internal val DISMISS_EVENT = DISMISS to Unit
 
 abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, Binding : ViewDataBinding> :
     BottomSheetDialogFragment(),
-    BaseObserver<ViewModel>,
-    ErrorHandler {
+    BaseObserver<ViewModel> {
 
     abstract val screen: Screen
 
@@ -40,6 +37,8 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
     protected val ctx: Context by lazy { requireContext() }
 
     protected val v: View by lazy { requireView() }
+
+    @Inject lateinit var popUpProvider: PopUpProvider
 
     abstract fun bindView()
 
@@ -75,7 +74,11 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
         super.onDestroyView()
     }
 
-    override fun handleUnknownError() = showSnackbarError(v, string(R.string.somethingWentWrong))
+    override fun eventHandler(event: Pair<String, Any>) {
+        when (event.first) {
+            DISMISS -> close()
+        }
+    }
 
     override fun navigationHandler(action: NavDirections) = with(findNavController()) {
         currentDestination?.getAction(action.actionId)?.let { navigate(action) }

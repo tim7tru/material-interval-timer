@@ -1,36 +1,30 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
-import android.content.Context
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
+import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import io.kotest.core.spec.style.BehaviorSpec
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.verify
-import java.lang.ref.WeakReference
+import org.mockito.kotlin.*
 
 @ExperimentalCoroutinesApi
 class HomeViewModelTest : BehaviorSpec({
 
-    val context: WeakReference<Context> = mock()
-    val mainDispatcher: CoroutineDispatcher = TestCoroutineDispatcher()
-    val backgroundDispatcher: CoroutineDispatcher = TestCoroutineDispatcher()
+    val resources: ResourceProvider = mock()
     val timerRepository: TimerRepository = mock()
     val screen: HomeScreen = mock()
     val bottomSheet: TimerActionBottomSheetScreen = mock()
 
     val viewModel = HomeViewModel(
-        context,
-        mainDispatcher,
-        backgroundDispatcher,
         timerRepository,
         screen,
-        bottomSheet
-    )
+        bottomSheet,
+        resources
+    ).apply {
+        ioDispatcher = TestCoroutineDispatcher()
+        mainDispatcher = TestCoroutineDispatcher()
+    }
 
     Given("fetch recent timers is called") {
         viewModel.fetchRecentTimers()
@@ -47,7 +41,7 @@ class HomeViewModelTest : BehaviorSpec({
     }
 
     Given("on add clicked") {
-        stub { on { screen.navToCreateTimer() }.doReturn(mock()) }
+        whenever(screen.navToCreateTimer()).thenReturn(mock())
         viewModel.onAddClicked()
         Then("navigation action is fetched from screen") {
             verify(screen).navToCreateTimer()

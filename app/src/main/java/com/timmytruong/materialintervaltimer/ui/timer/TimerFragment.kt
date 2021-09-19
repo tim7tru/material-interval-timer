@@ -14,8 +14,8 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.di.CircularProgress
-import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemAdapter
-import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalItemScreenBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -97,7 +97,6 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
     }
 
     override fun eventHandler(event: Pair<String, Any>) {
-        super.eventHandler(event)
         when (event.first) {
             CANCEL_ANIMATION -> progressBar.cancelAnimation()
             START_ANIMATION -> progressBar.startAnimation(
@@ -112,7 +111,7 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
 
     private fun showFavouriteMenuIcon() {
         favouriteButton.apply {
-            iconTintList = ctx.colorList(R.color.favourite_button_color)
+            iconTintList = resources.colorList(R.color.favourite_button_color)
             setOnMenuItemClickListener {
                 val event = !favouriteButton.isChecked
                 favouriteButton.isChecked = event
@@ -135,12 +134,12 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         }
     }
 
-    private fun showExitDialog() = showDialog(
-        context = ctx,
-        title = string(R.string.dialogCloseTimerTitle),
-        message = string(R.string.dialogCloseTimerMessage),
-        positiveMessage = string(R.string.exit),
-        negativeMessage = string(R.string.cancel),
+    private fun showExitDialog() = popUpProvider.showDialog(
+        title = R.string.dialogCloseTimerTitle,
+        message = R.string.dialogCloseTimerMessage,
+        positiveMessage = R.string.exit,
+        neutralMessage = -1,
+        negativeMessage = R.string.cancel,
         clicks = this@TimerFragment
     )
 }

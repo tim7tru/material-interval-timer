@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Material Interval Timer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="favorite">Favourite</string>
     <string name="unfavorite">Unfavourite</string>
@@ -68,8 +66,10 @@
 
     <string name="addInterval">Add Interval</string>
     <string name="emptyTime">00h 00m 00s</string>
-    <string name="timerTimeFormat">%s:%s:%s</string>
-    <string name="timeFormat">%sh %sm %ss</string>
+    <string name="inputTimeFormat">%1$sh %2$sm %3$ss</string>
+    <string name="fullTimeFormat">%1$s:%2$s:%3$s</string>
+    <string name="noHourTimeFormat">%1$s:%2$s</string>
+    <string name="secondsTimeFormat">%s</string>
     <string name="createInterval">Create interval</string>
     <string name="number_of_intervals_format">%s intervals</string>
     <string name="repeat">Repeat</string>

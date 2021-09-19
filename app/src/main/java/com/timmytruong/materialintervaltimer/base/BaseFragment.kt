@@ -15,17 +15,22 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
-import com.timmytruong.materialintervaltimer.utils.events.ErrorHandler
-import com.timmytruong.materialintervaltimer.utils.events.UNKNOWN_ERROR
-import com.timmytruong.materialintervaltimer.utils.showSnackbarError
-import com.timmytruong.materialintervaltimer.utils.string
+import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-abstract class BaseFragment<Screen : BaseScreen, ViewModel : BaseViewModel, Binding : ViewDataBinding> :
-    Fragment(), BaseObserver<ViewModel>, ErrorHandler, ProgressBar {
+const val UNKNOWN_ERROR = "unknown_error"
+
+abstract class BaseFragment<
+        Screen : BaseScreen,
+        ViewModel : BaseViewModel,
+        Binding : ViewDataBinding
+        > : Fragment(), BaseObserver<ViewModel>, ProgressBar {
 
     protected val ctx: Context by lazy { requireContext() }
 
@@ -38,6 +43,10 @@ abstract class BaseFragment<Screen : BaseScreen, ViewModel : BaseViewModel, Bind
     abstract val name: String
 
     abstract val layoutId: Int
+
+    @Inject lateinit var popUpProvider: PopUpProvider
+
+    @Inject lateinit var resources: ResourceProvider
 
     abstract fun bindView()
 
@@ -80,17 +89,15 @@ abstract class BaseFragment<Screen : BaseScreen, ViewModel : BaseViewModel, Bind
         super.onDestroyView()
     }
 
-    override fun navigationHandler(action: NavDirections) = with(findNavController()) {
-        currentDestination?.getAction(action.actionId)?.let { navigate(action) }
-    }
-
     override fun eventHandler(event: Pair<String, Any>) {
         when (event.first) {
-            UNKNOWN_ERROR -> handleUnknownError()
+            UNKNOWN_ERROR -> popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
         }
     }
 
-    override fun handleUnknownError() = showSnackbarError(v, string(R.string.somethingWentWrong))
+    override fun navigationHandler(action: NavDirections) = with(findNavController()) {
+        currentDestination?.getAction(action.actionId)?.let { navigate(action) }
+    }
 
     override fun updateProgressBar(progress: Int, show: Boolean) = (activity as MainActivity)
         .updateProgressBar(progress = progress, show = show)
