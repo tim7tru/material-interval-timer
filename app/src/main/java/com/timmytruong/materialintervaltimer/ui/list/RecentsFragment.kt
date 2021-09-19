@@ -49,4 +49,9 @@ class RecentsFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fragme
         binding?.fragmentRecentsRecycler?.adapter = null
         super.onDestroyView()
     }
+
+    override fun onDestroyView() {
+        binding?.fragmentRecentsRecycler?.adapter = null
+        super.onDestroyView()
+    }
 }

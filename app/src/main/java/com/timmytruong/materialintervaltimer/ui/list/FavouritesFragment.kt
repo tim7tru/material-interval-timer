@@ -49,4 +49,9 @@ class FavouritesFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fra
         binding?.fragmentFavouritesRecycler?.adapter = null
         super.onDestroyView()
     }
+
+    override fun onDestroyView() {
+        binding?.fragmentFavouritesRecycler?.adapter = null
+        super.onDestroyView()
+    }
 }
