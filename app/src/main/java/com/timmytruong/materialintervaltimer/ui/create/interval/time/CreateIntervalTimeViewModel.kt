@@ -10,7 +10,9 @@ import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.utils.ResourceProvider
-import com.timmytruong.materialintervaltimer.utils.constants.*
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
+import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,8 +64,10 @@ class CreateIntervalTimeViewModel @Inject constructor(
             it.intervalCount = it.intervals.size
         }
 
-        navigateWith(screen.navBackToCreateTimer())
+        navigateWith(screen.navToCreateTimer())
     }
+
+    fun backPressed() = navigateWith(screen.navToCreateInterval())
 
     private fun getDisplayTime(): String {
         val temp = fillTime()

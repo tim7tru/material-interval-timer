@@ -19,7 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateTimerFragment : BaseFragment<CreateTimerScreen, CreateTimerViewModel, FragmentCreateTimerBinding>() {
+class CreateTimerFragment :
+    BaseFragment<CreateTimerScreen, CreateTimerViewModel, FragmentCreateTimerBinding>() {
 
     @Inject
     lateinit var intervalAdapter: IntervalItemAdapter
@@ -75,8 +76,10 @@ data class CreateTimerScreen(
 
     fun navToTimer(id: Int) =
         CreateTimerFragmentDirections.actionCreateTimerFragmentToTimerFragment(id)
-    fun navToAddInterval(clearStore: Boolean) =
-        CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment(clearStore)
+
+    fun navToAddInterval() =
+        CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment(clearStores = true)
+
     fun navToSoundBottomSheet() =
         CreateTimerFragmentDirections.actionCreateTimerFragmentToIntervalSoundsBottomSheet()
 }
