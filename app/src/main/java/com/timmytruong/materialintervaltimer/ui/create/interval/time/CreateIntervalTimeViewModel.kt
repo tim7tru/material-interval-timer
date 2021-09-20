@@ -22,6 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateIntervalTimeViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val resources: ResourceProvider,
     @TimerStore private val timerStore: Store<Timer>,
     @IntervalStore private val intervalStore: Store<Interval>,

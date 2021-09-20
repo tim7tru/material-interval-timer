@@ -135,10 +135,10 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
     }
 
     private fun showExitDialog() = popUpProvider.showDialog(
+        activity = requireActivity(),
         title = R.string.dialogCloseTimerTitle,
         message = R.string.dialogCloseTimerMessage,
         positiveMessage = R.string.exit,
-        neutralMessage = -1,
         negativeMessage = R.string.cancel,
         clicks = this@TimerFragment
     )

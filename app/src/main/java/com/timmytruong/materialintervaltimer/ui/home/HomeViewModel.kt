@@ -28,6 +28,8 @@ private const val NUM_TIMERS_SHOWN = 7
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
     private val screen: HomeScreen,
     private val bottomSheet: TimerActionBottomSheetScreen,

@@ -27,6 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerListViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
     private val screen: TimerListScreen,
     private val bottomSheet: TimerActionBottomSheetScreen,
