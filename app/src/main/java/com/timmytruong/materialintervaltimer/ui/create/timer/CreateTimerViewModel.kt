@@ -77,7 +77,7 @@ class CreateTimerViewModel @Inject constructor(
         navigateWith(screen.navToTimer(id.toInt()))
     }
 
-    fun onGoToAddIntervalClicked() = navigateWith(screen.navToAddInterval(clearStore = true))
+    fun onGoToAddIntervalClicked() = navigateWith(screen.navToAddInterval())
 
     fun onGoToSoundsBottomSheet() = navigateWith(screen.navToSoundBottomSheet())
 

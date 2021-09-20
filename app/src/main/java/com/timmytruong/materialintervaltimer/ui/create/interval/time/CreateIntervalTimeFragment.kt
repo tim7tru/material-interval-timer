@@ -1,5 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval.time
 
+import android.content.Context
+import androidx.activity.addCallback
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
@@ -26,6 +28,14 @@ class CreateIntervalTimeFragment :
 
     override val viewModel: CreateIntervalTimeViewModel by viewModels()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            this.isEnabled = true
+            viewModel.backPressed()
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         updateProgressBar(PROGRESS_FULL)
@@ -42,6 +52,10 @@ data class CreateIntervalTimeScreen(
     val intervalTimeLengthValidity: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 
-    fun navBackToCreateTimer() = CreateIntervalTimeFragmentDirections
-        .actionCreateIntervalTimeFragmentToCreateTimerFragment(false)
+    fun navToCreateTimer() = CreateIntervalTimeFragmentDirections
+        .actionCreateIntervalTimeFragmentToCreateTimerFragment(clearViewModel = false)
+
+    fun navToCreateInterval() = CreateIntervalTimeFragmentDirections
+        .actionCreateIntervalTimeFragmentToCreateIntervalFragment(clearStores = false)
+
 }
