@@ -75,8 +75,8 @@ data class CreateTimerScreen(
 
     fun navToTimer(id: Int) =
         CreateTimerFragmentDirections.actionCreateTimerFragmentToTimerFragment(id)
-    fun navToAddInterval() =
-        CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment()
+    fun navToAddInterval(clearStore: Boolean) =
+        CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment(clearStore)
     fun navToSoundBottomSheet() =
         CreateTimerFragmentDirections.actionCreateTimerFragmentToIntervalSoundsBottomSheet()
 }

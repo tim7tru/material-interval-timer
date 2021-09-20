@@ -30,7 +30,6 @@ class IntervalSoundsBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         bindView()
         intervalSoundsAdapter.addList(screen.list)
-        viewModel.observeStore()
     }
 
     override fun bindView() {

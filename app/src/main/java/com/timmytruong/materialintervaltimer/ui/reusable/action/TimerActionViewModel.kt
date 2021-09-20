@@ -3,16 +3,21 @@ package com.timmytruong.materialintervaltimer.ui.reusable.action
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 @HiltViewModel
 class TimerActionViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
     private val screen: TimerActionBottomSheetScreen
 ) : BaseViewModel() {

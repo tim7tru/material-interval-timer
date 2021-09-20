@@ -18,13 +18,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
-    @MainDispatcher
-    @Inject
-    lateinit var mainDispatcher: CoroutineDispatcher
-
-    @BackgroundDispatcher
-    @Inject
-    lateinit var ioDispatcher: CoroutineDispatcher
+    abstract val mainDispatcher: CoroutineDispatcher
 
     private val _navigateFlow = MutableSharedFlow<NavDirections>()
     val navigateFlow: Flow<NavDirections> = _navigateFlow

@@ -7,6 +7,8 @@ import androidx.databinding.ObservableInt
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
@@ -18,6 +20,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -27,6 +30,8 @@ internal const val START_ANIMATION = "start animation"
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val intervalTimer: IntervalTimer,
     private val timerLocalDataSource: TimerRepository,
     private val screen: TimerScreen,

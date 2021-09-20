@@ -6,17 +6,22 @@ import androidx.databinding.ObservableField
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.base.DISMISS_EVENT
 import com.timmytruong.materialintervaltimer.data.local.Store
+import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
+import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
 import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
 class IntervalSoundsViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     @TimerStore private val timerStore: Store<Timer>,
     private val sounds: List<IntervalSound>,
     private val soundsBottomSheet: IntervalSoundsBottomSheetScreen,
@@ -33,11 +38,12 @@ class IntervalSoundsViewModel @Inject constructor(
             )
         }
 
-    init { soundsBottomSheet.list = soundBindings }
-
-    fun observeStore() = startSuspending(ioDispatcher) {
-        timerStore.observe.collectLatest {
-            setSoundSelected { binding -> binding.soundName.get() == it.intervalSound.name }
+    init {
+        soundsBottomSheet.list = soundBindings
+        startSuspending(ioDispatcher) {
+            timerStore.observe.collectLatest {
+                setSoundSelected { binding -> binding.soundName.get() == it.intervalSound.name }
+            }
         }
     }
 

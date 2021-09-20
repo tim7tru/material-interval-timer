@@ -1,5 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
+import android.os.Bundle
+import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
@@ -30,9 +32,13 @@ class CreateIntervalFragment :
 
     private val args: CreateIntervalFragmentArgs by navArgs()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (args.clearStores) { viewModel.clearStore() }
+    }
+
     override fun onStart() {
         super.onStart()
-        if (args.clearStores) { viewModel.clearStore() }
         viewModel.fetchInterval()
         updateProgressBar(PROGRESS_HALF)
     }

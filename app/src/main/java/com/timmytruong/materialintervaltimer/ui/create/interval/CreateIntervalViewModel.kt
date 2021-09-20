@@ -19,10 +19,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateIntervalViewModel @Inject constructor(
+    @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val resources: ResourceProvider,
     @IntervalStore private val intervalStore: Store<Interval>,
     private val screen: CreateIntervalScreen
 ) : BaseViewModel() {
+
+    init {
+        startSuspending(ioDispatcher) {
+            intervalStore.observe.collectLatest { interval ->
+                screen.intervalIconTag.set(resources.tagFromDrawableId(interval.iconId))
+                screen.intervalTitle.set(interval.name)
+            }
+        }
+    }
 
     fun setIntervalIcon(tag: String) = startSuspending(ioDispatcher) {
         val id = resources.drawableIdFromTag(tag = tag)
@@ -43,14 +54,7 @@ class CreateIntervalViewModel @Inject constructor(
 
     fun clearStore() = startSuspending(ioDispatcher) { intervalStore.update { it.clear() } }
 
-    fun fetchInterval() = startSuspending(ioDispatcher) {
-        intervalStore.observe.collectLatest { interval ->
-            screen.intervalIconTag.set(resources.tagFromDrawableId(interval.iconId))
-            screen.intervalTitle.set(interval.name)
-        }
-
-        intervalStore.refresh()
-    }
+    fun fetchInterval() = startSuspending(ioDispatcher) { intervalStore.refresh() }
 }
 
 @InstallIn(ActivityRetainedComponent::class)
