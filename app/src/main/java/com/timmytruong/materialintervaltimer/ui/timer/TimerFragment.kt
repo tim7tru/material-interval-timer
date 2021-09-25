@@ -112,6 +112,7 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
     private fun showFavouriteMenuIcon() {
         favouriteButton.apply {
             iconTintList = resources.colorList(R.color.favourite_button_color)
+            isVisible = true
             setOnMenuItemClickListener {
                 val event = !favouriteButton.isChecked
                 favouriteButton.isChecked = event

@@ -12,6 +12,8 @@ import javax.inject.Singleton
 @Module
 object AppModule {
 
+    val EMPTY_SOUND = IntervalSound(-1, "None", true)
+
     @Singleton
     @Provides
     fun provideSounds(emptySound: IntervalSound): List<IntervalSound> = listOf(
@@ -28,5 +30,5 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideEmptySound() = IntervalSound(-1, "None", true)
+    fun provideEmptySound() = EMPTY_SOUND
 }

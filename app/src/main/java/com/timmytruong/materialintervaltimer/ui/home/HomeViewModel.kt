@@ -32,7 +32,6 @@ class HomeViewModel @Inject constructor(
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
     private val screen: HomeScreen,
-    private val bottomSheet: TimerActionBottomSheetScreen,
     private val resources: ResourceProvider
 ) : BaseViewModel() {
 
@@ -67,13 +66,7 @@ class HomeViewModel @Inject constructor(
         title = ObservableField(timer.title),
         intervalCount = ObservableField(resources.string(R.string.number_of_intervals_format, timer.intervalCount)),
         timerId = timer.id,
-        clicks = {
-            startSuspending(ioDispatcher) {
-                bottomSheet.timerId.set(timer.id)
-                bottomSheet.isFavourite.set(timer.isFavourited)
-                navigateWith(screen.navToBottomSheet())
-            }
-        }
+        clicks = { navigateWith(screen.navToBottomSheet(timer.id, timer.isFavourited)) }
     )
 }
 

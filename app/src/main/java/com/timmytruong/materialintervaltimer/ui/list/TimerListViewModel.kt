@@ -31,12 +31,11 @@ class TimerListViewModel @Inject constructor(
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
     private val screen: TimerListScreen,
-    private val bottomSheet: TimerActionBottomSheetScreen,
     private val resources: ResourceProvider
 ) : BaseViewModel() {
 
     fun fetchTimers() = startSuspending(ioDispatcher) {
-        screen.timers = when (screen.screenName) {
+        screen.timers = when (screen.name) {
             FavouritesFragment::class.java.simpleName -> timerRepository.getFavouritedTimers()
                 .map { it.map(::mapTimerToBinding) }
             RecentsFragment::class.java.simpleName -> timerRepository.getRecentTimers()
@@ -52,9 +51,7 @@ class TimerListViewModel @Inject constructor(
         timerId = timer.id,
         clicks = {
             startSuspending(ioDispatcher) {
-                bottomSheet.timerId.set(timer.id)
-                bottomSheet.isFavourite.set(timer.isFavourited)
-                navigateWith(screen.navToBottomSheet())
+                navigateWith(screen.navToBottomSheet(timer.id))
             }
         }
     )
@@ -65,9 +62,9 @@ data class TimerListScreen(
     var timers: Flow<@JvmSuppressWildcards List<TimerListScreenBinding>> = emptyFlow()
 ) : BaseScreen() {
 
-    fun navToBottomSheet() = when (screenName) {
-        FavouritesFragment::class.java.simpleName -> FavouritesFragmentDirections.actionFavouritesFragmentToTimerActionBottomSheet()
-        RecentsFragment::class.java.simpleName -> RecentsFragmentDirections.actionRecentsFragmentToTimerActionBottomSheet()
+    fun navToBottomSheet(id: Int) = when (name) {
+        FavouritesFragment::class.java.simpleName -> FavouritesFragmentDirections.actionFavouritesFragmentToTimerActionBottomSheet(timerId = id)
+        RecentsFragment::class.java.simpleName -> RecentsFragmentDirections.actionRecentsFragmentToTimerActionBottomSheet(timerId = id)
         else -> error("fragment type not found")
     }
 }

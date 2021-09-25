@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.timmytruong.materialintervaltimer.di.modules.AppModule
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalConverter
 import com.timmytruong.materialintervaltimer.utils.converters.IntervalSoundConverter
 
@@ -36,7 +37,7 @@ data class Timer(
 
     @ColumnInfo(name = "interval_sound")
     @TypeConverters(IntervalSoundConverter::class)
-    var intervalSound: IntervalSound = IntervalSound(-1, "None", true)
+    var intervalSound: IntervalSound = AppModule.EMPTY_SOUND
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
@@ -50,7 +51,7 @@ data class Timer(
         intervals = arrayListOf()
         intervalCount = 0
         totalTimeMs = 0L
-        intervalSound = IntervalSound(-1)
+        intervalSound = AppModule.EMPTY_SOUND
         id = 0
     }
 
