@@ -1,5 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.databinding.ObservableBoolean
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
@@ -47,6 +49,18 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
         binding?.fragmentHomeFavouritesFrag?.horizontalRecycler?.adapter = favouritesAdapter
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.app_bar, menu)
+        menu.findItem(R.id.start).apply {
+            isVisible = true
+            setOnMenuItemClickListener {
+                viewModel.onAddClicked()
+                return@setOnMenuItemClickListener true
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         viewModel.fetchFavouriteTimers()
@@ -78,8 +92,11 @@ data class HomeScreen(
     val isFavouritesEmpty: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 
-    fun navToBottomSheet() = HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet()
-    fun navToCreateTimer() = HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment()
+    fun navToBottomSheet(id: Int, isFavourited: Boolean) =
+        HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet(timerId = id)
+
+    fun navToCreateTimer() =
+        HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment(clearViewModel = true)
 }
 
 @InstallIn(FragmentComponent::class)

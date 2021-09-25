@@ -5,6 +5,7 @@ import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.materialintervaltimer.model.Timer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,22 +23,28 @@ class TimerActionViewModel @Inject constructor(
     private val screen: TimerActionBottomSheetScreen
 ) : BaseViewModel() {
 
-    fun onFavouritedClicked(id: Int, favourite: Boolean) = startSuspending(ioDispatcher) {
-        timerRepository.setFavourite(id = id, favourite = favourite)
+    private lateinit var timer: Timer
+
+    fun fetchTimer(id: Int) = startSuspending {
+        timer = timerRepository.getTimerById(id)
+    }
+
+    fun onFavouritedClicked() = startSuspending(ioDispatcher) {
+        timerRepository.setFavourite(id = timer.id, favourite = timer.isFavourited)
         fireEvents(
-            FAVOURITE to when (favourite) {
+            FAVOURITE to when (timer.isFavourited) {
                 true -> R.string.favourited
                 false -> R.string.unfavourited
             }
         )
     }
 
-    fun onDeleteClicked(id: Int) = startSuspending(ioDispatcher) {
-        timerRepository.deleteTimer(id = id)
+    fun onDeleteClicked() = startSuspending(ioDispatcher) {
+        timerRepository.deleteTimer(id = timer.id)
         fireEvents(DELETE to R.string.deleted)
     }
 
-    fun onStartClicked(id: Int) = navigateWith(screen.navToTimer(id))
+    fun onStartClicked() = navigateWith(screen.navToTimer(timer.id))
 }
 
 @InstallIn(ActivityRetainedComponent::class)

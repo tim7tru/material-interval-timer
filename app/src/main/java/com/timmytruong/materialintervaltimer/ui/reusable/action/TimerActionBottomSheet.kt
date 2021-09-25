@@ -1,8 +1,11 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.action
 
+import android.os.Bundle
+import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseBottomSheet
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
@@ -24,6 +27,13 @@ class TimerActionBottomSheet :
     override val layoutId: Int = R.layout.fragment_timer_action_bottom_sheet
 
     override val viewModel: TimerActionViewModel by viewModels()
+
+    private val args: TimerActionBottomSheetArgs by navArgs()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchTimer(args.timerId)
+    }
 
     override fun bindView() {
         binding?.viewModel = viewModel

@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:textColor="@color/colorSecondaryDark"
             android:text="@string/startTimer"
-            android:onClick="@{() -> viewModel.onStartClicked(screen.timerId)}"
+            android:onClick="@{() -> viewModel.onStartClicked()}"
             app:icon="@drawable/ic_timer_24px"
             app:rippleColor="@color/colorSecondaryAccent"
             app:iconTint="@color/colorSecondaryDark"/>
@@ -38,7 +38,7 @@
             android:layout_height="match_parent"
             android:textColor="@{screen.isFavourite ? @color/colorGolden : @color/colorSecondaryDark}"
             android:text="@{screen.isFavourite ? @string/unfavorite : @string/favorite}"
-            android:onClick="@{() -> viewModel.onFavouritedClicked(screen.timerId, !screen.isFavourite)}"
+            android:onClick="@{() -> viewModel.onFavouritedClicked()}"
             app:icon="@drawable/ic_grade_24px"
             app:rippleColor="@{screen.isFavourite ? @color/colorGoldenAccent : @color/colorSecondaryAccent}"
             app:iconTint="@{screen.isFavourite ? @color/colorGolden : @color/colorSecondaryDark}"/>
@@ -49,7 +49,7 @@
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{() -> viewModel.onDeleteClicked(screen.timerId)}"
+            android:onClick="@{() -> viewModel.onDeleteClicked()}"
             android:text="@string/delete"
             android:textColor="@color/colorRed"
             app:icon="@drawable/ic_delete_24px"

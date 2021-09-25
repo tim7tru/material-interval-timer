@@ -17,7 +17,6 @@ import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -63,7 +62,7 @@ abstract class BaseFragment<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        screen.screenName = name
+        screen.name = name
     }
 
     override fun onStart() {
@@ -99,8 +98,8 @@ abstract class BaseFragment<
         currentDestination?.getAction(action.actionId)?.let { navigate(action) }
     }
 
-    override fun updateProgressBar(progress: Int, show: Boolean) = (activity as MainActivity)
-        .updateProgressBar(progress = progress, show = show)
+    override fun updateProgressBar(progress: Int, show: Boolean) =
+        (activity as MainActivity).updateProgressBar(progress = progress, show = show)
 
     protected fun startSuspending(block: suspend (CoroutineScope) -> Unit) =
         uiStateJobs.add(lifecycleScope.launchWhenStarted(block))
