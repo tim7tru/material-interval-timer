@@ -10,6 +10,9 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsB
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundsAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,7 +32,9 @@ class IntervalSoundsBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindView()
-        intervalSoundsAdapter.addList(screen.list)
+        startSuspending {
+            screen.list.collectLatest { intervalSoundsAdapter.addList(it) }
+        }
     }
 
     override fun bindView() {
@@ -44,5 +49,5 @@ class IntervalSoundsBottomSheet :
 }
 
 data class IntervalSoundsBottomSheetScreen(
-    var list: List<IntervalSoundScreenBinding> = emptyList()
+    var list: Flow<@JvmSuppressWildcards List<IntervalSoundScreenBinding>> = emptyFlow()
 ) : BaseScreen()

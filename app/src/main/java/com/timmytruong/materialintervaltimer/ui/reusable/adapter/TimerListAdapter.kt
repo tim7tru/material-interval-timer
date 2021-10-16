@@ -1,12 +1,13 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 
-import androidx.databinding.ObservableField
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseListAdapter
 import com.timmytruong.materialintervaltimer.base.screen.Clicks
+import com.timmytruong.materialintervaltimer.base.screen.EmptyClicks
 import com.timmytruong.materialintervaltimer.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerHorizontalBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerVerticalBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
@@ -18,6 +19,7 @@ class VerticalTimerListAdapter @Inject constructor() :
         get() = R.layout.item_timer_vertical
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemTimerVerticalBinding>, position: Int) {
+        super.onBindViewHolder(holder, position)
         holder.view.screen = list[position]
     }
 }
@@ -33,14 +35,15 @@ class HorizontalTimerItemAdapter @Inject constructor() :
         holder: BaseViewHolder<ItemTimerHorizontalBinding>,
         position: Int
     ) {
+        super.onBindViewHolder(holder, position)
         holder.view.screen = list[position]
     }
 }
 
 data class TimerListScreenBinding(
-    val time: ObservableField<String> = ObservableField(""),
-    val title: ObservableField<String> = ObservableField(""),
-    val intervalCount: ObservableField<String> = ObservableField(""),
+    val time: ObservableString = ObservableString(""),
+    val title: ObservableString = ObservableString(""),
+    val intervalCount: ObservableString = ObservableString(""),
     val timerId: Int,
-    override val clicks: Clicks<TimerListScreenBinding>
-) : ListBinding<TimerListScreenBinding>()
+    override val clicks: Clicks
+) : ListBinding()

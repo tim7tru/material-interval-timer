@@ -1,12 +1,15 @@
 package com.timmytruong.materialintervaltimer.base.screen
 
-typealias Clicks<T> = (T) -> Unit
+typealias Clicks = (Int) -> Unit
 
-object EmptyClicks: Clicks<Any> {
-    override fun invoke(p1: Any) {}
+object EmptyClicks: Clicks {
+    override fun invoke(p1: Int) {}
 }
 
-abstract class ListBinding<T> {
-    open val clicks: Clicks<T> = {}
-    open fun click(item: T): Unit = clicks.invoke(item)
+abstract class ListBinding {
+    abstract val clicks: Clicks
+
+    var position: Int = -1
+
+    fun click(): Unit = clicks.invoke(position)
 }

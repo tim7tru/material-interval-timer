@@ -5,6 +5,7 @@
 
     <data>
         <import type="android.view.View"/>
+
         <variable
             name="screen"
             type="com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding" />
@@ -19,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorSecondaryDark"
-            android:text="@{screen.header}"
-            android:visibility="@{screen.hasHeader ? View.VISIBLE : View.GONE}"
+            android:text="@{screen.position == 0 ? @string/currentIntervalTitle : @string/upNextIntervalTitle}"
+            android:visibility="@{screen.position == 0 || screen.position == 1 ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Current interval" />
@@ -48,12 +49,13 @@
                     android:layout_marginTop="@dimen/material_small"
                     android:layout_marginBottom="@dimen/material_small"
                     android:contentDescription="@string/intervalIconDesc"
-                    android:visibility="@{screen.iconId == 0 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{screen.iconId != 0 ? View.VISIBLE : View.GONE}"
                     app:imageResource="@{screen.iconId}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:tint="@color/colorSecondary" />
+                    app:tint="@color/colorSecondary"
+                    tools:src="@drawable/ic_accessibility_24px"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TimerCardTitle"

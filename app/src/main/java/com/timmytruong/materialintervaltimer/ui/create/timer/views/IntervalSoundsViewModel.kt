@@ -2,7 +2,6 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.views
 
 import android.media.MediaPlayer
 import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.base.DISMISS_EVENT
 import com.timmytruong.materialintervaltimer.data.local.Store
@@ -12,10 +11,11 @@ import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,44 +28,44 @@ class IntervalSoundsViewModel @Inject constructor(
     private val resources: ResourceProvider
 ): BaseViewModel() {
 
-    private var soundBindings: List<IntervalSoundScreenBinding> =
-        sounds.mapIndexed { position, sound ->
-            IntervalSoundScreenBinding(
-                soundName = ObservableField<String>(sound.name),
-                isSelected = ObservableBoolean(sound.isSelected),
-                position = position,
-                clicks = ::onSoundClicked
-            )
-        }
+    private val soundBindings: List<IntervalSoundScreenBinding> = sounds.map { it.toBinding() }
+
+    private val _bindings = MutableSharedFlow<List<IntervalSoundScreenBinding>>()
 
     init {
-        soundsBottomSheet.list = soundBindings
+        soundsBottomSheet.list = _bindings
         startSuspending(ioDispatcher) {
-            timerStore.observe.collectLatest {
-                setSoundSelected { binding -> binding.soundName.get() == it.intervalSound.name }
+            timerStore.observe.collectLatest { timer ->
+                setSoundSelected { soundBindings[it].id == timer.intervalSound.id }
+                _bindings.emit(soundBindings)
             }
         }
     }
 
     fun dismissSoundsBottomSheet() = fireEvents(DISMISS_EVENT)
 
-    private fun onSoundClicked(binding: IntervalSoundScreenBinding) = setSoundSelected {
-        if (it == binding) {
-            val position = it.position
+    private fun onSoundClicked(position: Int) = setSoundSelected {
+        if (it == position) {
             startSuspending(ioDispatcher) {
                 timerStore.update { timer -> timer.intervalSound = sounds[position] }
             }
             if (sounds[position].id != -1) {
                 MediaPlayer.create(resources.ctx, sounds[position].id).start()
             }
-            soundsBottomSheet.list = soundBindings
             true
         } else {
             false
         }
     }
 
-    private fun setSoundSelected(predicate: (IntervalSoundScreenBinding) -> Boolean) {
-        soundBindings.forEach { it.isSelected.set(predicate.invoke(it)) }
+    private fun setSoundSelected(predicate: (Int) -> Boolean) {
+        soundBindings.forEach { it.isSelected.set(predicate.invoke(it.position)) }
     }
+
+    private fun IntervalSound.toBinding() = IntervalSoundScreenBinding(
+        id = id,
+        soundName = ObservableString(name),
+        isSelected = ObservableBoolean(isSelected),
+        clicks = { onSoundClicked(it) }
+    )
 }

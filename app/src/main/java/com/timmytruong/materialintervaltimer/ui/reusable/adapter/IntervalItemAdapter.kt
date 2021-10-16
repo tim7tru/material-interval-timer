@@ -1,7 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseListAdapter
@@ -9,6 +7,7 @@ import com.timmytruong.materialintervaltimer.base.screen.Clicks
 import com.timmytruong.materialintervaltimer.base.screen.EmptyClicks
 import com.timmytruong.materialintervaltimer.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
@@ -20,15 +19,15 @@ class IntervalItemAdapter @Inject constructor():
         get() = R.layout.item_interval
 
     override fun onBindViewHolder(holder: BaseViewHolder<ItemIntervalBinding>, position: Int) {
+        super.onBindViewHolder(holder, position)
         holder.view.screen = list[position]
     }
 }
 
 data class IntervalItemScreenBinding(
-    val hasHeader: ObservableBoolean = ObservableBoolean(false),
-    val header: ObservableField<String> = ObservableField(""),
+    val header: ObservableString = ObservableString(""),
     val iconId: ObservableInt = ObservableInt(0),
-    val title: ObservableField<String> = ObservableField(""),
-    val description: ObservableField<String> = ObservableField(""),
-    override val clicks: Clicks<IntervalItemScreenBinding> = EmptyClicks
-): ListBinding<IntervalItemScreenBinding>()
+    val title: ObservableString = ObservableString(""),
+    val description: ObservableString = ObservableString(""),
+    override val clicks: Clicks = EmptyClicks
+): ListBinding()
