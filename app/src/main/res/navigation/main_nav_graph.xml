@@ -40,7 +40,7 @@
             android:id="@+id/action_homeFragment_to_favouritesFragment"
             app:destination="@id/favouritesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_recentsFragment2"
+            android:id="@+id/action_homeFragment_to_recentsFragment"
             app:destination="@id/recentsFragment" />
         <action
             android:id="@+id/action_homeFragment_to_createTimerFragment"
@@ -132,7 +132,7 @@
     <fragment
         android:id="@+id/recentsFragment"
         android:name="com.timmytruong.materialintervaltimer.ui.list.RecentsFragment"
-        android:label="RecentsFragment" >
+        android:label="@string/recents" >
         <action
             android:id="@+id/action_recentsFragment_to_timerActionBottomSheet"
             app:destination="@id/timerActionBottomSheet" />

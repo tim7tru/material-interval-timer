@@ -33,11 +33,26 @@
                 android:visibility="@{screen.isFavouritesEmpty ? View.GONE : View.VISIBLE}"
                 android:orientation="vertical">
 
-                <com.google.android.material.textview.MaterialTextView
-                    style="@style/HeaderText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/favouriteTimers" />
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/HeaderText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/favouriteTimers"
+                        android:layout_weight="1"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:onClick="@{() -> viewModel.onFavouritesSeeAllClicked()}"
+                        android:text="@string/seeAll"/>
+                </LinearLayout>
 
                 <include
                     layout="@layout/horizontal_recycler"
@@ -55,11 +70,28 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.textview.MaterialTextView
-                    style="@style/HeaderText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/recentTimers" />
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/HeaderText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="@string/recentTimers"
+                        android:layout_weight="1"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:onClick="@{() -> viewModel.onRecentsSeeAllClicked()}"
+                        android:text="@string/seeAll"/>
+
+                </LinearLayout>
 
                 <include
                     layout="@layout/horizontal_recycler"

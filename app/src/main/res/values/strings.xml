@@ -97,6 +97,7 @@
     <string name="pauseTag">Pause</string>
     <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
 
+    <string name="seeAll">See all</string>
     <string name="favourited">Timer favourited</string>
     <string name="unfavourited">Timer unfavourited</string>
     <string name="deleted">Timer deleted</string>

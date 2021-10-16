@@ -60,6 +60,10 @@ class HomeViewModel @Inject constructor(
 
     fun onAddClicked() = navigateWith(screen.navToCreateTimer())
 
+    fun onFavouritesSeeAllClicked() = navigateWith(screen.navToFavouriteTimers())
+
+    fun onRecentsSeeAllClicked() = navigateWith(screen.navToRecentTimers())
+
     private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
         time = ObservableString(timer.totalTimeMs.toDisplayTime(resources)),
         title = ObservableString(timer.title),

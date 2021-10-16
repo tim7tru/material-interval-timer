@@ -101,6 +101,12 @@ data class HomeScreen(
     fun navToBottomSheet(id: Int, isFavourited: Boolean) =
         HomeFragmentDirections.actionHomeFragmentToTimerActionBottomSheet(timerId = id)
 
+    fun navToRecentTimers() =
+        HomeFragmentDirections.actionHomeFragmentToRecentsFragment()
+
+    fun navToFavouriteTimers() =
+        HomeFragmentDirections.actionHomeFragmentToFavouritesFragment()
+
     fun navToCreateTimer() =
         HomeFragmentDirections.actionHomeFragmentToCreateTimerFragment(clearViewModel = true)
 }
