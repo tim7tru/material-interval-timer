@@ -19,9 +19,9 @@ class RecentsFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fragme
     @Inject
     override lateinit var screen: TimerListScreen
 
-    override val layoutId: Int = R.layout.fragment_recents
-
     override val name: String = this.name()
+
+    override val layoutId: Int = R.layout.fragment_recents
 
     override val viewModel: TimerListViewModel by viewModels()
 

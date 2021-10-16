@@ -176,11 +176,11 @@
 
     <style name="TextButton" parent="@style/SelectableItemBackground">
         <item name="android:textSize">@dimen/material_text_medium</item>
+        <item name="android:textColor">@color/colorSecondary</item>
         <item name="fontFamily">@font/quicksand_bold</item>
-        <item name="textAllCaps">true</item>
         <item name="android:gravity">center</item>
         <item name="android:clickable">true</item>
-        <item name="android:padding">@dimen/material</item>
+        <item name="android:padding">@dimen/material_xxsmall</item>
     </style>
 
     <style name="TimerCard" parent="Widget.MaterialComponents.CardView">
