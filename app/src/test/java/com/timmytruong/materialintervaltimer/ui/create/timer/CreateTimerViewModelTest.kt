@@ -5,8 +5,8 @@ import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.model.*
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,19 +32,18 @@ class CreateTimerViewModelTest : BehaviorSpec({
     val screen = CreateTimerScreen()
 
     fun create(timerScreen: CreateTimerScreen = screen) = CreateTimerViewModel(
+        ioDispatcher = TestCoroutineDispatcher(),
+        mainDispatcher = TestCoroutineDispatcher(),
         timerStore = timerStore,
         screen = timerScreen,
         timerLocalDataSource = timerRepository,
         resources = resources,
         date = date
-    ).apply {
-        ioDispatcher = TestCoroutineDispatcher()
-        mainDispatcher = TestCoroutineDispatcher()
-    }
+    )
 
     Given("store is updated with timer") {
         whenever(timerStore.observe).thenReturn(flowOf(TIMER))
-        create().fetchCurrentTimer()
+        create().fetchCurrentTimer(true)
         Then("timer count is set") {
             assertEquals(INTERVAL_COUNT, screen.timerIntervalCount.get())
         }
@@ -66,16 +65,26 @@ class CreateTimerViewModelTest : BehaviorSpec({
             assertEquals(0, screen.timerIntervalCount.get())
         }
         Then("interval sound name is empty") {
-            assertEquals("", screen.timerSelectedSound.get())
+            assertEquals("None", screen.timerSelectedSound.get())
         }
     }
 
     Given("timer title is inputted") {
-        create().apply {
-            fetchCurrentTimer()
-            setTimerTitle(TITLE)
+        When("should clear store") {
+            create().apply {
+                fetchCurrentTimer(true)
+                setTimerTitle(TITLE)
+            }
+            Then("store is cleared and updated") { verify(timerStore, times(2)).update(any())}
         }
-        Then("store is updated") { verify(timerStore).update(any()) }
+
+        When("should not clear store") {
+            create().apply {
+                fetchCurrentTimer(false)
+                setTimerTitle(TITLE)
+            }
+            Then("store is updated") { verify(timerStore).update(any())}
+        }
     }
 
     Given("repeat is triggered") {
@@ -111,6 +120,13 @@ class CreateTimerViewModelTest : BehaviorSpec({
         val viewModel = create(navScreen)
         viewModel.navigateFlow.test {
             viewModel.validateTimer(TITLE)
+            Then("timer is updated in store") { verify(timerStore).update(any()) }
+//            Then("date is fetched") {
+//                val captor = argumentCaptor<(Timer) -> Unit>()
+//                verify(timerStore).update(captor.capture())
+//                captor.firstValue.invoke(TIMER)
+//                verify(date, times(2)).getCurrentDate()
+//            }
             Then("timer is saved to repository") { verify(timerRepository).saveNewTimer(TIMER) }
             Then("navigate event is retrieved") { verify(navScreen).navToTimer(TIMER_ID) }
             Then("navigation event fired") { assert(expectItem() == action) }
@@ -130,13 +146,13 @@ class CreateTimerViewModelTest : BehaviorSpec({
     }
 
     Given("sounds is clicked") {
-        val navScreen: CreateTimerScreen = mock()
         val action: NavDirections = mock()
-        navScreen::navToSoundBottomSheet.stub { on { this.invoke() }.doReturn(action) }
+        val navScreen: CreateTimerScreen =
+            mock { on { navToSoundBottomSheet(any()) }.thenReturn(action) }
         val viewModel = create(navScreen)
         viewModel.navigateFlow.test {
             viewModel.onGoToSoundsBottomSheet()
-            Then("navigate event is retrieved") { verify(navScreen).navToSoundBottomSheet() }
+            Then("navigate event is retrieved") { verify(navScreen).navToSoundBottomSheet(SOUND_ID) }
             Then("navigation event fired") { assert(expectItem() == action) }
         }
     }
