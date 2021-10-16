@@ -1,6 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.timer
 
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
@@ -13,8 +12,8 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.toDisplayTime
 import dagger.Module
 import dagger.Provides
@@ -37,18 +36,19 @@ class CreateTimerViewModel @Inject constructor(
     private val date: DateProvider
 ) : BaseViewModel() {
 
-    init {
-        startSuspending(ioDispatcher) {
-            timerStore.observe.collectLatest {
-                screen.intervals = mapIntervals(it.intervals)
-                screen.timerIntervalCount.set(it.intervalCount)
-                screen.timerTitle.set(it.title)
-                screen.timerSelectedSound.set(it.intervalSound.name)
-            }
+    fun fetchCurrentTimer(clearTimer: Boolean) = startSuspending(ioDispatcher) {
+        timerStore.observe.collectLatest {
+            screen.intervals = mapIntervals(it.intervals)
+            screen.timerIntervalCount.set(it.intervalCount)
+            screen.timerTitle.set(it.title)
+            screen.timerSelectedSound.set(it.intervalSound.name)
+        }
+
+        when (clearTimer) {
+            true -> timerStore.update { it.clear() }
+            false -> timerStore.refresh()
         }
     }
-
-    fun fetchCurrentTimer() = startSuspending(ioDispatcher) { timerStore.refresh() }
 
     fun clearTimer() = startSuspending(ioDispatcher) { timerStore.update { it.clear() } }
 
@@ -80,7 +80,8 @@ class CreateTimerViewModel @Inject constructor(
 
     fun onGoToAddIntervalClicked() = navigateWith(screen.navToAddInterval())
 
-    fun onGoToSoundsBottomSheet() = navigateWith(screen.navToSoundBottomSheet())
+    fun onGoToSoundsBottomSheet() =
+        navigateWith(screen.navToSoundBottomSheet(timerStore.get().intervalSound.id))
 
     private fun mapIntervals(list: ArrayList<Interval>) = list.map {
         IntervalItemScreenBinding(

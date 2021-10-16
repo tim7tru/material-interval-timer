@@ -3,8 +3,13 @@ package com.timmytruong.materialintervaltimer.utils
 import androidx.annotation.StringRes
 
 sealed class Event {
-    sealed class TimerAction : Event() {
-        data class ToastMessage(@StringRes val message: Int) : TimerAction()
+
+    sealed class BottomSheet : Event() {
+        object Dismiss : BottomSheet()
+
+        sealed class TimerAction : BottomSheet() {
+            data class ToastMessage(@StringRes val message: Int) : TimerAction()
+        }
     }
 
     sealed class Timer : Event() {

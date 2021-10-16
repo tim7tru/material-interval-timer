@@ -10,6 +10,7 @@ import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,19 +30,12 @@ class IntervalSoundsViewModel @Inject constructor(
 
     private val soundBindings: List<IntervalSoundScreenBinding> = sounds.map { it.toBinding() }
 
-    private val _bindings = MutableSharedFlow<List<IntervalSoundScreenBinding>>()
-
-    init {
-        soundsBottomSheet.list = _bindings
-        startSuspending(ioDispatcher) {
-            timerStore.observe.collectLatest { timer ->
-                setSoundSelected { soundBindings[it].id == timer.intervalSound.id }
-                _bindings.emit(soundBindings)
-            }
-        }
+    fun fetchSounds(soundId: Int) {
+        setSoundSelected { soundBindings[it].id == soundId }
+        soundsBottomSheet.list = soundBindings
     }
 
-    fun dismissSoundsBottomSheet() = navigateWith(soundsBottomSheet.navToCreateTimer())
+    fun dismissSoundsBottomSheet() = fireEvent(Event.BottomSheet.Dismiss)
 
     private fun onSoundClicked(position: Int) = setSoundSelected {
         if (it == position) {
@@ -58,7 +52,7 @@ class IntervalSoundsViewModel @Inject constructor(
     }
 
     private fun setSoundSelected(predicate: (Int) -> Boolean) {
-        soundBindings.forEach { if (it.position != -1) it.isSelected.set(predicate.invoke(it.position)) }
+        soundBindings.forEachIndexed { idx, sound -> sound.isSelected.set(predicate.invoke(idx)) }
     }
 
     private fun IntervalSound.toBinding() = IntervalSoundScreenBinding(

@@ -3,6 +3,7 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.views
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseBottomSheet
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
@@ -10,9 +11,6 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsB
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundsAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,17 +27,18 @@ class IntervalSoundsBottomSheet :
 
     override val layoutId: Int get() = R.layout.fragment_interval_sounds_bottom_sheet
 
+    private val args: IntervalSoundsBottomSheetArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchSounds(args.soundId)
         bindView()
-        startSuspending {
-            screen.list.collectLatest { intervalSoundsAdapter.addList(it) }
-        }
     }
 
     override fun bindView() {
         binding?.viewModel = viewModel
         binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = intervalSoundsAdapter
+        intervalSoundsAdapter.addList(screen.list)
     }
 
     override fun onDestroyView() {
@@ -49,9 +48,5 @@ class IntervalSoundsBottomSheet :
 }
 
 data class IntervalSoundsBottomSheetScreen(
-    var list: Flow<@JvmSuppressWildcards List<IntervalSoundScreenBinding>> = emptyFlow()
-) : BaseScreen() {
-
-    fun navToCreateTimer() =
-        IntervalSoundsBottomSheetDirections.actionIntervalSoundsBottomSheetToCreateTimerFragment()
-}
+    var list: List<IntervalSoundScreenBinding> = emptyList()
+) : BaseScreen()

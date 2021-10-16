@@ -38,7 +38,7 @@ class CreateTimerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (args.clearViewModel) viewModel.clearTimer()
+        viewModel.fetchCurrentTimer(args.clearViewModel)
     }
 
     override fun onStart() {
@@ -69,7 +69,7 @@ data class CreateTimerScreen(
     var intervals: List<IntervalItemScreenBinding> = listOf(),
     val timerTitle: ObservableString = ObservableString(""),
     val timerIntervalCount: ObservableInt = ObservableInt(0),
-    val timerSelectedSound: ObservableString = ObservableString(""),
+    val timerSelectedSound: ObservableString = ObservableString("None"),
     val timerIsSaved: ObservableBoolean = ObservableBoolean(false),
     val timerIsRepeated: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
@@ -80,6 +80,6 @@ data class CreateTimerScreen(
     fun navToAddInterval() =
         CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment(clearStores = true)
 
-    fun navToSoundBottomSheet() =
-        CreateTimerFragmentDirections.actionCreateTimerFragmentToIntervalSoundsBottomSheet()
+    fun navToSoundBottomSheet(id: Int) =
+        CreateTimerFragmentDirections.actionCreateTimerFragmentToIntervalSoundsBottomSheet(soundId = id)
 }
