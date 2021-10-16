@@ -75,6 +75,7 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
 
     override fun eventHandler(event: Event) {
         when (event) {
+            Event.BottomSheet.Dismiss -> close()
             is Event.Error.Unknown ->  popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
             else -> {}
         }

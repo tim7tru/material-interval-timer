@@ -40,7 +40,7 @@ class TimerActionBottomSheet :
 
     override fun eventHandler(event: Event) {
         when(event) {
-            is Event.TimerAction.ToastMessage -> toastAndDismiss(event.message)
+            is Event.BottomSheet.TimerAction.ToastMessage -> toastAndDismiss(event.message)
             else -> { /** noop **/ }
         }
     }

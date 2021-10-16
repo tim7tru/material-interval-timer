@@ -33,7 +33,7 @@ class TimerActionViewModel @Inject constructor(
     fun onFavouritedClicked() = startSuspending(ioDispatcher) {
         timerRepository.setFavourite(id = timer.id, favourite = timer.isFavourited)
         fireEvent(
-            Event.TimerAction.ToastMessage(
+            Event.BottomSheet.TimerAction.ToastMessage(
                 when (timer.isFavourited) {
                     true -> R.string.favourited
                     false -> R.string.unfavourited
@@ -44,7 +44,7 @@ class TimerActionViewModel @Inject constructor(
 
     fun onDeleteClicked() = startSuspending(ioDispatcher) {
         timerRepository.deleteTimer(id = timer.id)
-        fireEvent(Event.TimerAction.ToastMessage(R.string.deleted))
+        fireEvent(Event.BottomSheet.TimerAction.ToastMessage(R.string.deleted))
     }
 
     fun onStartClicked() = navigateWith(screen.navToTimer(timer.id))
