@@ -3,7 +3,6 @@ package com.timmytruong.materialintervaltimer.ui.create.timer
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -13,6 +12,7 @@ import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,9 +67,9 @@ class CreateTimerFragment :
 @Open
 data class CreateTimerScreen(
     var intervals: List<IntervalItemScreenBinding> = listOf(),
-    val timerTitle: ObservableField<String> = ObservableField(""),
+    val timerTitle: ObservableString = ObservableString(""),
     val timerIntervalCount: ObservableInt = ObservableInt(0),
-    val timerSelectedSound: ObservableField<String> = ObservableField(""),
+    val timerSelectedSound: ObservableString = ObservableString(""),
     val timerIsSaved: ObservableBoolean = ObservableBoolean(false),
     val timerIsRepeated: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {

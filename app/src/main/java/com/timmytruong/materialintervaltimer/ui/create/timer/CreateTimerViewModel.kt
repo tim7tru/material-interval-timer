@@ -12,6 +12,7 @@ import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import com.timmytruong.materialintervaltimer.utils.toDisplayTime
@@ -84,8 +85,8 @@ class CreateTimerViewModel @Inject constructor(
     private fun mapIntervals(list: ArrayList<Interval>) = list.map {
         IntervalItemScreenBinding(
             iconId = ObservableInt(it.iconId),
-            title = ObservableField(it.name),
-            description = ObservableField(it.timeMs.toDisplayTime(resources))
+            title = ObservableString(it.name),
+            description = ObservableString(it.timeMs.toDisplayTime(resources))
         )
     }
 }

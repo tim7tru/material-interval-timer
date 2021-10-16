@@ -1,34 +1,31 @@
 package com.timmytruong.materialintervaltimer.base
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.timmytruong.materialintervaltimer.base.screen.ListBinding
 
-abstract class BaseListAdapter<Binding : ViewDataBinding, Entity> :
-    RecyclerView.Adapter<BaseListAdapter.BaseViewHolder<Binding>>() {
+abstract class BaseListAdapter<View : ViewDataBinding, Entity : ListBinding> :
+    RecyclerView.Adapter<BaseListAdapter.BaseViewHolder<View>>() {
 
-    class BaseViewHolder<Binding : ViewDataBinding>(val view: Binding) :
+    class BaseViewHolder<View : ViewDataBinding>(val view: View) :
         RecyclerView.ViewHolder(view.root)
 
     abstract val bindingLayout: Int
 
-    protected val context: Context by lazy { binding.root.context }
-
-    protected val view: View by lazy { binding.root }
-
     protected val list: MutableList<Entity> = mutableListOf()
 
-    private lateinit var binding: Binding
+    private lateinit var binding: View
 
-    abstract override fun onBindViewHolder(holder: BaseViewHolder<Binding>, position: Int)
+    override fun onBindViewHolder(holder: BaseViewHolder<View>, position: Int) {
+        list[position].position = position
+    }
 
     override fun getItemCount(): Int = list.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Binding> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<View> {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             bindingLayout,

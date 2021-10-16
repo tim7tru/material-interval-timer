@@ -1,10 +1,13 @@
 package com.timmytruong.materialintervaltimer.utils
 
+import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
+
+typealias ObservableString = ObservableField<String>
 
 fun Fragment.name(): String = this::class.java.simpleName
 

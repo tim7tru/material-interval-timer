@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{screen.soundName}"
-            android:onClick="@{() -> screen.click(screen)}"
+            android:onClick="@{() -> screen.click()}"
             android:textColor="@{screen.isSelected ? @color/colorSecondaryAccent : @color/colorGray}"
             tools:text="Sound"
             tools:textColor="@color/colorGray"/>

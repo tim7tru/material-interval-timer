@@ -3,12 +3,12 @@ package com.timmytruong.materialintervaltimer.ui.create.interval.time
 import android.content.Context
 import androidx.activity.addCallback
 import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -48,7 +48,7 @@ class CreateIntervalTimeFragment :
 }
 
 data class CreateIntervalTimeScreen(
-    val intervalDisplayTime: ObservableField<String> = ObservableField(""),
+    val intervalDisplayTime: ObservableString = ObservableString(""),
     val intervalTimeLengthValidity: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 

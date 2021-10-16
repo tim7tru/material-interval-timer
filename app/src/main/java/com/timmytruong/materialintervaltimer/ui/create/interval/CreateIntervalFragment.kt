@@ -10,6 +10,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalBinding
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -56,8 +57,8 @@ class CreateIntervalFragment :
 
 data class CreateIntervalScreen(
     val enableIcon: ObservableBoolean = ObservableBoolean(false),
-    val intervalIconTag: ObservableField<String> = ObservableField(""),
-    val intervalTitle: ObservableField<String> = ObservableField("")
+    val intervalIconTag: ObservableString = ObservableString(""),
+    val intervalTitle: ObservableString = ObservableString("")
 ) : BaseScreen() {
 
     fun nextAction() =

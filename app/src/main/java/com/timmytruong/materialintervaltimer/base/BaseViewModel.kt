@@ -3,18 +3,11 @@ package com.timmytruong.materialintervaltimer.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
-import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
@@ -35,7 +28,7 @@ abstract class BaseViewModel : ViewModel() {
     }
 
     protected fun ViewModel.startSuspending(
-        context: CoroutineContext = EmptyCoroutineContext,
+        context: CoroutineContext = Dispatchers.Default,
         block: suspend (CoroutineScope) -> Unit
     ) {
         viewModelScope.launch(context, CoroutineStart.DEFAULT, block)

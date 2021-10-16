@@ -147,7 +147,7 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
 
 data class TimerScreen(
     val timerState: ObservableField<TimerState> = ObservableField(TimerState.STOPPED),
-    val timeRemaining: ObservableField<String> = ObservableField(""),
+    val timeRemaining: ObservableString = ObservableString(""),
     val progress: ObservableInt = ObservableInt(0),
     var intervals: Flow<@JvmSuppressWildcards List<IntervalItemScreenBinding>> = emptyFlow(),
 ) : BaseScreen() {

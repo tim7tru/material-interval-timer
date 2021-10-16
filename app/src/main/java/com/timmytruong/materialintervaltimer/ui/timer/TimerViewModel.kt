@@ -1,10 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.timer
 
 import android.media.MediaPlayer
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
-import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
@@ -111,19 +108,11 @@ class TimerViewModel @Inject constructor(
     }
 
     private fun updateIntervalBindings() = startSuspending(ioDispatcher) {
-        intervalBindings.value = intervals.mapIndexed { position, interval ->
+        intervalBindings.value = intervals.map { interval ->
             IntervalItemScreenBinding(
-                hasHeader = ObservableBoolean(position == 0 || position == 1),
-                header = ObservableField(
-                    when (position) {
-                        0 -> resources.string(R.string.currentIntervalTitle)
-                        1 -> resources.string(R.string.upNextIntervalTitle)
-                        else -> ""
-                    }
-                ),
                 iconId = ObservableInt(interval.iconId),
-                title = ObservableField(interval.name),
-                description = ObservableField(interval.timeMs.toDisplayTime(resources))
+                title = ObservableString(interval.name),
+                description = ObservableString(interval.timeMs.toDisplayTime(resources))
             )
         }
     }

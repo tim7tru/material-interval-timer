@@ -1,6 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
-import androidx.databinding.ObservableField
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
@@ -8,7 +7,7 @@ import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerListScreenBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
+import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.toDisplayTime
 import dagger.Module
@@ -62,9 +61,9 @@ class HomeViewModel @Inject constructor(
     fun onAddClicked() = navigateWith(screen.navToCreateTimer())
 
     private fun mapTimerToBinding(timer: Timer) = TimerListScreenBinding(
-        time = ObservableField(timer.totalTimeMs.toDisplayTime(resources)),
-        title = ObservableField(timer.title),
-        intervalCount = ObservableField(resources.string(R.string.number_of_intervals_format, timer.intervalCount)),
+        time = ObservableString(timer.totalTimeMs.toDisplayTime(resources)),
+        title = ObservableString(timer.title),
+        intervalCount = ObservableString(resources.string(R.string.number_of_intervals_format, timer.intervalCount)),
         timerId = timer.id,
         clicks = { navigateWith(screen.navToBottomSheet(timer.id, timer.isFavourited)) }
     )
