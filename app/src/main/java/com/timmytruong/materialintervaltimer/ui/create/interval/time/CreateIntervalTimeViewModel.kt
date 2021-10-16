@@ -9,7 +9,7 @@ import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L

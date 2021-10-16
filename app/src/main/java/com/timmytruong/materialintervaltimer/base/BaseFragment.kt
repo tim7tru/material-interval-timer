@@ -15,8 +15,8 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -29,7 +29,7 @@ abstract class BaseFragment<
         Screen : BaseScreen,
         ViewModel : BaseViewModel,
         Binding : ViewDataBinding
-        > : Fragment(), BaseObserver<ViewModel>, ProgressBar {
+> : Fragment(), BaseObserver<ViewModel>, ProgressBar {
 
     protected val ctx: Context by lazy { requireContext() }
 

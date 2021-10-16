@@ -61,8 +61,15 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.app_bar, menu)
         this.menu = menu
-        showFavouriteMenuIcon()
-        showSoundMenuIcon()
+        favouriteButton.isVisible = true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item) {
+            favouriteButton -> viewModel.setShouldSave()
+            mutedButton, unmutedButton -> soundToggled(item)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onAttach(context: Context) {
@@ -105,34 +112,15 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
                 end = 0,
                 duration = event.second as Long
             )
-            IS_SAVED -> favouriteButton.isChecked = true
+            IS_SAVED -> favouriteButton.isVisible = true
+            SHOW_SOUND_TOGGLE -> unmutedButton.isVisible = event.second as Boolean
         }
     }
 
-    private fun showFavouriteMenuIcon() {
-        favouriteButton.apply {
-            iconTintList = resources.colorList(R.color.favourite_button_color)
-            isVisible = true
-            setOnMenuItemClickListener {
-                val event = !favouriteButton.isChecked
-                favouriteButton.isChecked = event
-                viewModel.setShouldSave(favourite = event)
-                true
-            }
-        }
-    }
-
-    private fun showSoundMenuIcon() {
-        unmutedButton.isVisible = true
-        MenuItem.OnMenuItemClickListener {
-            unmutedButton.isVisible = it.itemId != R.id.soundOn
-            mutedButton.isVisible = it.itemId == R.id.soundOn
-            viewModel.isMuted = it.itemId == R.id.soundOff
-            return@OnMenuItemClickListener true
-        }.apply {
-            unmutedButton.setOnMenuItemClickListener(this)
-            mutedButton.setOnMenuItemClickListener(this)
-        }
+    private fun soundToggled(item: MenuItem) {
+        unmutedButton.isVisible = item.itemId == R.id.soundOff
+        mutedButton.isVisible = item.itemId == R.id.soundOn
+        viewModel.isMuted = item.itemId == R.id.soundOn
     }
 
     private fun showExitDialog() = popUpProvider.showDialog(

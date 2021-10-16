@@ -6,7 +6,7 @@ import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.TIMER
 import com.timmytruong.materialintervaltimer.model.TIMER_ID
 import com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheetScreen
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import kotlinx.coroutines.ExperimentalCoroutinesApi

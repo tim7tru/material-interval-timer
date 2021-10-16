@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.data.local.room.TimerDatabase
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

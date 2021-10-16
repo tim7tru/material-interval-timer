@@ -6,6 +6,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 
 typealias ObservableString = ObservableField<String>
 
