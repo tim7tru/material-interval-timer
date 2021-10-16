@@ -14,9 +14,9 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.di.CircularProgress
+import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
-import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
@@ -57,6 +57,15 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         setHasOptionsMenu(true)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            this.isEnabled = true
+            viewModel.handlePause()
+            showExitDialog()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.app_bar, menu)
@@ -72,19 +81,9 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            this.isEnabled = true
-            viewModel.handlePause()
-            showExitDialog()
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.fetchTimer(id = args.timerId)
-        startSuspending { screen.intervals.collectLatest(intervalItemAdapter::addList) }
     }
 
     override fun bindView() {
@@ -114,6 +113,7 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
             is Event.Timer.HasSound -> unmutedButton.isVisible = event.hasSound
             is Event.Timer.IsSaved -> favouriteButton.isVisible = event.saved
             Event.Timer.Stopped -> progressBar.cancelAnimation()
+            Event.Timer.Bindings -> intervalItemAdapter.addList(screen.intervals)
             else -> { /** noop **/ }
         }
     }
@@ -138,7 +138,7 @@ data class TimerScreen(
     val timerState: ObservableField<TimerState> = ObservableField(TimerState.STOPPED),
     val timeRemaining: ObservableString = ObservableString(""),
     val progress: ObservableInt = ObservableInt(0),
-    var intervals: Flow<@JvmSuppressWildcards List<IntervalItemScreenBinding>> = emptyFlow(),
+    var intervals: ArrayList<IntervalItemScreenBinding> = arrayListOf(),
 ) : BaseScreen() {
 
     fun navToHome() = TimerFragmentDirections.actionTimerFragmentToHomeFragment()

@@ -22,11 +22,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-internal const val IS_SAVED = "is saved"
-internal const val SHOW_SOUND_TOGGLE = "show sound toggle"
-internal const val CANCEL_ANIMATION = "cancel anim"
-internal const val START_ANIMATION = "start animation"
-
 @HiltViewModel
 class TimerViewModel @Inject constructor(
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -40,21 +35,15 @@ class TimerViewModel @Inject constructor(
     var isMuted: Boolean = false
 
     private lateinit var timer: Timer
-    private val intervalBindings = MutableStateFlow<List<IntervalItemScreenBinding>>(listOf())
     private var currentIntervalTimeRemaining: Long = 0L
     private var currentIntervalTotalTime: Long = 0L
     private var intervals: ArrayList<Interval> = arrayListOf()
-        set(value) {
-            field = value
-            updateIntervalBindings()
-        }
 
     fun fetchTimer(id: Int) = startSuspending(ioDispatcher) {
         if (!(this@TimerViewModel::timer.isInitialized)) {
             timer = timerLocalDataSource.getTimerById(id = id)
         }
 
-        screen.intervals = intervalBindings
         intervalTimer.currentTimeRemaining.collectLatest(::updateTimeRemaining)
         fireEvent(
             Event.Timer.IsSaved(timer.isFavourited),
@@ -96,10 +85,11 @@ class TimerViewModel @Inject constructor(
     private fun cancelAnimation() = fireEvent(Event.Timer.Stopped)
 
     private fun resetProgress() {
-        screen.progress.set(((currentIntervalTimeRemaining.toFloat() / currentIntervalTotalTime.toFloat()) * MILLI_IN_SECS_L).toInt())
+        val progress = ((currentIntervalTimeRemaining.toFloat() / currentIntervalTotalTime.toFloat()) * MILLI_IN_SECS_L).toInt()
+        screen.progress.set(progress)
     }
 
-    private suspend fun setNewInterval() {
+    private fun setNewInterval() = startSuspending(mainDispatcher) {
         val intervalTime = intervals.first().timeMs
         intervalTimer.buildIntervalTimer(intervalTime)
         currentIntervalTimeRemaining = intervalTime
@@ -113,13 +103,9 @@ class TimerViewModel @Inject constructor(
     }
 
     private fun updateIntervalBindings() = startSuspending(ioDispatcher) {
-        intervalBindings.value = intervals.map { interval ->
-            IntervalItemScreenBinding(
-                iconId = ObservableInt(interval.iconId),
-                title = ObservableString(interval.name),
-                description = ObservableString(interval.timeMs.toDisplayTime(resources))
-            )
-        }
+        screen.intervals.clear()
+        screen.intervals.addAll(intervals.toBindings())
+        fireEvent(Event.Timer.Bindings)
     }
 
     private fun updateTimeRemaining(timeRemaining: Long) {
@@ -168,6 +154,14 @@ class TimerViewModel @Inject constructor(
         intervals.addAll(timer.intervals)
         updateIntervalBindings()
         setNewInterval()
+    }
+
+    private fun List<Interval>.toBindings() = this.map {
+        IntervalItemScreenBinding(
+            iconId = ObservableInt(it.iconId),
+            title = ObservableString(it.name),
+            description = ObservableString(it.timeMs.toDisplayTime(resources))
+        )
     }
 }
 

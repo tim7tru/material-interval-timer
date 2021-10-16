@@ -103,7 +103,7 @@
                 app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
                 app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/timer_circle"
                 app:tint="@color/colorSecondaryDark" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator

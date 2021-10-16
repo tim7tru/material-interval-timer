@@ -14,9 +14,10 @@ sealed class Event {
 
     sealed class Timer : Event() {
         data class Started(val timeRemaining: Long) : Timer()
-        object Stopped : Timer()
         data class IsSaved(val saved: Boolean) : Timer()
         data class HasSound(val hasSound: Boolean) : Timer()
+        object Stopped : Timer()
+        object Bindings : Timer()
     }
 
     sealed class Error : Event() {
