@@ -50,4 +50,8 @@ class IntervalSoundsBottomSheet :
 
 data class IntervalSoundsBottomSheetScreen(
     var list: Flow<@JvmSuppressWildcards List<IntervalSoundScreenBinding>> = emptyFlow()
-) : BaseScreen()
+) : BaseScreen() {
+
+    fun navToCreateTimer() =
+        IntervalSoundsBottomSheetDirections.actionIntervalSoundsBottomSheetToCreateTimerFragment()
+}

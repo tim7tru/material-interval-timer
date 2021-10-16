@@ -122,7 +122,13 @@
     <dialog
         android:id="@+id/intervalSoundsBottomSheet"
         android:name="com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheet"
-        android:label="IntervalSoundsBottomSheet" />
+        android:label="IntervalSoundsBottomSheet" >
+        <action
+            android:id="@+id/action_intervalSoundsBottomSheet_to_createTimerFragment"
+            app:destination="@id/createTimerFragment"
+            app:popUpTo="@id/createTimerFragment"
+            app:popUpToInclusive="true"/>
+    </dialog>
 
     <fragment
         android:id="@+id/recentsFragment"

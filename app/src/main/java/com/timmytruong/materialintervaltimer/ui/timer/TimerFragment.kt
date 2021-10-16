@@ -103,17 +103,18 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         dialog?.dismiss()
     }
 
-    override fun eventHandler(event: Pair<String, Any>) {
-        when (event.first) {
-            CANCEL_ANIMATION -> progressBar.cancelAnimation()
-            START_ANIMATION -> progressBar.startAnimation(
+    override fun eventHandler(event: Event) {
+        when (event) {
+            is Event.Timer.Started -> progressBar.startAnimation(
                 target = binding?.fragmentTimerProgressCircle,
                 start = screen.progress.get(),
                 end = 0,
-                duration = event.second as Long
+                duration = event.timeRemaining
             )
-            IS_SAVED -> favouriteButton.isVisible = true
-            SHOW_SOUND_TOGGLE -> unmutedButton.isVisible = event.second as Boolean
+            is Event.Timer.HasSound -> unmutedButton.isVisible = event.hasSound
+            is Event.Timer.IsSaved -> favouriteButton.isVisible = event.saved
+            Event.Timer.Stopped -> progressBar.cancelAnimation()
+            else -> { /** noop **/ }
         }
     }
 

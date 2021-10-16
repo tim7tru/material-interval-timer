@@ -6,6 +6,7 @@ import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.utils.Event
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,17 +32,19 @@ class TimerActionViewModel @Inject constructor(
 
     fun onFavouritedClicked() = startSuspending(ioDispatcher) {
         timerRepository.setFavourite(id = timer.id, favourite = timer.isFavourited)
-        fireEvents(
-            FAVOURITE to when (timer.isFavourited) {
-                true -> R.string.favourited
-                false -> R.string.unfavourited
-            }
+        fireEvent(
+            Event.TimerAction.ToastMessage(
+                when (timer.isFavourited) {
+                    true -> R.string.favourited
+                    false -> R.string.unfavourited
+                }
+            )
         )
     }
 
     fun onDeleteClicked() = startSuspending(ioDispatcher) {
         timerRepository.deleteTimer(id = timer.id)
-        fireEvents(DELETE to R.string.deleted)
+        fireEvent(Event.TimerAction.ToastMessage(R.string.deleted))
     }
 
     fun onStartClicked() = navigateWith(screen.navToTimer(timer.id))

@@ -10,12 +10,10 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.BaseBottomSheet
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerActionBottomSheetBinding
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.Open
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
-internal const val FAVOURITE = "favourite"
-internal const val DELETE = "delete"
 
 @AndroidEntryPoint
 class TimerActionBottomSheet :
@@ -40,10 +38,10 @@ class TimerActionBottomSheet :
         binding?.screen = screen
     }
 
-    override fun eventHandler(event: Pair<String, Any>) {
-        when (event.first) {
-            FAVOURITE -> toastAndDismiss(event.second as Int)
-            DELETE -> toastAndDismiss(event.second as Int)
+    override fun eventHandler(event: Event) {
+        when(event) {
+            is Event.TimerAction.ToastMessage -> toastAndDismiss(event.message)
+            else -> { /** noop **/ }
         }
     }
 

@@ -15,6 +15,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
@@ -22,8 +23,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
-
-const val UNKNOWN_ERROR = "unknown_error"
 
 abstract class BaseFragment<
         Screen : BaseScreen,
@@ -88,9 +87,10 @@ abstract class BaseFragment<
         super.onDestroyView()
     }
 
-    override fun eventHandler(event: Pair<String, Any>) {
-        when (event.first) {
-            UNKNOWN_ERROR -> popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
+    override fun eventHandler(event: Event) {
+        when (event) {
+            is Event.Error.Unknown ->  popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
+            else -> { /** noop **/ }
         }
     }
 
