@@ -3,6 +3,7 @@ package com.timmytruong.materialintervaltimer.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
+import com.timmytruong.materialintervaltimer.utils.Event
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,10 +17,10 @@ abstract class BaseViewModel : ViewModel() {
     private val _navigateFlow = MutableSharedFlow<NavDirections>()
     val navigateFlow: Flow<NavDirections> = _navigateFlow
 
-    private val _eventFlow = MutableSharedFlow<Pair<String, Any>>()
-    val eventFlow: SharedFlow<Pair<String, Any>> = _eventFlow
+    private val _eventFlow = MutableSharedFlow<Event>()
+    val eventFlow: SharedFlow<Event> = _eventFlow
 
-    protected fun fireEvents(vararg events: Pair<String, Any>) = startSuspending(mainDispatcher) {
+    protected fun fireEvent(vararg events: Event) = startSuspending(mainDispatcher) {
         events.forEach { _eventFlow.emit(it) }
     }
 

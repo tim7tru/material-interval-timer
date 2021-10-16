@@ -56,9 +56,9 @@ class TimerViewModel @Inject constructor(
 
         screen.intervals = intervalBindings
         intervalTimer.currentTimeRemaining.collectLatest(::updateTimeRemaining)
-        fireEvents(
-            IS_SAVED to timer.isFavourited,
-            SHOW_SOUND_TOGGLE to (timer.intervalSound.id != -1)
+        fireEvent(
+            Event.Timer.IsSaved(timer.isFavourited),
+            Event.Timer.HasSound(timer.intervalSound.id != -1)
         )
         handleStop()
     }
@@ -67,7 +67,7 @@ class TimerViewModel @Inject constructor(
         cancelAnimation()
         screen.timerState.set(TimerState.RUNNING)
         intervalTimer.start()
-        fireEvents(START_ANIMATION to currentIntervalTimeRemaining)
+        fireEvent(Event.Timer.Started(currentIntervalTimeRemaining))
     }
 
     fun handlePause() = startSuspending(ioDispatcher) {
@@ -93,7 +93,7 @@ class TimerViewModel @Inject constructor(
         navigateWith(screen.navToHome())
     }
 
-    private fun cancelAnimation() = fireEvents(CANCEL_ANIMATION to Unit)
+    private fun cancelAnimation() = fireEvent(Event.Timer.Stopped)
 
     private fun resetProgress() {
         screen.progress.set(((currentIntervalTimeRemaining.toFloat() / currentIntervalTotalTime.toFloat()) * MILLI_IN_SECS_L).toInt())

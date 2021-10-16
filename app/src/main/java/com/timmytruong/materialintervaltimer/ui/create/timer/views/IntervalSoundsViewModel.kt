@@ -3,7 +3,6 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.views
 import android.media.MediaPlayer
 import androidx.databinding.ObservableBoolean
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.base.DISMISS_EVENT
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
@@ -42,7 +41,7 @@ class IntervalSoundsViewModel @Inject constructor(
         }
     }
 
-    fun dismissSoundsBottomSheet() = fireEvents(DISMISS_EVENT)
+    fun dismissSoundsBottomSheet() = navigateWith(soundsBottomSheet.navToCreateTimer())
 
     private fun onSoundClicked(position: Int) = setSoundSelected {
         if (it == position) {
@@ -59,7 +58,7 @@ class IntervalSoundsViewModel @Inject constructor(
     }
 
     private fun setSoundSelected(predicate: (Int) -> Boolean) {
-        soundBindings.forEach { it.isSelected.set(predicate.invoke(it.position)) }
+        soundBindings.forEach { if (it.position != -1) it.isSelected.set(predicate.invoke(it.position)) }
     }
 
     private fun IntervalSound.toBinding() = IntervalSoundScreenBinding(
