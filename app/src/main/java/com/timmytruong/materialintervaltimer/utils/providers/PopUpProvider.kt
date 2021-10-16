@@ -9,7 +9,6 @@ import androidx.annotation.StringRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
 
 interface PopUpProvider {
     fun showErrorSnackbar(view: View, @StringRes message: Int)

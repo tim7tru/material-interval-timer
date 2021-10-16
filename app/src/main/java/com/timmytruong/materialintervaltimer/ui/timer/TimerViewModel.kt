@@ -11,6 +11,7 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.utils.*
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 internal const val IS_SAVED = "is saved"
+internal const val SHOW_SOUND_TOGGLE = "show sound toggle"
 internal const val CANCEL_ANIMATION = "cancel anim"
 internal const val START_ANIMATION = "start animation"
 
@@ -54,7 +56,10 @@ class TimerViewModel @Inject constructor(
 
         screen.intervals = intervalBindings
         intervalTimer.currentTimeRemaining.collectLatest(::updateTimeRemaining)
-        fireEvents(IS_SAVED to timer.isFavourited)
+        fireEvents(
+            IS_SAVED to timer.isFavourited,
+            SHOW_SOUND_TOGGLE to (timer.intervalSound.id != -1)
+        )
         handleStop()
     }
 
@@ -79,8 +84,8 @@ class TimerViewModel @Inject constructor(
         setNewIntervalList()
     }
 
-    fun setShouldSave(favourite: Boolean) = startSuspending(ioDispatcher) {
-        timerLocalDataSource.setFavourite(id = timer.id, favourite = favourite)
+    fun setShouldSave() = startSuspending(ioDispatcher) {
+        timerLocalDataSource.setFavourite(id = timer.id, favourite = !timer.isFavourited)
     }
 
     fun exit() {

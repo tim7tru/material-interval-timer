@@ -13,7 +13,7 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import com.timmytruong.materialintervaltimer.utils.toDisplayTime
 import dagger.Module

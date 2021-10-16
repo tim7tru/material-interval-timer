@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.utils
+package com.timmytruong.materialintervaltimer.utils.providers
 
 import android.content.Context
 import android.content.res.ColorStateList

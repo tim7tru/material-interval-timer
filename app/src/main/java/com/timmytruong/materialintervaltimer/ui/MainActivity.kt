@@ -18,7 +18,7 @@ import com.timmytruong.materialintervaltimer.di.HorizontalProgress
 import com.timmytruong.materialintervaltimer.ui.home.HomeFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

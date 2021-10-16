@@ -1,8 +1,8 @@
 package com.timmytruong.materialintervaltimer.di.modules
 
 import android.content.Context
-import com.timmytruong.materialintervaltimer.utils.ResourceProvider
-import com.timmytruong.materialintervaltimer.utils.ResourceProviderImpl
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProviderImpl
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import com.timmytruong.materialintervaltimer.utils.providers.DateProviderImpl
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider

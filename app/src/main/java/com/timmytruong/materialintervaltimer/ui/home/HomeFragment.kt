@@ -1,7 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.databinding.ObservableBoolean
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
@@ -42,23 +44,20 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
 
     override val viewModel: HomeViewModel by viewModels()
 
-    override fun bindView() {
-        binding?.screen = screen
-        binding?.viewModel = viewModel
-        binding?.fragmentHomeRecentFrag?.horizontalRecycler?.adapter = recentsAdapter
-        binding?.fragmentHomeFavouritesFrag?.horizontalRecycler?.adapter = favouritesAdapter
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.app_bar, menu)
-        menu.findItem(R.id.start).apply {
-            isVisible = true
-            setOnMenuItemClickListener {
-                viewModel.onAddClicked()
-                return@setOnMenuItemClickListener true
-            }
-        }
+        menu.findItem(R.id.start).isVisible = true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.start) viewModel.onAddClicked()
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
@@ -77,6 +76,13 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
                 favouritesAdapter.addList(list)
             }.launchIn(it)
         }
+    }
+
+    override fun bindView() {
+        binding?.screen = screen
+        binding?.viewModel = viewModel
+        binding?.fragmentHomeRecentFrag?.horizontalRecycler?.adapter = recentsAdapter
+        binding?.fragmentHomeFavouritesFrag?.horizontalRecycler?.adapter = favouritesAdapter
     }
 
     override fun onDestroyView() {
