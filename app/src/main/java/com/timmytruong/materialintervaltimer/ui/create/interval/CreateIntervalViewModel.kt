@@ -26,12 +26,10 @@ class CreateIntervalViewModel @Inject constructor(
     private val screen: CreateIntervalScreen
 ) : BaseViewModel() {
 
-    init {
-        startSuspending(ioDispatcher) {
-            intervalStore.observe.collectLatest { interval ->
-                screen.intervalIconTag.set(resources.tagFromDrawableId(interval.iconId))
-                screen.intervalTitle.set(interval.name)
-            }
+    fun observe() = startSuspending(ioDispatcher) {
+        intervalStore.observe.collectLatest { interval ->
+            screen.intervalIconTag.set(resources.tagFromDrawableId(interval.iconId))
+            screen.intervalTitle.set(interval.name)
         }
     }
 
