@@ -88,5 +88,5 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
     protected fun close() = findNavController().popBackStack()
 
     protected fun startSuspending(block: suspend (CoroutineScope) -> Unit) =
-        uiStateJobs.add(lifecycleScope.launchWhenStarted(block))
+        uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted(block))
 }

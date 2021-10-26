@@ -102,5 +102,5 @@ abstract class BaseFragment<
         (activity as MainActivity).updateProgressBar(progress = progress, show = show)
 
     protected fun startSuspending(block: suspend (CoroutineScope) -> Unit) =
-        uiStateJobs.add(lifecycleScope.launchWhenStarted(block))
+        uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted(block))
 }

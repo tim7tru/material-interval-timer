@@ -46,3 +46,9 @@ fun timer(
     totalTimeMs = totalTimeMs,
     intervalSound = intervalSound
 ).apply { this.id = id }
+
+fun sounds(): List<IntervalSound> {
+    val sounds = mutableListOf<IntervalSound>()
+    (1..5).forEach { sounds.add(IntervalSound(id = it, name = "sound$it")) }
+    return sounds
+}

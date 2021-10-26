@@ -1,6 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.timer.views
 
-import android.media.MediaPlayer
 import androidx.databinding.ObservableBoolean
 import com.timmytruong.materialintervaltimer.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.local.Store
@@ -15,7 +14,6 @@ import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,9 +40,7 @@ class IntervalSoundsViewModel @Inject constructor(
             startSuspending(ioDispatcher) {
                 timerStore.update { timer -> timer.intervalSound = sounds[position] }
             }
-            if (sounds[position].id != -1) {
-                MediaPlayer.create(resources.ctx, sounds[position].id).start()
-            }
+            if (sounds[position].id != -1) { fireEvent(Event.PlaySound(sounds[position].id)) }
             true
         } else {
             false

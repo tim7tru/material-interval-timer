@@ -29,7 +29,9 @@ class CreateTimerViewModelTest : BehaviorSpec({
         on { get() }.thenReturn(TIMER)
     }
     val timerRepository: TimerRepository = mock()
-    val screen = CreateTimerScreen()
+    val screen: CreateTimerScreen = mock {
+        on { timerIntervalCount }.thenReturn(mock())
+    }
 
     fun create(timerScreen: CreateTimerScreen = screen) = CreateTimerViewModel(
         ioDispatcher = TestCoroutineDispatcher(),
@@ -121,12 +123,12 @@ class CreateTimerViewModelTest : BehaviorSpec({
         viewModel.navigateFlow.test {
             viewModel.validateTimer(TITLE)
             Then("timer is updated in store") { verify(timerStore).update(any()) }
-//            Then("date is fetched") {
-//                val captor = argumentCaptor<(Timer) -> Unit>()
-//                verify(timerStore).update(captor.capture())
-//                captor.firstValue.invoke(TIMER)
-//                verify(date, times(2)).getCurrentDate()
-//            }
+            Then("date is fetched") {
+                val captor = argumentCaptor<(Timer) -> Unit>()
+                verify(timerStore).update(captor.capture())
+                captor.firstValue.invoke(TIMER)
+                verify(date, times(2)).getCurrentDate()
+            }
             Then("timer is saved to repository") { verify(timerRepository).saveNewTimer(TIMER) }
             Then("navigate event is retrieved") { verify(navScreen).navToTimer(TIMER_ID) }
             Then("navigation event fired") { assert(expectItem() == action) }
