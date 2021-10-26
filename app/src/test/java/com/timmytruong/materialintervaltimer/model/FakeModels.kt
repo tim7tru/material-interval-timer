@@ -3,12 +3,17 @@ package com.timmytruong.materialintervaltimer.model
 internal const val TITLE = "title"
 internal const val DATE = "date"
 internal const val INTERVAL_COUNT = 1
+internal const val INTERVAL_ICON_ID = 1
 internal const val TOTAL_TIME = 500L
 internal const val SOUND_NAME = "sound"
 internal const val SOUND_ID = 1
 internal const val TIMER_ID = 1
 
-val INTERVAL = Interval(timeMs = TOTAL_TIME)
+val INTERVAL = Interval(
+    timeMs = TOTAL_TIME,
+    name = TITLE,
+    iconId = INTERVAL_ICON_ID
+)
 
 val INTERVAL_SOUND = IntervalSound(id = SOUND_ID, name = SOUND_NAME)
 
