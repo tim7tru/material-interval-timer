@@ -4,6 +4,8 @@ import androidx.annotation.StringRes
 
 sealed class Event {
 
+    data class PlaySound(val id: Int) : Event()
+
     sealed class BottomSheet : Event() {
         object Dismiss : BottomSheet()
 
