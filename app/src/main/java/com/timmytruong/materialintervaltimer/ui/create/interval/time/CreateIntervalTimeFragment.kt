@@ -9,6 +9,7 @@ import com.timmytruong.materialintervaltimer.base.BaseFragment
 import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString
+import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.name
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -38,6 +39,7 @@ class CreateIntervalTimeFragment :
 
     override fun onStart() {
         super.onStart()
+
         updateProgressBar(PROGRESS_FULL)
     }
 
@@ -47,8 +49,9 @@ class CreateIntervalTimeFragment :
     }
 }
 
+@Open
 data class CreateIntervalTimeScreen(
-    val intervalDisplayTime: ObservableString = ObservableString(""),
+    val intervalDisplayTime: ObservableString = ObservableString("00h 00m 00s"),
     val intervalTimeLengthValidity: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 

@@ -38,12 +38,8 @@ class CreateIntervalTimeViewModel @Inject constructor(
             screen.intervalTimeLengthValidity.set(field.isNotEmpty())
         }
 
-    init {
-        screen.intervalDisplayTime.set(getDisplayTime())
-    }
-
     fun addToTime(newNumber: String) {
-        if (time.length <= 6) {
+        if (time.length < 6) {
             time = "$time$newNumber"
             screen.intervalDisplayTime.set(getDisplayTime())
         }
