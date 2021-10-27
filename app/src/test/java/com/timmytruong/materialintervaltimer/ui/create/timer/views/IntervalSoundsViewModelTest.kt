@@ -20,7 +20,6 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 class IntervalSoundsViewModelTest : BehaviorSpec({
-    isolationMode = IsolationMode.InstancePerLeaf
 
     val ioDispatcher = TestCoroutineDispatcher()
     val mainDispatcher = TestCoroutineDispatcher()

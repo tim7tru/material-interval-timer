@@ -27,8 +27,6 @@ private const val DRAWABLE = 1
 @ExperimentalCoroutinesApi
 class CreateIntervalViewModelTest : BehaviorSpec({
 
-    isolationMode = IsolationMode.InstancePerLeaf
-
     val ioDispatcher = TestCoroutineDispatcher()
     val mainDispatcher = TestCoroutineDispatcher()
     val resources: ResourceProvider = mock()

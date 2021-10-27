@@ -20,7 +20,6 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 class CreateTimerViewModelTest : BehaviorSpec({
-    isolationMode = IsolationMode.InstancePerLeaf
 
     val resources: ResourceProvider = mock()
     val date: DateProvider = mock()
