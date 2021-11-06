@@ -1,7 +1,12 @@
 package com.timmytruong.materialintervaltimer.utils
 
+import android.view.View
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
+import com.google.android.material.textview.MaterialTextView
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
@@ -32,4 +37,29 @@ fun Long.toDisplayTime(res: ResourceProvider): String {
         hours == 0L && mins == 0L -> res.string(R.string.secondsTimeFormat, secs)
         else -> ""
     }
+}
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
+}
+
+fun ImageView.set(@DrawableRes id: Int?) = with(this) {
+    if (id == null) {
+        hide()
+    } else {
+        show()
+        setImageResource(id)
+    }
+}
+
+fun MaterialTextView.set(@StringRes id: Int?) = with(this) {
+    text = if (id == null) "" else context.getString(id)
+}
+
+fun MaterialTextView.set(string: String?) = with(this) {
+    text = string
 }

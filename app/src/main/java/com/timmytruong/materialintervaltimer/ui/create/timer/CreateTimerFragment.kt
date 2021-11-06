@@ -7,11 +7,11 @@ import androidx.databinding.ObservableInt
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
-import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBinding
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.name
@@ -66,7 +66,7 @@ class CreateTimerFragment :
 
 @Open
 data class CreateTimerScreen(
-    var intervals: List<IntervalItemScreenBinding> = listOf(),
+    var intervals: List<IntervalItem> = emptyList(),
     val timerTitle: ObservableString = ObservableString(""),
     val timerIntervalCount: ObservableInt = ObservableInt(0),
     val timerSelectedSound: ObservableString = ObservableString("None"),

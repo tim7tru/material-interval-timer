@@ -15,8 +15,8 @@ import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.di.CircularProgress
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
 import com.timmytruong.materialintervaltimer.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
@@ -138,7 +138,7 @@ data class TimerScreen(
     val timerState: ObservableField<TimerState> = ObservableField(TimerState.STOPPED),
     val timeRemaining: ObservableString = ObservableString(""),
     val progress: ObservableInt = ObservableInt(0),
-    var intervals: ArrayList<IntervalItemScreenBinding> = arrayListOf(),
+    var intervals: MutableList<IntervalItem> = mutableListOf(),
 ) : BaseScreen() {
 
     fun navToHome() = TimerFragmentDirections.actionTimerFragmentToHomeFragment()

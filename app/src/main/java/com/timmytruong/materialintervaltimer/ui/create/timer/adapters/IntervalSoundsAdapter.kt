@@ -2,10 +2,10 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.adapters
 
 import androidx.databinding.ObservableBoolean
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.databinding.ItemSoundBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter
 import com.timmytruong.materialintervaltimer.ui.base.screen.Clicks
-import com.timmytruong.materialintervaltimer.ui.base.screen.ListBinding
-import com.timmytruong.materialintervaltimer.databinding.ItemSoundBinding
+import com.timmytruong.materialintervaltimer.ui.base.screen.ListItem
 import com.timmytruong.materialintervaltimer.utils.ObservableString
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
@@ -27,4 +27,4 @@ data class IntervalSoundScreenBinding(
     val soundName: ObservableString = ObservableString(""),
     val isSelected: ObservableBoolean = ObservableBoolean(false),
     override val clicks: Clicks
-): ListBinding()
+): ListItem()

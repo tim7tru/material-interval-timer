@@ -3,9 +3,9 @@ package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter
 import com.timmytruong.materialintervaltimer.ui.base.screen.Clicks
-import com.timmytruong.materialintervaltimer.ui.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerHorizontalBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerVerticalBinding
+import com.timmytruong.materialintervaltimer.ui.base.screen.ListItem
 import com.timmytruong.materialintervaltimer.utils.ObservableString
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
@@ -45,4 +45,4 @@ data class TimerListScreenBinding(
     val intervalCount: ObservableString = ObservableString(""),
     val timerId: Int,
     override val clicks: Clicks
-) : ListBinding()
+) : ListItem()

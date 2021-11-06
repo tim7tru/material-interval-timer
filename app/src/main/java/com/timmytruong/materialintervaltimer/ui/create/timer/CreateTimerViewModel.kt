@@ -1,7 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.timer
 
-import androidx.databinding.ObservableInt
-import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
@@ -9,9 +7,10 @@ import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
-import com.timmytruong.materialintervaltimer.utils.ObservableString
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import com.timmytruong.materialintervaltimer.utils.toDisplayTime
@@ -38,7 +37,7 @@ class CreateTimerViewModel @Inject constructor(
 
     fun fetchCurrentTimer(clearTimer: Boolean) = startSuspending(ioDispatcher) {
         timerStore.observe.collectLatest {
-            screen.intervals = mapIntervals(it.intervals)
+            screen.intervals = it.intervals.toListItems(resources, hasHeaders = false)
             screen.timerIntervalCount.set(it.intervalCount)
             screen.timerTitle.set(it.title)
             screen.timerSelectedSound.set(it.intervalSound.name)
@@ -82,14 +81,6 @@ class CreateTimerViewModel @Inject constructor(
 
     fun onGoToSoundsBottomSheet() =
         navigateWith(screen.navToSoundBottomSheet(timerStore.get().intervalSound.id))
-
-    private fun mapIntervals(list: ArrayList<Interval>) = list.map {
-        IntervalItemScreenBinding(
-            iconId = ObservableInt(it.iconId),
-            title = ObservableString(it.name),
-            description = ObservableString(it.timeMs.toDisplayTime(resources))
-        )
-    }
 }
 
 @InstallIn(ActivityRetainedComponent::class)

@@ -3,36 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <import type="android.view.View"/>
-
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding" />
-    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/HeaderText"
-            android:id="@+id/itemIntervalTextTitle"
+            android:id="@+id/header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorSecondaryDark"
-            android:text="@{screen.position == 0 ? @string/currentIntervalTitle : @string/upNextIntervalTitle}"
-            android:visibility="@{screen.position == 0 || screen.position == 1 ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Current interval" />
 
         <com.google.android.material.card.MaterialCardView
             style="@style/TimerCard"
-            android:id="@+id/intervalCard"
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/material_small"
-            app:layout_constraintTop_toBottomOf="@id/itemIntervalTextTitle"
+            app:layout_constraintTop_toBottomOf="@id/header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -42,15 +33,13 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/intervalIcon"
+                    android:id="@+id/icon"
                     android:layout_width="@dimen/material_touch"
                     android:layout_height="@dimen/material_touch"
                     android:layout_marginStart="@dimen/material"
                     android:layout_marginTop="@dimen/material_small"
                     android:layout_marginBottom="@dimen/material_small"
                     android:contentDescription="@string/intervalIconDesc"
-                    android:visibility="@{screen.iconId != 0 ? View.VISIBLE : View.GONE}"
-                    app:imageResource="@{screen.iconId}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -59,25 +48,23 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TimerCardTitle"
-                    android:id="@+id/intervalTitle"
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/material"
-                    android:text="@{screen.title}"
-                    app:layout_constraintStart_toEndOf="@id/intervalIcon"
+                    app:layout_constraintStart_toEndOf="@id/icon"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/intervalTime"
+                    app:layout_constraintBottom_toTopOf="@id/time"
                     tools:text="Title - 20 Character" />
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TimerCardTitle"
-                    android:id="@+id/intervalTime"
+                    android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{screen.description}"
                     android:layout_marginStart="@dimen/material"
-                    app:layout_constraintStart_toEndOf="@id/intervalIcon"
-                    app:layout_constraintTop_toBottomOf="@id/intervalTitle"
+                    app:layout_constraintStart_toEndOf="@id/icon"
+                    app:layout_constraintTop_toBottomOf="@id/title"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:text="999h 99m 99s" />
 

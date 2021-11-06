@@ -1,14 +1,13 @@
 package com.timmytruong.materialintervaltimer.ui.timer
 
 import android.media.MediaPlayer
-import androidx.databinding.ObservableInt
-import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemScreenBinding
+import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
 import com.timmytruong.materialintervaltimer.utils.*
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
@@ -104,7 +103,7 @@ class TimerViewModel @Inject constructor(
 
     private fun updateIntervalBindings() = startSuspending(ioDispatcher) {
         screen.intervals.clear()
-        screen.intervals.addAll(intervals.toBindings())
+        screen.intervals.addAll(intervals.toListItems(resources, hasHeaders = true))
         fireEvent(Event.Timer.Bindings)
     }
 
@@ -154,14 +153,6 @@ class TimerViewModel @Inject constructor(
         intervals.addAll(timer.intervals)
         updateIntervalBindings()
         setNewInterval()
-    }
-
-    private fun List<Interval>.toBindings() = this.map {
-        IntervalItemScreenBinding(
-            iconId = ObservableInt(it.iconId),
-            title = ObservableString(it.name),
-            description = ObservableString(it.timeMs.toDisplayTime(resources))
-        )
     }
 }
 
