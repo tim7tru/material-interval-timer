@@ -5,15 +5,12 @@ import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
-import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheetScreen
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
+import com.timmytruong.materialintervaltimer.ui.create.timer.sounds.IntervalSoundsBottomSheetScreen
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
-import com.timmytruong.materialintervaltimer.utils.toDisplayTime
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

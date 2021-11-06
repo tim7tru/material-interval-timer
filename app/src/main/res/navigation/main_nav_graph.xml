@@ -121,7 +121,7 @@
 
     <dialog
         android:id="@+id/intervalSoundsBottomSheet"
-        android:name="com.timmytruong.materialintervaltimer.ui.create.timer.views.IntervalSoundsBottomSheet"
+        android:name="com.timmytruong.materialintervaltimer.ui.create.timer.sounds.IntervalSoundsBottomSheet"
         android:label="IntervalSoundsBottomSheet" >
         <argument
             android:name="soundId"

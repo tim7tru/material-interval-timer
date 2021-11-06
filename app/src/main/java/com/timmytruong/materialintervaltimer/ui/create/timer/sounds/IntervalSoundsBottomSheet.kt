@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui.create.timer.views
+package com.timmytruong.materialintervaltimer.ui.create.timer.sounds
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -6,13 +6,14 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsBottomSheetBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseBottomSheet
 import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
-import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsBottomSheetBinding
-import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
-import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundsAdapter
 import com.timmytruong.materialintervaltimer.utils.Event
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,16 +36,16 @@ class IntervalSoundsBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         viewModel.fetchSounds(args.soundId)
         bindView()
+        startSuspending { screen.list.collect(intervalSoundsAdapter::addList) }
     }
 
     override fun bindView() {
-        binding?.viewModel = viewModel
-        binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = intervalSoundsAdapter
-        intervalSoundsAdapter.addList(screen.list)
+        binding?.close?.setOnClickListener { viewModel.dismissSoundsBottomSheet() }
+        binding?.recycler?.adapter = intervalSoundsAdapter
     }
 
     override fun onDestroyView() {
-        binding?.fragmentIntervalsSoundsBottomSheetRecycler?.adapter = null
+        binding?.recycler?.adapter = null
         super.onDestroyView()
     }
 
@@ -57,5 +58,5 @@ class IntervalSoundsBottomSheet :
 }
 
 data class IntervalSoundsBottomSheetScreen(
-    var list: List<IntervalSoundScreenBinding> = emptyList()
+    var list: Flow<@JvmSuppressWildcards List<IntervalSoundItem>> = emptyFlow()
 ) : BaseScreen()

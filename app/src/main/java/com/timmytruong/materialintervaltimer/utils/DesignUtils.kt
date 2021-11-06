@@ -2,8 +2,10 @@ package com.timmytruong.materialintervaltimer.utils
 
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import com.google.android.material.textview.MaterialTextView
@@ -62,4 +64,8 @@ fun MaterialTextView.set(@StringRes id: Int?) = with(this) {
 
 fun MaterialTextView.set(string: String?) = with(this) {
     text = string
+}
+
+fun MaterialTextView.textColor(@ColorRes id: Int) = with(this) {
+    this.setTextColor(ContextCompat.getColor(context, id))
 }

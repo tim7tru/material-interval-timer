@@ -55,23 +55,16 @@ abstract class BaseListAdapter2<View: ViewBinding, Entity : ListItem>(
 
     protected val list: MutableList<Entity> = mutableListOf()
 
-    private lateinit var binding: View
-
-    private lateinit var context: Context
-
     override fun onBindViewHolder(holder: ViewHolder<View>, position: Int) {
         with(list[position]) {
             this.position = position
-            holder.view.root.setOnClickListener { clicks.invoke(position) }
         }
     }
 
     override fun getItemCount(): Int = list.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<View> {
-        context = parent.context
-        binding = inflater.invoke(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(view = binding)
+        return ViewHolder(inflater.invoke(LayoutInflater.from(parent.context), parent, false))
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -80,6 +73,4 @@ abstract class BaseListAdapter2<View: ViewBinding, Entity : ListItem>(
         list.addAll(newList)
         notifyDataSetChanged()
     }
-
-    protected fun string(@StringRes id: Int?) = if (id == null) null else context.getString(id)
 }
