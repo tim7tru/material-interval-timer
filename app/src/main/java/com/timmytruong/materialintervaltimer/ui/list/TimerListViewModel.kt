@@ -2,8 +2,8 @@ package com.timmytruong.materialintervaltimer.ui.list
 
 import androidx.databinding.ObservableBoolean
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
+import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher

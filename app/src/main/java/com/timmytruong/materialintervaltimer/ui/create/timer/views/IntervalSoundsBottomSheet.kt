@@ -6,8 +6,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseBottomSheet
-import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
+import com.timmytruong.materialintervaltimer.ui.base.BaseBottomSheet
+import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentIntervalSoundsBottomSheetBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundScreenBinding
 import com.timmytruong.materialintervaltimer.ui.create.timer.adapters.IntervalSoundsAdapter

@@ -1,7 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher

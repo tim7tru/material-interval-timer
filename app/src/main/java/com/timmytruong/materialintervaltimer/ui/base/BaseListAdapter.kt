@@ -1,11 +1,11 @@
-package com.timmytruong.materialintervaltimer.base
+package com.timmytruong.materialintervaltimer.ui.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.timmytruong.materialintervaltimer.base.screen.ListBinding
+import com.timmytruong.materialintervaltimer.ui.base.screen.ListBinding
 
 abstract class BaseListAdapter<View : ViewDataBinding, Entity : ListBinding> :
     RecyclerView.Adapter<BaseListAdapter.BaseViewHolder<View>>() {

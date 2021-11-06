@@ -2,9 +2,9 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.adapters
 
 import androidx.databinding.ObservableBoolean
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseListAdapter
-import com.timmytruong.materialintervaltimer.base.screen.Clicks
-import com.timmytruong.materialintervaltimer.base.screen.ListBinding
+import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter
+import com.timmytruong.materialintervaltimer.ui.base.screen.Clicks
+import com.timmytruong.materialintervaltimer.ui.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemSoundBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString
 import dagger.hilt.android.scopes.FragmentScoped

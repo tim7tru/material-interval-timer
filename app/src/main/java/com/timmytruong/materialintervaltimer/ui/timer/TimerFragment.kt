@@ -10,8 +10,8 @@ import androidx.databinding.ObservableInt
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseFragment
-import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
+import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.di.CircularProgress
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation

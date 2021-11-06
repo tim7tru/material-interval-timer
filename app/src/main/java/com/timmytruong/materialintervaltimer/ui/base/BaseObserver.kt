@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.base
+package com.timmytruong.materialintervaltimer.ui.base
 
 import androidx.navigation.NavDirections
 import com.timmytruong.materialintervaltimer.utils.Event

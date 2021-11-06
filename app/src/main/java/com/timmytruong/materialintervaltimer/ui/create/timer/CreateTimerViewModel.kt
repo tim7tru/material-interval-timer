@@ -1,7 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.create.timer
 
 import androidx.databinding.ObservableInt
-import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher

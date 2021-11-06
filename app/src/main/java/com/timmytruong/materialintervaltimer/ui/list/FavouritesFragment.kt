@@ -2,7 +2,7 @@ package com.timmytruong.materialintervaltimer.ui.list
 
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.databinding.FragmentFavouritesBinding
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.VerticalTimerListAdapter
 import com.timmytruong.materialintervaltimer.utils.name

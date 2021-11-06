@@ -7,8 +7,8 @@ import android.view.MenuItem
 import androidx.databinding.ObservableBoolean
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseFragment
-import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
+import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.di.Favourites
 import com.timmytruong.materialintervaltimer.di.Recents

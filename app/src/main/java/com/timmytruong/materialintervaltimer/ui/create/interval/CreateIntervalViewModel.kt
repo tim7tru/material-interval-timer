@@ -1,6 +1,6 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
-import com.timmytruong.materialintervaltimer.base.BaseViewModel
+import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.IntervalStore

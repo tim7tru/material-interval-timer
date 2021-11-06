@@ -3,12 +3,11 @@ package com.timmytruong.materialintervaltimer.ui.create.interval
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseFragment
-import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
+import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString
 import com.timmytruong.materialintervaltimer.utils.Open

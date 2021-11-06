@@ -1,10 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseListAdapter
-import com.timmytruong.materialintervaltimer.base.screen.Clicks
-import com.timmytruong.materialintervaltimer.base.screen.EmptyClicks
-import com.timmytruong.materialintervaltimer.base.screen.ListBinding
+import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter
+import com.timmytruong.materialintervaltimer.ui.base.screen.Clicks
+import com.timmytruong.materialintervaltimer.ui.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerHorizontalBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerVerticalBinding
 import com.timmytruong.materialintervaltimer.utils.ObservableString

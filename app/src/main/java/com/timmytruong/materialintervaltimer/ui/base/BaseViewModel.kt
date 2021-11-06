@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.base
+package com.timmytruong.materialintervaltimer.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

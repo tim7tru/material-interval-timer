@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.base.screen
+package com.timmytruong.materialintervaltimer.ui.base.screen
 
 typealias Clicks = (Int) -> Unit
 
