@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.MainActivity
+import com.timmytruong.materialintervaltimer.ui.reusable.BackPress
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
@@ -28,7 +30,7 @@ abstract class BaseFragment<
         Screen : BaseScreen,
         ViewModel : BaseViewModel,
         Binding : ViewDataBinding
-> : Fragment(), BaseObserver<ViewModel>, ProgressBar {
+> : Fragment(), BaseObserver<ViewModel>, ProgressBar, BackPress {
 
     protected val ctx: Context by lazy { requireContext() }
 
@@ -41,6 +43,8 @@ abstract class BaseFragment<
     abstract val name: String
 
     abstract val layoutId: Int
+
+    abstract val hasBackPress: Boolean
 
     @Inject lateinit var popUpProvider: PopUpProvider
 
@@ -62,6 +66,13 @@ abstract class BaseFragment<
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         screen.name = name
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (hasBackPress) {
+            requireActivity().onBackPressedDispatcher.addCallback(this) { onBackPressed() }
+        }
     }
 
     override fun onStart() {
@@ -86,6 +97,8 @@ abstract class BaseFragment<
         binding = null
         super.onDestroyView()
     }
+
+    override fun onBackPressed() { /** No op **/ }
 
     override fun eventHandler(event: Event) {
         when (event) {

@@ -1,19 +1,17 @@
 package com.timmytruong.materialintervaltimer.ui.timer
 
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
-import androidx.activity.addCallback
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
-import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.di.CircularProgress
+import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
@@ -42,6 +40,8 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
 
     override val layoutId: Int = R.layout.fragment_timer
 
+    override val hasBackPress: Boolean = true
+
     private lateinit var menu: Menu
 
     private val mutedButton: MenuItem by lazy { menu.findItem(R.id.soundOff) }
@@ -57,13 +57,9 @@ class TimerFragment : BaseFragment<TimerScreen, TimerViewModel, FragmentTimerBin
         setHasOptionsMenu(true)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            this.isEnabled = true
-            viewModel.handlePause()
-            showExitDialog()
-        }
+    override fun onBackPressed() {
+        viewModel.handlePause()
+        showExitDialog()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -25,6 +25,8 @@ class FavouritesFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fra
 
     override val viewModel: TimerListViewModel by viewModels()
 
+    override val hasBackPress: Boolean = false
+
     override fun onStart() {
         super.onStart()
         viewModel.fetchTimers()

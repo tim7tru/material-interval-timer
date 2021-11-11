@@ -29,6 +29,8 @@ class CreateIntervalTimeFragment :
 
     override val viewModel: CreateIntervalTimeViewModel by viewModels()
 
+    override val hasBackPress: Boolean = false
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         requireActivity().onBackPressedDispatcher.addCallback(this) {

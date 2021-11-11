@@ -31,6 +31,8 @@ class CreateIntervalFragment :
 
     override val layoutId: Int = R.layout.fragment_create_interval
 
+    override val hasBackPress: Boolean = false
+
     private val args: CreateIntervalFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

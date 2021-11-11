@@ -44,6 +44,8 @@ class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding
 
     override val viewModel: HomeViewModel by viewModels()
 
+    override val hasBackPress: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

@@ -25,6 +25,8 @@ class RecentsFragment : BaseFragment<TimerListScreen, TimerListViewModel, Fragme
 
     override val viewModel: TimerListViewModel by viewModels()
 
+    override val hasBackPress: Boolean = false
+
     override fun onStart() {
         super.onStart()
         viewModel.fetchTimers()

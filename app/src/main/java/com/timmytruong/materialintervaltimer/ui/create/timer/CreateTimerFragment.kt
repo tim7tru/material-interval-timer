@@ -34,6 +34,8 @@ class CreateTimerFragment :
 
     override val viewModel: CreateTimerViewModel by viewModels()
 
+    override val hasBackPress: Boolean = false
+
     private val args: CreateTimerFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
