@@ -13,7 +13,7 @@
             app:argType="integer"
             android:defaultValue="-1" />
         <action
-            android:id="@+id/action_timerFragment_to_homeFragment"
+            android:id="@+id/to_home"
             app:destination="@id/homeFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/homeFragment"
@@ -21,31 +21,19 @@
     </fragment>
 
     <fragment
-        android:id="@+id/favouritesFragment"
-        android:name="com.timmytruong.materialintervaltimer.ui.list.FavouritesFragment"
-        android:label="@string/favourites" >
-        <action
-            android:id="@+id/action_favouritesFragment_to_timerActionBottomSheet"
-            app:destination="@id/timerActionBottomSheet" />
-    </fragment>
-
-    <fragment
         android:id="@+id/homeFragment"
         android:name="com.timmytruong.materialintervaltimer.ui.home.HomeFragment"
         android:label="@string/home">
         <action
-            android:id="@+id/action_homeFragment_to_timerActionBottomSheet"
+            android:id="@+id/to_action_bottom_sheet"
             app:destination="@id/timerActionBottomSheet"/>
         <action
-            android:id="@+id/action_homeFragment_to_favouritesFragment"
-            app:destination="@id/favouritesFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_recentsFragment"
-            app:destination="@id/recentsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_createTimerFragment"
+            android:id="@+id/to_create_timer"
             app:destination="@id/createTimerFragment"
             app:launchSingleTop="true"/>
+        <action
+            android:id="@+id/to_timer_list"
+            app:destination="@id/timerListFragment" />
     </fragment>
 
     <dialog
@@ -53,11 +41,15 @@
         android:name="com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheet"
         android:label="TimerActionBottomSheet" >
         <argument
+            android:name="favourited"
+            android:defaultValue="false"
+            app:argType="boolean"/>
+        <argument
             android:name="timerId"
             android:defaultValue="-1"
             app:argType="integer"/>
         <action
-            android:id="@+id/action_timerActionBottomSheet_to_timerFragment"
+            android:id="@+id/to_timer"
             app:destination="@id/timerFragment" />
     </dialog>
 
@@ -66,13 +58,13 @@
         android:name="com.timmytruong.materialintervaltimer.ui.create.interval.time.CreateIntervalTimeFragment"
         android:label="@string/createInterval">
         <action
-            android:id="@+id/action_createIntervalTimeFragment_to_createTimerFragment"
+            android:id="@+id/to_create_timer"
             app:destination="@id/createTimerFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/createTimerFragment"
             app:popUpToInclusive="true"/>
         <action
-            android:id="@+id/action_createIntervalTimeFragment_to_createIntervalFragment"
+            android:id="@+id/to_create_interval"
             app:destination="@id/createIntervalFragment"
             app:popUpTo="@id/createIntervalFragment"
             app:popUpToInclusive="true"/>
@@ -87,19 +79,19 @@
             android:defaultValue="true"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_createTimerFragment_to_createIntervalFragment"
+            android:id="@+id/to_create_interval"
             app:destination="@id/createIntervalFragment" />
         <action
-            android:id="@+id/action_createTimerFragment_to_intervalSoundsBottomSheet"
+            android:id="@+id/to_sounds"
             app:destination="@id/intervalSoundsBottomSheet" />
         <action
-            android:id="@+id/action_createTimerFragment_to_homeFragment"
+            android:id="@+id/to_home"
             app:destination="@id/homeFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/main_nav_graph"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_createTimerFragment_to_timerFragment"
+            android:id="@+id/to_timer"
             app:destination="@id/timerFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/homeFragment"
@@ -115,7 +107,7 @@
             android:defaultValue="true"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_createIntervalFragment_to_createIntervalTimeFragment"
+            android:id="@+id/to_time"
             app:destination="@id/createIntervalTimeFragment"/>
     </fragment>
 
@@ -130,11 +122,14 @@
     </dialog>
 
     <fragment
-        android:id="@+id/recentsFragment"
-        android:name="com.timmytruong.materialintervaltimer.ui.list.RecentsFragment"
-        android:label="@string/recents" >
+        android:id="@+id/timerListFragment"
+        android:name="com.timmytruong.materialintervaltimer.ui.list.TimerListFragment"
+        android:label="TimerListFragment" >
+        <argument
+            android:name="type"
+            app:argType="com.timmytruong.materialintervaltimer.ui.list.TimerType"/>
         <action
-            android:id="@+id/action_recentsFragment_to_timerActionBottomSheet"
+            android:id="@+id/to_action_bottom_sheet"
             app:destination="@id/timerActionBottomSheet" />
     </fragment>
 </navigation>

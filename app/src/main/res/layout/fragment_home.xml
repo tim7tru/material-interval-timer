@@ -2,18 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <import type="android.view.View"/>
-
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeScreen" />
-
-        <variable
-            name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,10 +15,10 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/favourites_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/material_large"
-                android:visibility="@{screen.isFavouritesEmpty ? View.GONE : View.VISIBLE}"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -47,26 +35,25 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TextButton"
+                        android:id="@+id/favourites_see_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:onClick="@{() -> viewModel.onFavouritesSeeAllClicked()}"
                         android:text="@string/seeAll"/>
                 </LinearLayout>
 
                 <include
                     layout="@layout/horizontal_recycler"
-                    android:id="@+id/fragmentHomeFavouritesFrag"
+                    android:id="@+id/favourites"
                     android:layout_marginTop="@dimen/material"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/fragmentHomeRecentContainer"
+                android:id="@+id/recents_container"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/material_large"
-                android:visibility="@{screen.isRecentsEmpty ? View.GONE : View.VISIBLE}"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -85,17 +72,17 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TextButton"
+                        android:id="@+id/recents_see_all"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:onClick="@{() -> viewModel.onRecentsSeeAllClicked()}"
                         android:text="@string/seeAll"/>
 
                 </LinearLayout>
 
                 <include
                     layout="@layout/horizontal_recycler"
-                    android:id="@+id/fragmentHomeRecentFrag"
+                    android:id="@+id/recents"
                     android:layout_marginTop="@dimen/material"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -105,20 +92,20 @@
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/HeaderText"
+            android:id="@+id/empty_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/noTimersText"
             android:gravity="center"
-            android:visibility="@{screen.isRecentsEmpty &amp;&amp; screen.isFavouritesEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             style="@style/TimerFab"
+            android:id="@+id/add_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/material"
-            android:onClick="@{() -> viewModel.onAddClicked()}"
             app:srcCompat="@drawable/ic_add_24px"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

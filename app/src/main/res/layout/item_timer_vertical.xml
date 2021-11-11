@@ -3,17 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerListScreenBinding" />
-    </data>
-
     <com.google.android.material.card.MaterialCardView
         style="@style/TimerCard"
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> screen.click()}"
         android:layout_marginBottom="@dimen/material_small">
 
         <LinearLayout
@@ -30,9 +24,9 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TimerCardTitle"
+                    android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{screen.title}"
                     tools:text="Title If applicable"/>
 
                 <LinearLayout
@@ -42,17 +36,17 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerCardSubtitle"
+                        android:id="@+id/count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{screen.intervalCount}"
                         tools:text="XX Intervals" />
 
                     <com.google.android.material.textview.MaterialTextView
                         style="@style/TimerCardDescription"
+                        android:id="@+id/time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/material_small"
-                        android:text="@{screen.time}"
                         tools:text="00h 00m 00s" />
 
                 </LinearLayout>

@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
 import com.timmytruong.materialintervaltimer.model.Interval
-import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter2
+import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter
 import com.timmytruong.materialintervaltimer.ui.base.screen.Clicks
 import com.timmytruong.materialintervaltimer.ui.base.screen.EmptyClicks
 import com.timmytruong.materialintervaltimer.ui.base.screen.ListItem
@@ -26,7 +26,7 @@ data class IntervalItem(
 
 @FragmentScoped
 class IntervalItemAdapter @Inject constructor():
-    BaseListAdapter2<ItemIntervalBinding, IntervalItem>(ItemIntervalBinding::inflate) {
+    BaseListAdapter<ItemIntervalBinding, IntervalItem>(ItemIntervalBinding::inflate) {
 
     override fun onBindViewHolder(holder: ViewHolder<ItemIntervalBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -37,7 +37,7 @@ class IntervalItemAdapter @Inject constructor():
                 header.show()
                 when (position) {
                     0 -> header.set(R.string.currentIntervalTitle)
-                     1 -> header.set(R.string.upNextIntervalTitle)
+                    1 -> header.set(R.string.upNextIntervalTitle)
                     else -> { /** No op **/ }
                 }
             } else {

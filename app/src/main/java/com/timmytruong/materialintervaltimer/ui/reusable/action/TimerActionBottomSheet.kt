@@ -57,6 +57,5 @@ data class TimerActionBottomSheetScreen(
     val isFavourite: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 
-    fun navToTimer(id: Int) =
-        TimerActionBottomSheetDirections.actionTimerActionBottomSheetToTimerFragment(id)
+    fun navToTimer(id: Int) = TimerActionBottomSheetDirections.toTimer(id)
 }

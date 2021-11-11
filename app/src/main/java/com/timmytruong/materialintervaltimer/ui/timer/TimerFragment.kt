@@ -137,5 +137,5 @@ data class TimerScreen(
     var intervals: MutableList<IntervalItem> = mutableListOf(),
 ) : BaseScreen() {
 
-    fun navToHome() = TimerFragmentDirections.actionTimerFragmentToHomeFragment()
+    fun navToHome() = TimerFragmentDirections.toHome()
 }

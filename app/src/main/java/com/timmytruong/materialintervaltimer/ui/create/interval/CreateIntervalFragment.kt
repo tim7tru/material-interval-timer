@@ -65,6 +65,5 @@ data class CreateIntervalScreen(
     val intervalTitle: ObservableString = ObservableString("")
 ) : BaseScreen() {
 
-    fun nextAction() =
-        CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
+    fun nextAction() = CreateIntervalFragmentDirections.toTime()
 }

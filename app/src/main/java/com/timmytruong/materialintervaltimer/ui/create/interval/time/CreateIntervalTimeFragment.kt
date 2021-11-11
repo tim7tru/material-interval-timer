@@ -57,10 +57,7 @@ data class CreateIntervalTimeScreen(
     val intervalTimeLengthValidity: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 
-    fun navToCreateTimer() = CreateIntervalTimeFragmentDirections
-        .actionCreateIntervalTimeFragmentToCreateTimerFragment(clearViewModel = false)
+    fun navToCreateTimer() = CreateIntervalTimeFragmentDirections.toCreateTimer(clearViewModel = false)
 
-    fun navToCreateInterval() = CreateIntervalTimeFragmentDirections
-        .actionCreateIntervalTimeFragmentToCreateIntervalFragment(clearStores = false)
-
+    fun navToCreateInterval() = CreateIntervalTimeFragmentDirections.toCreateInterval(clearStores = false)
 }

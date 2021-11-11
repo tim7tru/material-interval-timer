@@ -76,12 +76,9 @@ data class CreateTimerScreen(
     val timerIsRepeated: ObservableBoolean = ObservableBoolean(false)
 ) : BaseScreen() {
 
-    fun navToTimer(id: Int) =
-        CreateTimerFragmentDirections.actionCreateTimerFragmentToTimerFragment(id)
+    fun navToTimer(id: Int) = CreateTimerFragmentDirections.toTimer(id)
 
-    fun navToAddInterval() =
-        CreateTimerFragmentDirections.actionCreateTimerFragmentToCreateIntervalFragment(clearStores = true)
+    fun navToAddInterval() = CreateTimerFragmentDirections.toCreateInterval(clearStores = true)
 
-    fun navToSoundBottomSheet(id: Int) =
-        CreateTimerFragmentDirections.actionCreateTimerFragmentToIntervalSoundsBottomSheet(soundId = id)
+    fun navToSoundBottomSheet(id: Int) = CreateTimerFragmentDirections.toSounds(soundId = id)
 }
