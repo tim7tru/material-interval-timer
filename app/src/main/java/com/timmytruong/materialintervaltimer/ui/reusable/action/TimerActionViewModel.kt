@@ -14,6 +14,8 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,22 +23,26 @@ class TimerActionViewModel @Inject constructor(
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
-    private val screen: TimerActionBottomSheetScreen
+    private val directions: TimerActionDirections
 ) : BaseViewModel() {
 
     private lateinit var timer: Timer
 
+    private val _favorite = MutableStateFlow(false)
+    val favorite: Flow<Boolean> = _favorite
+
     fun fetchTimer(id: Int) = startSuspending {
         timer = timerRepository.getTimerById(id)
+        _favorite.value = timer.isFavorited
     }
 
-    fun onFavouritedClicked() = startSuspending(ioDispatcher) {
-        timerRepository.setFavourite(id = timer.id, favourite = timer.isFavourited)
+    fun onFavoriteClicked() = startSuspending(ioDispatcher) {
+        timerRepository.setFavorite(id = timer.id, favorite = !timer.isFavorited)
         fireEvent(
             Event.BottomSheet.TimerAction.ToastMessage(
-                when (timer.isFavourited) {
-                    true -> R.string.favourited
-                    false -> R.string.unfavourited
+                when (!timer.isFavorited) {
+                    true -> R.string.favorited
+                    false -> R.string.unfavorited
                 }
             )
         )
@@ -47,14 +53,5 @@ class TimerActionViewModel @Inject constructor(
         fireEvent(Event.BottomSheet.TimerAction.ToastMessage(R.string.deleted))
     }
 
-    fun onStartClicked() = navigateWith(screen.navToTimer(timer.id))
-}
-
-@InstallIn(ActivityRetainedComponent::class)
-@Module
-class TimerActionViewModelModule {
-
-    @ActivityRetainedScoped
-    @Provides
-    fun provideTimerActionBottomSheetScreen() = TimerActionBottomSheetScreen()
+    fun onStartClicked() = navigateWith(directions.toTimer(timer.id))
 }

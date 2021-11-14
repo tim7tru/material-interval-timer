@@ -1,58 +1,59 @@
 package com.timmytruong.materialintervaltimer.ui.list
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerListBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
-import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.VerticalTimerAdapter
-import com.timmytruong.materialintervaltimer.utils.hide
-import com.timmytruong.materialintervaltimer.utils.name
-import com.timmytruong.materialintervaltimer.utils.set
-import com.timmytruong.materialintervaltimer.utils.show
+import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
+import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emptyFlow
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TimerListFragment : BaseFragment<TimerListScreen, TimerListViewModel, FragmentTimerListBinding>() {
+class TimerListFragment : BaseFragment<TimerListViewModel, FragmentTimerListBinding>(FragmentTimerListBinding::inflate) {
 
     @Inject
     lateinit var verticalTimerAdapter: VerticalTimerAdapter
-
-    @Inject
-    override lateinit var screen: TimerListScreen
-
-    override val name: String = this.name()
-
-    override val layoutId: Int = R.layout.fragment_timer_list
 
     override val viewModel: TimerListViewModel by viewModels()
 
     override val hasBackPress: Boolean = false
 
+    override val hasOptionsMenu: Boolean = false
+
+    override val fragmentTitle: Int get() = when (args.type) {
+        TimerType.RECENTS -> R.string.recentTimers
+        TimerType.FAVORITES -> R.string.favoriteTimers
+    }
+
     private val args: TimerListFragmentArgs by navArgs()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchTimers(args.type)
+    }
 
     override fun onStart() {
         super.onStart()
         viewModel.fetchTimers(args.type)
-        startSuspending {
-            screen.timers.collect {
-                checkEmptyState(it.isEmpty())
-                verticalTimerAdapter.addList(it)
-            }
-        }
     }
 
-    override fun bindView() {
-        binding?.recycler?.adapter = verticalTimerAdapter
+    override fun bindView() = binding?.apply {
+        recycler.adapter = verticalTimerAdapter
         when (args.type) {
-            TimerType.RECENTS -> binding?.header?.set(R.string.recentTimers)
-            TimerType.FAVOURITES -> binding?.header?.set(R.string.favouriteTimers)
+            TimerType.RECENTS -> header.text = resources.string(R.string.recentTimers)
+            TimerType.FAVORITES -> header.text = resources.string(R.string.favoriteTimers)
         }
     }
 
@@ -61,22 +62,28 @@ class TimerListFragment : BaseFragment<TimerListScreen, TimerListViewModel, Frag
         super.onDestroyView()
     }
 
-    private fun checkEmptyState(isEmpty: Boolean) {
-        if (isEmpty) binding?.header?.hide() else binding?.header?.show()
-        if (isEmpty) binding?.recycler?.hide() else binding?.recycler?.show()
-        if (isEmpty) binding?.emptyState?.show() else binding?.emptyState?.hide()
+    private fun checkEmptyState(isEmpty: Boolean) = binding?.apply {
+        header.visibility = if (isEmpty) HIDE else SHOW
+        recycler.visibility = if (isEmpty) HIDE else SHOW
+        emptyState.visibility = if (isEmpty) SHOW else HIDE
     }
+
+    override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
+        viewModel.timers.onEach {
+            checkEmptyState(it.isEmpty())
+            verticalTimerAdapter.addList(it)
+        }.launchIn(scope)
+    }
+}
+
+@Open
+@ActivityRetainedScoped
+class TimerListDirctions @Inject constructor() {
+    fun navToBottomSheet(id: Int, favorited: Boolean) =
+        TimerListFragmentDirections.toActionBottomSheet(timerId = id, favorited = favorited)
 }
 
 enum class TimerType {
     RECENTS,
-    FAVOURITES
-}
-
-data class TimerListScreen(
-    var timers: Flow<@JvmSuppressWildcards List<TimerItem>> = emptyFlow()
-) : BaseScreen() {
-
-    fun navToBottomSheet(id: Int, favourited: Boolean) =
-        TimerListFragmentDirections.toActionBottomSheet(timerId = id, favourited = favourited)
+    FAVORITES
 }

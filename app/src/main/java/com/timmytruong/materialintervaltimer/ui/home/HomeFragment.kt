@@ -1,129 +1,113 @@
 package com.timmytruong.materialintervaltimer.ui.home
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
-import com.timmytruong.materialintervaltimer.di.Favourites
+import com.timmytruong.materialintervaltimer.di.Favorites
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
-import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.HorizontalTimerAdapter
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import com.timmytruong.materialintervaltimer.utils.Open
-import com.timmytruong.materialintervaltimer.utils.hide
-import com.timmytruong.materialintervaltimer.utils.name
-import com.timmytruong.materialintervaltimer.utils.show
+import com.timmytruong.materialintervaltimer.utils.extensions.show
+import com.timmytruong.materialintervaltimer.utils.extensions.showIf
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.components.FragmentComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<HomeScreen, HomeViewModel, FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
-    @Inject
-    override lateinit var screen: HomeScreen
+    @Inject @Recents lateinit var recentsAdapter: HorizontalTimerAdapter
 
-    @Inject
-    @Recents
-    lateinit var recentsAdapter: HorizontalTimerAdapter
-
-    @Inject
-    @Favourites
-    lateinit var favouritesAdapter: HorizontalTimerAdapter
-
-    override val name: String = name()
-
-    override val layoutId: Int = R.layout.fragment_home
+    @Inject @Favorites lateinit var favoritesAdapter: HorizontalTimerAdapter
 
     override val viewModel: HomeViewModel by viewModels()
 
+    override val hasOptionsMenu: Boolean = true
+
     override val hasBackPress: Boolean = false
+
+    override val fragmentTitle: Int = R.string.home
 
     private var isRecentsEmpty = true
 
-    private var isFavouritesEmpty = true
+    private var isFavoritesEmpty = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private val start: MenuItem? get() = menu?.findItem(R.id.start)
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.app_bar, menu)
-        menu.findItem(R.id.start).isVisible = true
+        start.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.start) viewModel.onAddClicked()
+        if (item == start) viewModel.onAddClicked()
         return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.fetchRecentTimers()
-        viewModel.fetchFavouriteTimers()
-
-        startSuspending {
-            screen.recents.onEach { list ->
-                isRecentsEmpty = list.isEmpty()
-                checkEmptyStates()
-                recentsAdapter.addList(list)
-            }.launchIn(it)
-
-            screen.favourites.onEach { list ->
-                isFavouritesEmpty = list.isEmpty()
-                checkEmptyStates()
-                favouritesAdapter.addList(list)
-            }.launchIn(it)
-        }
+        viewModel.fetchRecents()
+        viewModel.fetchFavorites()
     }
 
-    private fun checkEmptyStates() {
-        if (isFavouritesEmpty) binding?.favouritesContainer?.hide() else binding?.favouritesContainer?.show()
-        if (isRecentsEmpty) binding?.recentsContainer?.hide() else binding?.recentsContainer?.show()
-        if (isFavouritesEmpty && isRecentsEmpty) binding?.emptyState?.show() else binding?.emptyState?.hide()
+    private fun checkEmptyStates() = binding?.apply {
+        favoritesContainer.showIf(!isFavoritesEmpty)
+        recentsContainer.showIf(!isRecentsEmpty)
+        emptyState.showIf(isFavoritesEmpty && isRecentsEmpty)
     }
 
-    override fun bindView() {
-        binding?.addFab?.setOnClickListener { viewModel.onAddClicked() }
-        binding?.favouritesSeeAll?.setOnClickListener { viewModel.onFavouritesSeeAllClicked() }
-        binding?.recentsSeeAll?.setOnClickListener { viewModel.onRecentsSeeAllClicked() }
-        binding?.recents?.horizontalRecycler?.adapter = recentsAdapter
-        binding?.favourites?.horizontalRecycler?.adapter = favouritesAdapter
+    override fun bindView() = binding?.apply {
+        addFab.setOnClickListener { viewModel.onAddClicked() }
+        favoritesSeeAll.setOnClickListener { viewModel.onFavoritesSeeAllClicked() }
+        recentsSeeAll.setOnClickListener { viewModel.onRecentsSeeAllClicked() }
+        recents.recycler.adapter = recentsAdapter
+        favorites.recycler.adapter = favoritesAdapter
     }
 
     override fun onDestroyView() {
-        binding?.recents?.horizontalRecycler?.adapter = null
-        binding?.favourites?.horizontalRecycler?.adapter = null
+        binding?.recents?.recycler?.adapter = null
+        binding?.favorites?.recycler?.adapter = null
         super.onDestroyView()
+    }
+
+    override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
+        viewModel.recents.onEach { list ->
+            isRecentsEmpty = list.isEmpty()
+            checkEmptyStates()
+            recentsAdapter.addList(list)
+        }.launchIn(scope)
+
+        viewModel.favorites.onEach { list ->
+            isFavoritesEmpty = list.isEmpty()
+            checkEmptyStates()
+            favoritesAdapter.addList(list)
+        }.launchIn(scope)
     }
 }
 
 @Open
-data class HomeScreen(
-    var recents: Flow<@JvmSuppressWildcards List<TimerItem>> = emptyFlow(),
-    var favourites: Flow<@JvmSuppressWildcards List<TimerItem>> = emptyFlow()
-) : BaseScreen() {
+@ActivityRetainedScoped
+class HomeDirections @Inject constructor() {
+    fun toBottomSheet(id: Int, favorited: Boolean) =
+        HomeFragmentDirections.toActionBottomSheet(timerId = id, favorited = favorited)
 
-    fun navToBottomSheet(id: Int, favourited: Boolean) =
-        HomeFragmentDirections.toActionBottomSheet(timerId = id, favourited = favourited)
+    fun toTimerList(type: TimerType) = HomeFragmentDirections.toTimerList(type = type)
 
-    fun navToTimerList(type: TimerType) = HomeFragmentDirections.toTimerList(type = type)
+    fun toCreateTimer() = HomeFragmentDirections.toCreateTimer(clearViewModel = true)
 
-    fun navToCreateTimer() = HomeFragmentDirections.toCreateTimer(clearViewModel = true)
 }
 
 @InstallIn(FragmentComponent::class)
@@ -132,10 +116,10 @@ class HomeFragmentModule {
 
     @Recents
     @Provides
-    fun provideRecentsAdapter() = HorizontalTimerAdapter()
+    fun provideRecentsAdapter(resources: ResourceProvider) = HorizontalTimerAdapter(resources)
 
-    @Favourites
+    @Favorites
     @Provides
-    fun provideFavouritesAdapter() = HorizontalTimerAdapter()
+    fun providefavoritesAdapter(resources: ResourceProvider) = HorizontalTimerAdapter(resources)
 }
 

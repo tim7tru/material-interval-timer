@@ -1,12 +1,11 @@
-package com.timmytruong.materialintervaltimer.ui.base
+package com.timmytruong.materialintervaltimer.ui.base.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.timmytruong.materialintervaltimer.ui.base.screen.Inflater
-import com.timmytruong.materialintervaltimer.ui.base.screen.ListItem
+import com.timmytruong.materialintervaltimer.utils.extensions.Inflater
 
 abstract class BaseListAdapter<View: ViewBinding, Entity : ListItem>(
     private val inflater: Inflater<View>
@@ -24,9 +23,8 @@ abstract class BaseListAdapter<View: ViewBinding, Entity : ListItem>(
 
     override fun getItemCount(): Int = list.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<View> {
-        return ViewHolder(inflater.invoke(LayoutInflater.from(parent.context), parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<View> =
+        ViewHolder(inflater.invoke(LayoutInflater.from(parent.context), parent, false))
 
     @SuppressLint("NotifyDataSetChanged")
     fun addList(newList: List<Entity>) {

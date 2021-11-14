@@ -1,9 +1,9 @@
-package com.timmytruong.materialintervaltimer.ui.base.screen
+package com.timmytruong.materialintervaltimer.ui.base.adapter
 
 typealias Clicks = (Int) -> Unit
 
 object EmptyClicks: Clicks {
-    override fun invoke(p1: Int) {}
+    override fun invoke(position: Int) {}
 }
 
 abstract class ListItem {

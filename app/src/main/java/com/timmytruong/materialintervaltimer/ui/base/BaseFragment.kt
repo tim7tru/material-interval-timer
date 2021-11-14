@@ -2,22 +2,19 @@ package com.timmytruong.materialintervaltimer.ui.base
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.addCallback
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.ui.MainActivity
 import com.timmytruong.materialintervaltimer.ui.reusable.BackPress
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.extensions.Inflater
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
@@ -26,46 +23,57 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-abstract class BaseFragment<
-        Screen : BaseScreen,
-        ViewModel : BaseViewModel,
-        Binding : ViewDataBinding
-> : Fragment(), BaseObserver<ViewModel>, ProgressBar, BackPress {
+abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
+    private val bindingInflater: Inflater<Binding>
+) : Fragment(), BaseObserver<ViewModel>, ProgressBar, BackPress {
 
     protected val ctx: Context by lazy { requireContext() }
 
     protected val v: View by lazy { requireView() }
 
+    protected var menu: Menu? = null
+
     protected var binding: Binding? = null
 
-    abstract val screen: Screen
-
-    abstract val name: String
-
-    abstract val layoutId: Int
+    abstract val fragmentTitle: Int
 
     abstract val hasBackPress: Boolean
+
+    abstract val hasOptionsMenu: Boolean
 
     @Inject lateinit var popUpProvider: PopUpProvider
 
     @Inject lateinit var resources: ResourceProvider
 
-    abstract fun bindView()
+    abstract fun bindView(): Binding?
+
+    abstract suspend fun bindState(scope: CoroutineScope): Binding?
 
     override var uiStateJobs: ArrayList<Job> = arrayListOf()
+
+    private val appBarMenu = R.menu.app_bar
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(hasOptionsMenu)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (hasOptionsMenu) {
+            super.onCreateOptionsMenu(menu, inflater)
+            inflater.inflate(appBarMenu, menu)
+            this.menu = menu
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        return binding!!.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        screen.name = name
+        (requireActivity() as MainActivity).supportActionBar?.title = resources.string(fragmentTitle)
+        binding = bindingInflater.invoke(inflater, container, false)
+        return requireNotNull(binding?.root)
     }
 
     override fun onAttach(context: Context) {
@@ -77,10 +85,7 @@ abstract class BaseFragment<
 
     override fun onStart() {
         super.onStart()
-        startSuspending {
-            viewModel.navigateFlow.onEach(::navigationHandler).launchIn(it)
-            viewModel.eventFlow.onEach(::eventHandler).launchIn(it)
-        }
+        bindState()
     }
 
     override fun onResume() {
@@ -102,7 +107,7 @@ abstract class BaseFragment<
 
     override fun eventHandler(event: Event) {
         when (event) {
-            is Event.Error.Unknown ->  popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
+            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
             else -> { /** noop **/ }
         }
     }
@@ -116,4 +121,10 @@ abstract class BaseFragment<
 
     protected fun startSuspending(block: suspend (CoroutineScope) -> Unit) =
         uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted(block))
+
+    private fun bindState() = uiStateJobs.add(lifecycleScope.launchWhenStarted {
+        viewModel.navigateFlow.onEach(::navigationHandler).launchIn(this)
+        viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
+        bindState(this)
+    })
 }

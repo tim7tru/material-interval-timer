@@ -1,31 +1,42 @@
 package com.timmytruong.materialintervaltimer.ui
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import com.google.android.material.navigation.NavigationView
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ActivityMainBinding
 import com.timmytruong.materialintervaltimer.di.HorizontalProgress
+import com.timmytruong.materialintervaltimer.ui.base.BaseObserver
 import com.timmytruong.materialintervaltimer.ui.home.HomeFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressAnimation
 import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
+import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.extensions.hideKeyboard
+import com.timmytruong.materialintervaltimer.utils.extensions.showIf
+import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity :
     AppCompatActivity(),
+    BaseObserver<MainActivityViewModel>,
     NavController.OnDestinationChangedListener,
+    NavigationView.OnNavigationItemSelectedListener,
     ProgressBar {
 
     @Inject
@@ -35,6 +46,12 @@ class MainActivity :
     @Inject
     lateinit var resources: ResourceProvider
 
+    @Inject lateinit var popUpProvider: PopUpProvider
+
+    override val viewModel: MainActivityViewModel by viewModels()
+
+    override val uiStateJobs: ArrayList<Job> = arrayListOf()
+
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var navController: NavController
@@ -43,16 +60,52 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        navController = (supportFragmentManager.findFragmentById(R.id.activityMainNavHostFragment) as NavHostFragment).navController
-        navController.addOnDestinationChangedListener(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setupNavController()
         setupNavDrawer()
         setupAppBar()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        uiStateJobs.add(
+            lifecycleScope.launchWhenStarted {
+                viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
+                viewModel.navigateFlow.onEach(::navigationHandler).launchIn(this)
+            }
+        )
+    }
+
+    override fun onStop() {
+        uiStateJobs.forEach { it.cancel() }
+        super.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         navController.removeOnDestinationChangedListener(this)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.createTimer -> viewModel.navToCreateTimer()
+            R.id.recents -> viewModel.navToRecents()
+            R.id.favorites -> viewModel.navToFavorites()
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    override fun eventHandler(event: Event) {
+        when (event) {
+            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(binding.root, R.string.somethingWentWrong)
+            else -> { /** noop **/ }
+        }
+    }
+
+    override fun navigationHandler(action: NavDirections) = with(navController) {
+        currentDestination?.getAction(action.actionId)?.let { navigate(action) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -73,11 +126,11 @@ class MainActivity :
         return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
     }
 
-    override fun updateProgressBar(progress: Int, show: Boolean) {
-        binding.activityMainProgressBar.visibility = if (show) View.VISIBLE else View.GONE
+    override fun updateProgressBar(progress: Int, show: Boolean) = with(binding) {
+        this.progress.showIf(show)
         progressAnimation.startAnimation(
-            target = binding.activityMainProgressBar,
-            start = binding.activityMainProgressBar.progress,
+            target =  this.progress,
+            start =  this.progress.progress,
             end = progress
         )
     }
@@ -90,26 +143,25 @@ class MainActivity :
         currentFocus?.hideKeyboard()
     }
 
-    private fun setupNavDrawer() {
-        binding.activityMainNavDrawer.setupWithNavController(navController)
+    private fun setupNavController() {
+        navController = (supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment).navController
+        navController.addOnDestinationChangedListener(this)
     }
 
-    private fun setupAppBar() {
-        setSupportActionBar(binding.activityMainNavToolBar)
-        supportActionBar?.title = resources.string(R.string.home)
-        appBarConfig =
-            AppBarConfiguration(setOf(R.id.homeFragment), binding.activityMainDrawerLayout)
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig)
-        NavigationUI.setupWithNavController(binding.activityMainNavDrawer, navController)
+    private fun setupNavDrawer() = with(binding.drawer) {
+        setupWithNavController(navController)
+        setNavigationItemSelectedListener(this@MainActivity)
+        menu.getItem(0).isChecked = true
+    }
+
+    private fun setupAppBar() = with(binding) {
+        setSupportActionBar(toolbar)
+        appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment), drawerLayout)
+        NavigationUI.setupActionBarWithNavController(this@MainActivity, navController, appBarConfig)
     }
 
     private fun getForegroundFragment(): Fragment? {
-        val frag = supportFragmentManager.findFragmentById(binding.activityMainNavHostFragment.id)
+        val frag = supportFragmentManager.findFragmentById(binding.fragment.id)
         return if (frag == null) null else frag.childFragmentManager.fragments[0]
-    }
-
-    private fun View.hideKeyboard() {
-        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 }

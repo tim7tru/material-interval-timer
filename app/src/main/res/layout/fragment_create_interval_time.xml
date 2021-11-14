@@ -1,178 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.create.interval.time.CreateIntervalTimeViewModel" />
-
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.create.interval.time.CreateIntervalTimeScreen" />
-    </data>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackgroundDark"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/material"
+        android:layout_marginTop="@dimen/material"
+        android:layout_marginEnd="@dimen/material"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/material"
-            android:layout_marginStart="@dimen/material"
-            android:layout_marginEnd="@dimen/material"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/fragmentCreateIntervalTimeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/quicksand_bold"
-                android:layout_weight="1"
-                android:text="@{screen.intervalDisplayTime}"
-                android:textColor="@{screen.intervalTimeLengthValidity ? @color/colorSecondary : @color/colorPrimaryDark}"
-                android:textSize="@dimen/material_text_xxxlarge"
-                app:layout_constraintStart_toStartOf="@id/fragmentCreateIntervalTimeSeparatorLine"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="99h 99m 99s" />
-
-            <ImageView
-                style="@style/SelectableItemBackground"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material"
-                android:clickable="true"
-                android:layout_gravity="center"
-                android:contentDescription="@string/backspace"
-                android:onClick="@{() -> viewModel.removeFromTime()}"
-                android:src="@drawable/ic_backspace_24px"
-                android:tint="@{screen.intervalTimeLengthValidity ? @color/colorBlack : @color/colorPrimaryDark}"
-                app:layout_constraintBottom_toBottomOf="@id/fragmentCreateIntervalTimeText"
-                app:layout_constraintEnd_toEndOf="@id/fragmentCreateIntervalTimeSeparatorLine"
-                app:layout_constraintTop_toTopOf="@id/fragmentCreateIntervalTimeText"
-                tools:ignore="UseAppTint" />
-
-        </LinearLayout>
-
-        <include
-            android:id="@+id/fragmentCreateIntervalTimeSeparatorLine"
-            layout="@layout/separator_line"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/material"
-            android:layout_marginTop="@dimen/material"
-            android:layout_marginEnd="@dimen/material"
-            app:layout_constraintTop_toBottomOf="@id/fragmentCreateIntervalTimeText" />
-
-        <GridLayout
-            android:id="@+id/fragmentCreateIntervalTimeGrid"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/material"
-            android:columnCount="3"
             android:layout_weight="1"
-            android:rowCount="4">
+            android:fontFamily="@font/quicksand_bold"
+            android:textSize="@dimen/material_text_xxxlarge"
+            tools:text="99h 99m 99s" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime1"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/one)}"
-                android:text="@string/one" />
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/two)}"
-                android:text="@string/two" />
-
-            <com.google.android.material.button.MaterialButton
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/three)}"
-                android:text="@string/three" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime4"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/four)}"
-                android:text="@string/four" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime5"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/five)}"
-                android:text="@string/five" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime6"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/six)}"
-                android:text="@string/six" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime7"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/seven)}"
-                android:text="@string/seven" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime8"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/eight)}"
-                android:text="@string/eight" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime9"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/nine)}"
-                android:text="@string/nine" />
-
-            <Space android:layout_columnWeight="1" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragmentCreateIntervalTime0"
-                style="@style/TimeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.addToTime(@string/zero)}"
-                android:text="@string/zero" />
-
-            <Space android:layout_columnWeight="1" />
-
-        </GridLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/fragmentCreateIntervalTimeContinueButton"
-            style="@style/ContinueFlowButton"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/delete"
+            style="@style/SelectableItemBackground"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@{screen.intervalTimeLengthValidity ? @color/colorSecondaryDark : @color/colorGray}"
-            android:clickable="@{screen.intervalTimeLengthValidity}"
-            android:onClick="@{() -> viewModel.addInterval()}"
-            android:text="@string/addInterval"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/material"
+            android:clickable="true"
+            android:contentDescription="@string/backspace"
+            android:src="@drawable/ic_backspace_24px"
+            tools:ignore="UseAppTint" />
+
     </LinearLayout>
-</layout>
+
+    <include
+        layout="@layout/separator_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/material_xxxsmall"
+        android:layout_marginStart="@dimen/material"
+        android:layout_marginTop="@dimen/material"
+        android:layout_marginEnd="@dimen/material" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/material"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_number" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next"
+        style="@style/ContinueFlowButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/addInterval"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</LinearLayout>

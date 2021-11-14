@@ -19,8 +19,8 @@ data class Timer(
     @ColumnInfo(name = "updated_date")
     var updatedDate: String = "",
 
-    @ColumnInfo(name = "is_favourite")
-    var isFavourited: Boolean = false,
+    @ColumnInfo(name = "is_favorite")
+    var isFavorited: Boolean = false,
 
     @ColumnInfo(name = "should_repeat")
     var shouldRepeat: Boolean = false,
@@ -46,7 +46,7 @@ data class Timer(
         title = ""
         createdDate = ""
         updatedDate = ""
-        isFavourited = false
+        isFavorited = false
         shouldRepeat = false
         intervals = arrayListOf()
         intervalCount = 0

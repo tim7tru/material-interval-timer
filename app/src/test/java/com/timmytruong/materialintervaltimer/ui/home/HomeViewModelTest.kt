@@ -4,8 +4,11 @@ import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.model.TIMER_ID
+import com.timmytruong.materialintervaltimer.model.TITLE
+import com.timmytruong.materialintervaltimer.model.TOTAL_TIME
 import com.timmytruong.materialintervaltimer.model.timer
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.ui.list.TimerType
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,103 +23,157 @@ import kotlin.time.ExperimentalTime
 class HomeViewModelTest : BehaviorSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
-    val resources: ResourceProvider = mock()
+    val navAction: NavDirections = mock()
     val timerRepository: TimerRepository = mock()
-    val screen: HomeScreen = mock()
-
-    fun viewModel(homeScreen: HomeScreen = screen) = HomeViewModel(
-        mainDispatcher = TestCoroutineDispatcher(),
+    val directions: HomeDirections = mock {
+        on { toBottomSheet(any(), any()) } doReturn navAction
+        on { toTimerList(any()) } doReturn navAction
+        on { toCreateTimer() } doReturn navAction
+    }
+    val subject = HomeViewModel(
         ioDispatcher = TestCoroutineDispatcher(),
+        mainDispatcher = TestCoroutineDispatcher(),
         timerRepository = timerRepository,
-        screen = homeScreen,
-        resources = resources
+        directions = directions
     )
 
-    Given("recent timer is clicked") {
-        val action: NavDirections = mock()
-        whenever(screen.navToBottomSheet(any(), any())).thenReturn(action)
-        whenever(timerRepository.getRecentTimers()).thenReturn(flowOf(listOf(timer(isFavourited = false))))
-        val viewModel = viewModel(screen)
+    Given("fetch recents is called") {
+        whenever(timerRepository.getRecentTimers()).thenReturn(flowOf(listOf(timer(isFavorited = false))))
+        subject.recents.test {
+            subject.fetchRecents()
 
-        Then("navigate action is retrieved") {
-            viewModel.recents.test {
-                viewModel.fetchRecentTimers()
-                val item = expectItem()
-                item.first().clicks.invoke(0)
-                verify(screen).navToBottomSheet(TIMER_ID, false)
+            val item = expectItem()
+
+            Then("Favorites is fetched from repository") {
+                verify(timerRepository).getRecentTimers()
             }
-        }
-
-        Then("action is emitted to nav flow") {
-            viewModel.recents.test {
-                viewModel.fetchRecentTimers()
-                val item = this@test.expectItem()
-                viewModel.navigateFlow.test {
-                    item.first().clicks.invoke(0)
-                    assertEquals(expectItem(), action)
+            Then("verify there is only one timer") {
+                assertEquals(1, item.size)
+            }
+            Then("timer is transformed correctly") {
+                with (item.first()) {
+                    assertEquals(TIMER_ID, id)
+                    assertEquals(TOTAL_TIME, time)
+                    assertEquals(TITLE, title)
+                    assertEquals(1, intervalCount)
                 }
             }
         }
     }
 
-    Given("favourite timer is clicked") {
-        val action: NavDirections = mock()
-        whenever(screen.navToBottomSheet(any(), any())).thenReturn(action)
-        whenever(timerRepository.getFavouritedTimers()).thenReturn(flowOf(listOf(timer(isFavourited = true))))
-        val viewModel = viewModel(screen)
+    Given("fetch favorites is called") {
+        whenever(timerRepository.getFavoritedTimers()).thenReturn(flowOf(listOf(timer(isFavorited = true))))
+        subject.favorites.test {
+            subject.fetchFavorites()
 
-        Then("navigate action is retrieved") {
-            viewModel.favourites.test {
-                viewModel.fetchFavouriteTimers()
-                val item = expectItem().first()
-                item.clicks.invoke(0)
-                verify(screen).navToBottomSheet(TIMER_ID, true)
+            val item = expectItem()
+
+            Then("favorites is fetched from repository") {
+                verify(timerRepository).getFavoritedTimers()
+            }
+            Then("verify there is only one timer") {
+                assertEquals(1, item.size)
+            }
+            Then("timer is transformed correctly") {
+                with (item.first()) {
+                    assertEquals(TIMER_ID, id)
+                    assertEquals(TOTAL_TIME, time)
+                    assertEquals(TITLE, title)
+                    assertEquals(1, intervalCount)
+                }
             }
         }
+    }
 
-        Then("action is emitted to nav flow") {
-            viewModel.favourites.test {
-                viewModel.fetchFavouriteTimers()
-                val item = this@test.expectItem()
-                viewModel.navigateFlow.test {
+    Given("recent timer is clicked") {
+        whenever(timerRepository.getRecentTimers()).thenReturn(flowOf(listOf(timer(isFavorited = false))))
+        subject.recents.test {
+            subject.fetchRecents()
+
+            val item = expectItem()
+
+            Then("navigation action is retrieved") {
+                item.first().clicks.invoke(0)
+                verify(directions).toBottomSheet(TIMER_ID, false)
+            }
+
+            Then("action is emitted to nav flow") {
+                subject.navigateFlow.test {
                     item.first().clicks.invoke(0)
-                    assertEquals(expectItem(), action)
+                    assertEquals(expectItem(), navAction)
+                }
+            }
+        }
+    }
+
+    Given("favorite timer is clicked") {
+        whenever(timerRepository.getFavoritedTimers()).thenReturn(flowOf(listOf(timer(isFavorited = true))))
+        subject.favorites.test {
+            subject.fetchFavorites()
+
+            val item = expectItem()
+
+            Then("navigation action is retrieved") {
+                item.first().clicks.invoke(0)
+                verify(directions).toBottomSheet(TIMER_ID, true)
+            }
+
+            Then("action is emitted to nav flow") {
+                subject.navigateFlow.test {
+                    item.first().clicks.invoke(0)
+                    assertEquals(expectItem(), navAction)
                 }
             }
         }
     }
 
     Given("on add clicked") {
-        val action: NavDirections = mock()
-        whenever(screen.navToCreateTimer()).thenReturn(action)
-        val viewModel = viewModel(screen)
-        viewModel.navigateFlow.test {
-            viewModel.onAddClicked()
-            Then("navigation action is fetched from screen") { verify(screen).navToCreateTimer() }
-            Then("navigation action is fired") { assert(expectItem() == action) }
+        subject.navigateFlow.test {
+            subject.onAddClicked()
+            Then("navigation action is fetched from screen") { verify(directions).toCreateTimer() }
+            Then("navigation action is fired") { assertEquals(expectItem(), navAction) }
         }
     }
 
-    Given("on see all favourites clicked") {
-        val action: NavDirections = mock()
-        whenever(screen.navToFavouriteTimers()).thenReturn(action)
-        val viewModel = viewModel(screen)
-        viewModel.navigateFlow.test {
-            viewModel.onFavouritesSeeAllClicked()
-            Then("navigation action is fetched from screen") { verify(screen).navToFavouriteTimers() }
-            Then("navigation action is fired") { assert(expectItem() == action) }
+    Given("on see all favorites clicked") {
+        subject.navigateFlow.test {
+            subject.onFavoritesSeeAllClicked()
+            Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.FAVORITES) }
+            Then("navigation action is fired") { assertEquals(expectItem(), navAction) }
         }
     }
-
 
     Given("on see all recents clicked") {
-        val action: NavDirections = mock()
-        whenever(screen.navToRecentTimers()).thenReturn(action)
-        val viewModel = viewModel(screen)
-        viewModel.navigateFlow.test {
-            viewModel.onRecentsSeeAllClicked()
-            Then("navigation action is fetched from screen") { verify(screen).navToRecentTimers() }
-            Then("navigation action is fired") { assert(expectItem() == action) }
+        subject.navigateFlow.test {
+            subject.onRecentsSeeAllClicked()
+            Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.RECENTS) }
+            Then("navigation action is fired") { assertEquals(expectItem(), navAction) }
+        }
+    }
+
+    Given("more than 7 timers are returned from repository") {
+        whenever(timerRepository.getRecentTimers()).thenReturn(
+            flowOf(
+                listOf(
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                    timer(isFavorited = false),
+                )
+            )
+        )
+
+        subject.recents.test {
+            subject.fetchRecents()
+            val item = expectItem()
+
+            Then("length is trimmed to 7") {
+                assertEquals(7, item.size)
+            }
         }
     }
 })

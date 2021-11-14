@@ -5,29 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil.inflate
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.ui.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.extensions.Inflater
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, Binding : ViewDataBinding> :
-    BottomSheetDialogFragment(),
-    BaseObserver<ViewModel> {
-
-    abstract val screen: Screen
-
-    abstract val layoutId: Int
+abstract class BaseBottomSheet<ViewModel : BaseViewModel, Binding : ViewBinding>(
+    private val bindingInflater: Inflater<Binding>
+) : BottomSheetDialogFragment(), BaseObserver<ViewModel> {
 
     protected var binding: Binding? = null
 
@@ -39,28 +35,25 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
 
     @Inject lateinit var popUpProvider: PopUpProvider
 
-    abstract fun bindView()
+    @Inject lateinit var resources: ResourceProvider
+
+    abstract fun bindView(): Binding?
+
+    abstract suspend fun bindState(scope: CoroutineScope): Binding?
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = inflate(inflater, layoutId, container, false)
+        binding = bindingInflater.invoke(inflater, container, false)
         return binding!!.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        startSuspending {
-            viewModel.navigateFlow.onEach(::navigationHandler).launchIn(it)
-            viewModel.eventFlow.onEach(::eventHandler).launchIn(it)
-        }
     }
 
     override fun onResume() {
         super.onResume()
         bindView()
+        bindState()
     }
 
     override fun onPause() {
@@ -88,5 +81,11 @@ abstract class BaseBottomSheet<Screen : BaseScreen, ViewModel : BaseViewModel, B
     protected fun close() = findNavController().popBackStack()
 
     protected fun startSuspending(block: suspend (CoroutineScope) -> Unit) =
-        uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted(block))
+        uiStateJobs.add(lifecycleScope.launchWhenStarted(block))
+
+    private fun bindState() = uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.navigateFlow.onEach(::navigationHandler).launchIn(this)
+        viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
+        bindState(this)
+    })
 }

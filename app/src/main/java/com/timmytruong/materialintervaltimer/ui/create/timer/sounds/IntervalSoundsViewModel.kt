@@ -8,9 +8,9 @@ import com.timmytruong.materialintervaltimer.model.IntervalSound
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 
@@ -19,17 +19,15 @@ class IntervalSoundsViewModel @Inject constructor(
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     @TimerStore private val timerStore: Store<Timer>,
-    private val sounds: List<IntervalSound>,
-    private val soundsBottomSheet: IntervalSoundsBottomSheetScreen,
-    private val resources: ResourceProvider
+    private val sounds: List<IntervalSound>
 ) : BaseViewModel() {
 
     private val soundItems: List<IntervalSoundItem> = sounds.map { it.toListItem() }
 
     private val _soundsFlow = MutableSharedFlow<List<IntervalSoundItem>>()
+    val soundsFlow: Flow<List<IntervalSoundItem>> = _soundsFlow
 
     fun fetchSounds(soundId: Int) {
-        soundsBottomSheet.list = _soundsFlow
         setSoundSelected { soundItems[it].id == soundId }
     }
 
@@ -39,8 +37,8 @@ class IntervalSoundsViewModel @Inject constructor(
         if (it == position) {
             startSuspending(ioDispatcher) {
                 timerStore.update { timer -> timer.intervalSound = sounds[position] }
+                if (sounds[position].id != -1) fireEvent(Event.PlaySound(sounds[position].id))
             }
-            if (sounds[position].id != -1) { fireEvent(Event.PlaySound(sounds[position].id)) }
             true
         } else {
             false

@@ -7,18 +7,12 @@ import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.ui.create.timer.sounds.IntervalSoundsBottomSheetScreen
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,19 +20,32 @@ class CreateTimerViewModel @Inject constructor(
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     @TimerStore private val timerStore: Store<Timer>,
-    private val screen: CreateTimerScreen,
     private val timerLocalDataSource: TimerRepository,
-    private val resources: ResourceProvider,
-    private val date: DateProvider
+    private val date: DateProvider,
+    private val directions: CreateTimerDirections
 ) : BaseViewModel() {
 
-    fun fetchCurrentTimer(clearTimer: Boolean) = startSuspending(ioDispatcher) {
-        timerStore.observe.collectLatest {
-            screen.intervals = it.intervals.toListItems(resources, hasHeaders = false)
-            screen.timerIntervalCount.set(it.intervalCount)
-            screen.timerTitle.set(it.title)
-            screen.timerSelectedSound.set(it.intervalSound.name)
-        }
+    private val _intervals = MutableStateFlow<List<IntervalItem>>(listOf())
+    val intervals: Flow<List<IntervalItem>> = _intervals
+
+    private val _title = MutableStateFlow("")
+    val title: Flow<String> = _title
+
+    private val _sound = MutableStateFlow("None")
+    val sound: Flow<String> = _sound
+
+    private val _shouldRepeat = MutableStateFlow(false)
+    val shouldRepeat: Flow<Boolean> = _shouldRepeat
+
+    private val _isSaved = MutableStateFlow(false)
+    val isSaved: Flow<Boolean> = _isSaved
+
+    fun fetchCurrentTimer(clearTimer: Boolean) = startSuspending(ioDispatcher) { scope ->
+        timerStore.observe.onEach {
+            _intervals.value = it.intervals.toListItems(hasHeaders = false)
+            _title.value = it.title
+            _sound.value = it.intervalSound.name
+        }.launchIn(scope)
 
         when (clearTimer) {
             true -> timerStore.update { it.clear() }
@@ -46,51 +53,36 @@ class CreateTimerViewModel @Inject constructor(
         }
     }
 
-    fun clearTimer() = startSuspending(ioDispatcher) { timerStore.update { it.clear() } }
-
     fun setTimerTitle(title: String) = startSuspending(ioDispatcher) {
         timerStore.update { it.title = title }
     }
 
     fun setRepeat(checked: Boolean) = startSuspending(ioDispatcher) {
         timerStore.update { it.shouldRepeat = checked }
-        screen.timerIsRepeated.set(checked)
+        _shouldRepeat.value = checked
     }
 
-    fun setFavourite(checked: Boolean) = startSuspending(ioDispatcher) {
-        timerStore.update { it.isFavourited = checked }
-        screen.timerIsSaved.set(checked)
+    fun setFavorite(checked: Boolean) = startSuspending(ioDispatcher) {
+        timerStore.update { it.isFavorited = checked }
+        _isSaved.value = checked
     }
 
     fun validateTimer(title: String) = startSuspending(ioDispatcher) {
+        val currentDate = date.getCurrentDate()
+
         timerStore.update {
             it.title = title
-            it.createdDate = date.getCurrentDate()
-            it.updatedDate = date.getCurrentDate()
+            it.createdDate = currentDate
+            it.updatedDate = currentDate
             it.setTotalTime()
         }
 
         val id = timerLocalDataSource.saveNewTimer(timer = timerStore.get())
-        navigateWith(screen.navToTimer(id.toInt()))
+        navigateWith(directions.toTimer(id.toInt()))
     }
 
-    fun onGoToAddIntervalClicked() = navigateWith(screen.navToAddInterval())
+    fun onGoToAddIntervalClicked() = navigateWith(directions.toCreateInterval())
 
     fun onGoToSoundsBottomSheet() =
-        navigateWith(screen.navToSoundBottomSheet(timerStore.get().intervalSound.id))
-}
-
-@InstallIn(ActivityRetainedComponent::class)
-@Module
-class CreateTimerViewModelModule {
-
-    @ActivityRetainedScoped
-    @Provides
-    fun provideScreen(): CreateTimerScreen = CreateTimerScreen()
-
-
-    @ActivityRetainedScoped
-    @Provides
-    fun provideIntervalSoundsBottomSheetScreen(): IntervalSoundsBottomSheetScreen =
-        IntervalSoundsBottomSheetScreen()
+        navigateWith(directions.toSounds(timerStore.get().intervalSound.id))
 }

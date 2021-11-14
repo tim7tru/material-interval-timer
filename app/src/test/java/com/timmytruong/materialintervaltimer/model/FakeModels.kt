@@ -15,13 +15,13 @@ val INTERVAL = Interval(
     iconId = INTERVAL_ICON_ID
 )
 
-val INTERVAL_SOUND = IntervalSound(id = SOUND_ID, name = SOUND_NAME)
+internal val INTERVAL_SOUND = IntervalSound(id = SOUND_ID, name = SOUND_NAME)
 
-val TIMER = Timer(
+internal val TIMER = Timer(
     title = TITLE,
     createdDate = DATE,
     updatedDate = DATE,
-    isFavourited = false,
+    isFavorited = false,
     shouldRepeat = false,
     intervals = arrayListOf(INTERVAL),
     intervalCount = INTERVAL_COUNT,
@@ -34,7 +34,7 @@ fun timer(
     title: String = TITLE,
     createdDate: String = DATE,
     updatedDate: String = DATE,
-    isFavourited: Boolean = false,
+    isFavorited: Boolean = false,
     shouldRepeat: Boolean = false,
     intervals: ArrayList<Interval> = arrayListOf(INTERVAL),
     intervalCount: Int = INTERVAL_COUNT,
@@ -44,7 +44,7 @@ fun timer(
     title = title,
     createdDate = createdDate,
     updatedDate = updatedDate,
-    isFavourited = isFavourited,
+    isFavorited = isFavorited,
     shouldRepeat = shouldRepeat,
     intervals = intervals,
     intervalCount = intervalCount,

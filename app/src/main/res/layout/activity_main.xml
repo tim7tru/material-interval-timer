@@ -1,62 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".ui.MainActivity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/activityMainDrawerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:theme="@style/AppBarLayoutTheme">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/AppBarStyle"
                 android:layout_height="wrap_content"
-                android:theme="@style/AppBarLayoutTheme">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/activityMainNavToolBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:menu="@menu/app_bar"
-                    style="@style/AppBarStyle"/>
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                style="@style/HorizontalProgressBar"
-                android:id="@+id/activityMainProgressBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:visibility="visible"
-                tools:progress="50"/>
+                app:menu="@menu/app_bar" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/activityMainNavHostFragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorBackgroundDark"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/main_nav_graph"
-                tools:layout="@layout/fragment_timer"/>
-        </LinearLayout>
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            style="@style/HorizontalProgressBar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            tools:progress="50"
+            tools:visibility="visible" />
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/activityMainNavDrawer"
-            android:layout_width="wrap_content"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment"
+            android:background="@color/colorBackgroundDark"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:menu="@menu/main_drawer"
-            app:itemIconTint="@drawable/navigation_drawer_item_color"
-            app:itemTextColor="@drawable/navigation_drawer_item_color"
-            android:background="@color/colorBackgroundLight"
-            android:fitsSystemWindows="true"/>
+            android:layout_width="match_parent"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/main_nav_graph"
+            tools:layout="@layout/fragment_timer" />
+    </LinearLayout>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
-</layout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/drawer"
+        android:background="@color/colorBackgroundLight"
+        android:fitsSystemWindows="true"
+        android:layout_gravity="start"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        app:itemIconTint="@drawable/navigation_drawer_item_color"
+        app:itemTextColor="@drawable/navigation_drawer_item_color"
+        app:menu="@menu/main_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

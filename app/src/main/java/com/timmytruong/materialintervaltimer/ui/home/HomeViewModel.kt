@@ -6,6 +6,7 @@ import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
+import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toTimerItems
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
@@ -15,52 +16,47 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
-    private val timerRepository: TimerRepository,
-    private val screen: HomeScreen,
-    private val resources: ResourceProvider
+    private val directions: HomeDirections,
+    private val timerRepository: TimerRepository
 ) : BaseViewModel() {
 
     companion object {
         private const val NUM_TIMERS_SHOWN = 7
     }
 
-    fun fetchRecentTimers() = startSuspending(ioDispatcher) {
-        screen.recents = timerRepository.getRecentTimers().toTimerItems()
+    private val _recents = MutableSharedFlow<List<TimerItem>>()
+    val recents: Flow<List<TimerItem>> = _recents
+
+    private val _favorites = MutableSharedFlow<List<TimerItem>>()
+    val favorites: Flow<List<TimerItem>> = _favorites
+
+    fun fetchRecents() = startSuspending(ioDispatcher) {
+        _recents.emitAll(timerRepository.getRecentTimers().toTimerItems())
     }
 
-    fun fetchFavouriteTimers() = startSuspending(ioDispatcher) {
-        screen.favourites = timerRepository.getFavouritedTimers().toTimerItems()
+    fun fetchFavorites() = startSuspending(ioDispatcher) {
+        _favorites.emitAll(timerRepository.getFavoritedTimers().toTimerItems())
     }
 
-    fun onAddClicked() = navigateWith(screen.navToCreateTimer())
+    fun onAddClicked() = navigateWith(directions.toCreateTimer())
 
-    fun onFavouritesSeeAllClicked() = navigateWith(screen.navToTimerList(TimerType.FAVOURITES))
+    fun onFavoritesSeeAllClicked() = navigateWith(directions.toTimerList(TimerType.FAVORITES))
 
-    fun onRecentsSeeAllClicked() = navigateWith(screen.navToTimerList(TimerType.RECENTS))
+    fun onRecentsSeeAllClicked() = navigateWith(directions.toTimerList(TimerType.RECENTS))
 
-    private fun Flow<List<Timer>>.toTimerItems() = map { it.trim().toTimerItems(resources, ::onTimerClicked) }
+    private fun Flow<List<Timer>>.toTimerItems() = map { it.trim().toTimerItems(::onTimerClicked) }
 
-    private fun onTimerClicked(id: Int, favourited: Boolean) = navigateWith(screen.navToBottomSheet(id, favourited))
+    private fun onTimerClicked(id: Int, favorited: Boolean) = navigateWith(directions.toBottomSheet(id, favorited))
 
     private fun List<Timer>.trim() = when {
         size < NUM_TIMERS_SHOWN -> subList(0, size)
         else -> subList(0, NUM_TIMERS_SHOWN)
     }
-}
-
-@InstallIn(ActivityRetainedComponent::class)
-@Module
-class HomeViewModelModule {
-
-    @ActivityRetainedScoped
-    @Provides
-    fun provideHomeScreen() = HomeScreen()
 }

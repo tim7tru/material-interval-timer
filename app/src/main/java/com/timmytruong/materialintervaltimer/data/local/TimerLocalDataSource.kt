@@ -21,8 +21,8 @@ class TimerLocalDataSource(
         return@withContext timerDao.getTimerById(id = id)
     }
 
-    override suspend fun setFavourite(id: Int, favourite: Boolean) = withContext(ioDispatcher) {
-        timerDao.setFavourite(id = id, isFavourite = favourite, date = date.getCurrentDate())
+    override suspend fun setFavorite(id: Int, favorite: Boolean) = withContext(ioDispatcher) {
+        timerDao.setFavorite(id = id, isFavorite = favorite, date = date.getCurrentDate())
     }
 
     override suspend fun deleteTimer(id: Int) = withContext(ioDispatcher) {
@@ -32,5 +32,5 @@ class TimerLocalDataSource(
 
     override fun getRecentTimers(): Flow<List<Timer>> = timerDao.getRecentTimers()
 
-    override fun getFavouritedTimers(): Flow<List<Timer>> = timerDao.getFavouritedTimers()
+    override fun getFavoritedTimers(): Flow<List<Timer>> = timerDao.getFavoritedTimers()
 }

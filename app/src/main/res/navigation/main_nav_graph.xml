@@ -41,7 +41,7 @@
         android:name="com.timmytruong.materialintervaltimer.ui.reusable.action.TimerActionBottomSheet"
         android:label="TimerActionBottomSheet" >
         <argument
-            android:name="favourited"
+            android:name="favorited"
             android:defaultValue="false"
             app:argType="boolean"/>
         <argument
@@ -56,7 +56,7 @@
     <fragment
         android:id="@+id/createIntervalTimeFragment"
         android:name="com.timmytruong.materialintervaltimer.ui.create.interval.time.CreateIntervalTimeFragment"
-        android:label="@string/createInterval">
+        android:label="@string/create_interval">
         <action
             android:id="@+id/to_create_timer"
             app:destination="@id/createTimerFragment"
@@ -73,7 +73,7 @@
     <fragment
         android:id="@+id/createTimerFragment"
         android:name="com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerFragment"
-        android:label="@string/newTimer">
+        android:label="@string/create_timer">
         <argument
             android:name="clearViewModel"
             android:defaultValue="true"
@@ -101,7 +101,7 @@
     <fragment
         android:id="@+id/createIntervalFragment"
         android:name="com.timmytruong.materialintervaltimer.ui.create.interval.CreateIntervalFragment"
-        android:label="@string/createInterval">
+        android:label="@string/create_interval">
         <argument
             android:name="clearStores"
             android:defaultValue="true"
@@ -123,8 +123,7 @@
 
     <fragment
         android:id="@+id/timerListFragment"
-        android:name="com.timmytruong.materialintervaltimer.ui.list.TimerListFragment"
-        android:label="TimerListFragment" >
+        android:name="com.timmytruong.materialintervaltimer.ui.list.TimerListFragment">
         <argument
             android:name="type"
             app:argType="com.timmytruong.materialintervaltimer.ui.list.TimerType"/>

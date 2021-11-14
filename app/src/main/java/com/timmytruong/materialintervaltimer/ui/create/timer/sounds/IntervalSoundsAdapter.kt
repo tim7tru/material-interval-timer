@@ -2,24 +2,27 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.sounds
 
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ItemSoundBinding
-import com.timmytruong.materialintervaltimer.ui.base.BaseListAdapter
-import com.timmytruong.materialintervaltimer.ui.base.screen.Clicks
-import com.timmytruong.materialintervaltimer.ui.base.screen.ListItem
-import com.timmytruong.materialintervaltimer.utils.set
-import com.timmytruong.materialintervaltimer.utils.textColor
+import com.timmytruong.materialintervaltimer.ui.base.adapter.BaseListAdapter
+import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
+import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @FragmentScoped
-class IntervalSoundsAdapter @Inject constructor() :
+class IntervalSoundsAdapter @Inject constructor(resources: ResourceProvider) :
     BaseListAdapter<ItemSoundBinding, IntervalSoundItem>(ItemSoundBinding::inflate) {
+
+    private val selectedColor = resources.color(R.color.colorSecondaryAccent)
+
+    private val unselectedColor = resources.color(R.color.colorGray)
 
     override fun onBindViewHolder(holder: ViewHolder<ItemSoundBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
         val sound = list[position]
         with(holder.view) {
-            title.set(sound.title)
-            title.textColor(if (sound.isSelected) R.color.colorSecondaryAccent else R.color.colorGray)
+            title.text = sound.title
+            title.setTextColor(if (sound.isSelected) selectedColor else unselectedColor)
             title.setOnClickListener { sound.clicks.invoke(position) }
         }
     }

@@ -11,5 +11,5 @@ interface BaseObserver<V: BaseViewModel> {
 
     fun eventHandler(event: Event)
 
-    fun navigationHandler(action: NavDirections): Unit? = null
+    fun navigationHandler(action: NavDirections): Unit?
 }

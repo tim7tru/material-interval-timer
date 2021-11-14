@@ -14,8 +14,10 @@ sealed class Event {
         }
     }
 
+    data class PlaySound(val id: Int) : Event()
+
     sealed class Timer : Event() {
-        data class Started(val timeRemaining: Long) : Timer()
+        data class Started(val timeRemaining: Long, val progress: Float) : Timer()
         data class IsSaved(val saved: Boolean) : Timer()
         data class HasSound(val hasSound: Boolean) : Timer()
         object Stopped : Timer()
