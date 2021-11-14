@@ -6,13 +6,12 @@ import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.model.*
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.junit.jupiter.api.Assertions.*
 import org.mockito.kotlin.*
 import kotlin.time.ExperimentalTime
 
@@ -49,19 +48,19 @@ class CreateTimerViewModelTest : BehaviorSpec({
                     subject.intervals.test {
                         subject.fetchCurrentTimer(true)
                         val initial = expectItem()
-                        assertEquals(0, initial.size)
+                        initial.size shouldBe 0
                     }
                 }
                 Then("initial timer title is emitted") {
                     subject.title.test {
                         subject.fetchCurrentTimer(true)
-                        assertEquals("", expectItem())
+                        expectItem() shouldBe ""
                     }
                 }
                 Then("none is emitted") {
                     subject.sound.test {
                         subject.fetchCurrentTimer(true)
-                        assertEquals("None", expectItem())
+                        expectItem() shouldBe "None"
                     }
                 }
                 Then("timer store is updated") {
@@ -84,29 +83,30 @@ class CreateTimerViewModelTest : BehaviorSpec({
                 subject.intervals.test {
                     subject.fetchCurrentTimer(true)
                     val initial = expectItem()
-                    assertEquals(0, initial.size)
+                    initial.size shouldBe 0
                     val item = expectItem()
-                    assertEquals(1, item.size)
+                    item.size shouldBe 1
+
                     with(item.first()) {
-                        assertEquals("", title)
-                        assertEquals(0, icon)
-                        assertEquals(TOTAL_TIME, time)
-                        assertFalse(hasHeaders)
+                        title shouldBe ""
+                        icon shouldBe 0
+                        time shouldBe TOTAL_TIME
+                        hasHeaders shouldBe false
                     }
                 }
             }
             Then("initial and new timer title is emitted") {
                 subject.title.test {
                     subject.fetchCurrentTimer(true)
-                    assertEquals("", expectItem())
-                    assertEquals(TITLE, expectItem())
+                    expectItem() shouldBe ""
+                    expectItem() shouldBe TITLE
                 }
             }
             Then("initial and new sound is emitted") {
                 subject.sound.test {
                     subject.fetchCurrentTimer(true)
-                    assertEquals("None", expectItem())
-                    assertEquals(SOUND_NAME, expectItem())
+                    expectItem() shouldBe "None"
+                    expectItem() shouldBe SOUND_NAME
                 }
             }
         }
@@ -125,8 +125,8 @@ class CreateTimerViewModelTest : BehaviorSpec({
                 subject.setRepeat(true)
                 Then("store is updated") { verify(timerStore).update(any()) }
                 Then("initial value is confirmed and new value is emitted") {
-                    assertFalse(expectItem())
-                    assertTrue(expectItem())
+                    expectItem() shouldBe false
+                    expectItem() shouldBe true
                 }
             }
         }
@@ -134,7 +134,7 @@ class CreateTimerViewModelTest : BehaviorSpec({
             subject.shouldRepeat.test {
                 subject.setRepeat(false)
                 Then("store is updated") { verify(timerStore).update(any()) }
-                Then("value is emitted") { assertFalse(expectItem()) }
+                Then("value is emitted") { expectItem() shouldBe false }
             }
         }
     }
@@ -145,8 +145,8 @@ class CreateTimerViewModelTest : BehaviorSpec({
                 subject.setFavorite(true)
                 Then("store is updated") { verify(timerStore).update(any()) }
                 Then("initial value is confirmed and new value is emitted") {
-                    assertFalse(expectItem())
-                    assertTrue(expectItem())
+                    expectItem() shouldBe false
+                    expectItem() shouldBe true
                 }
             }
         }
@@ -154,7 +154,7 @@ class CreateTimerViewModelTest : BehaviorSpec({
             subject.isSaved.test {
                 subject.setFavorite(checked = false)
                 Then("store is updated") { verify(timerStore).update(any()) }
-                Then("screen is updated") { assertFalse(expectItem()) }
+                Then("screen is updated") { expectItem() shouldBe false }
             }
         }
     }
@@ -168,7 +168,7 @@ class CreateTimerViewModelTest : BehaviorSpec({
             Then("timer is saved to repository") { verify(timerRepository).saveNewTimer(TIMER) }
             Then("navigate event is retrieved") { verify(directions).toTimer(TIMER_ID) }
             Then("timer is fetched from store") { verify(timerStore).get() }
-            Then("navigation event fired") { assertEquals(expectItem(), navAction) }
+            Then("navigation event fired") { expectItem() shouldBe navAction }
         }
     }
 
@@ -176,7 +176,7 @@ class CreateTimerViewModelTest : BehaviorSpec({
         subject.navigateFlow.test {
             subject.onGoToAddIntervalClicked()
             Then("navigate event is retrieved") { verify(directions).toCreateInterval() }
-            Then("navigation event fired") { assertEquals(expectItem(), navAction) }
+            Then("navigation event fired") { expectItem() shouldBe navAction }
         }
     }
 
@@ -184,7 +184,7 @@ class CreateTimerViewModelTest : BehaviorSpec({
         subject.navigateFlow.test {
             subject.onGoToSoundsBottomSheet()
             Then("navigate event is retrieved") { verify(directions).toSounds(SOUND_ID) }
-            Then("navigation event fired") { assertEquals(expectItem(), navAction) }
+            Then("navigation event fired") { expectItem() shouldBe navAction }
         }
     }
 })

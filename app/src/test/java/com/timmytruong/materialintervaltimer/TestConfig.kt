@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.ui
+package com.timmytruong.materialintervaltimer
 
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.spec.IsolationMode

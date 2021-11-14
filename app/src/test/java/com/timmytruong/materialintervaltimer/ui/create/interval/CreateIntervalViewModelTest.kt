@@ -4,113 +4,156 @@ import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.model.INTERVAL
-import com.timmytruong.materialintervaltimer.model.INTERVAL_ICON_ID
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.TITLE
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
-import io.kotest.core.spec.IsolationMode
+import com.timmytruong.materialintervaltimer.assertThrows
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.junit.jupiter.api.Assertions.*
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
+import org.mockito.kotlin.*
 import kotlin.time.ExperimentalTime
 
-private const val TAG = "tag"
 private const val DRAWABLE = 1
 
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 class CreateIntervalViewModelTest : BehaviorSpec({
 
+    val navAction: NavDirections = mock()
     val ioDispatcher = TestCoroutineDispatcher()
     val mainDispatcher = TestCoroutineDispatcher()
-    val resources: ResourceProvider = mock()
-    val store: Store<Interval> = mock()
-    val screen = CreateIntervalScreen()
+    val store: Store<Interval> = mock {
+        on { observe } doReturn emptyFlow()
+        on { get() } doReturn INTERVAL
+    }
+    val directions: CreateIntervalDirections = mock {
+        on { navToTime() } doReturn navAction
+    }
+    val iconIds = listOf(DRAWABLE, DRAWABLE, DRAWABLE, DRAWABLE)
 
-    fun subject(createIntervalScreen: CreateIntervalScreen = screen) = CreateIntervalViewModel(
+    val subject = CreateIntervalViewModel(
         ioDispatcher = ioDispatcher,
         mainDispatcher = mainDispatcher,
-        resources = resources,
         intervalStore = store,
-        screen = createIntervalScreen
+        directions = directions,
+        iconIds = iconIds
     )
 
-    Given("Observe is called") {
-        When("Interval is emitted") {
-            whenever(store.observe).thenReturn(flowOf(INTERVAL))
-            whenever(resources.tagFromDrawableId(any())).thenReturn(TAG)
-            subject().observe()
+    Given("fetch interval is called") {
+        When("clear stores is true") {
+            And("interval is emitted") {
+                whenever(store.observe).thenReturn(flowOf(INTERVAL))
+                subject.title.test {
+                    subject.fetchInterval(true)
+                    Then("title is emitted") { expectItem() shouldBe TITLE }
+                    Then("store is updated") { verify(store).update(any()) }
+                    cancelAndConsumeRemainingEvents()
+                }
+            }
 
-            Then("Tag is retrieved from resources") {
-                verify(resources).tagFromDrawableId(INTERVAL_ICON_ID)
+            And("no interval is emitted") {
+                subject.title.test {
+                    subject.fetchInterval(true)
+                    Then("expect item times out") {
+                        assertThrows<TimeoutCancellationException> { expectItem() }
+                    }
+                    Then("store is updated") { verify(store).update(any()) }
+                }
             }
-            Then("Screen icon tag is set") {
-                assertEquals(TAG, screen.intervalIconTag.get())
-            }
-            Then("Screen title is set") {
-                assertEquals(TITLE, screen.intervalTitle.get())
+        }
+
+        When("clear stores is false") {
+            subject.fetchInterval(false)
+            Then("store is refreshed") {
+                verify(store).refresh()
             }
         }
     }
 
-    Given("Set interval icon is called") {
-        whenever(resources.drawableIdFromTag(TAG)).thenReturn(DRAWABLE)
-        subject().setIntervalIcon(TAG)
-        Then("Interval store is updated") { verify(store).update(any()) }
-        Then("Drawable is retrieved from resources") {
-            verify(resources).drawableIdFromTag(TAG)
-        }
-        Then("Screen icon tag is set") {
-            assertEquals(TAG, screen.intervalIconTag.get())
+    Given("icons are initialized") {
+        subject.icons.test {
+            subject.onEnabledToggled(true)
+            val icons = expectItem()
+
+            Then("icons size matches icon ids size") { icons.size shouldBe 4 }
+            Then("ensure icons are transformed correctly") {
+                icons.forEach {
+                    it.id shouldBe DRAWABLE
+                    it.isSelected shouldBe false
+                }
+            }
+            Then("no interaction with the store") { verifyNoInteractions(store) }
+
+            When("icon is clicked") {
+                icons.first().clicks.invoke(0)
+                Then("store is updated") { verify(store).update(any()) }
+
+                val newIcons = expectItem()
+                Then("icons are transformed and emitted again") {
+                    newIcons.forEachIndexed { idx, icon ->
+                        icon.id shouldBe DRAWABLE
+                        icon.isSelected shouldBe (idx == 0)
+                    }
+                }
+                Then("ensure first icon is selected and no others") {
+                    newIcons.forEach {
+                        it.id shouldBe DRAWABLE
+                        if (it == newIcons.first()) it.isSelected shouldBe true
+                        else it.isSelected shouldBe false
+                    }
+                }
+            }
         }
     }
 
-    Given("Set enabled is called") {
-        When("Enabled is true") {
-            subject().setEnabled(true)
-            Then("Screen enable icon is set") { assertTrue(screen.enableIcon.get()) }
+    Given("on enabled togged is called") {
+        When("enabled is true") {
+            Then("icons are emitted") {
+                subject.icons.test {
+                    subject.onEnabledToggled(true)
+                    expectItem().size shouldBe 4
+                }
+            }
+            Then("enabled is emitted") {
+                subject.enableIcon.test {
+                    subject.onEnabledToggled(true)
+                    expectItem() shouldBe true
+                }
+            }
         }
-        When ("Enabled is false") {
-            subject().setEnabled(false)
-            Then("Screen enable icon is set") { assertFalse(screen.enableIcon.get()) }
+
+        When("enabled is false") {
+            Then("no icons are emitted") {
+                subject.icons.test {
+                    subject.onEnabledToggled(false)
+                    assertThrows<TimeoutCancellationException> { expectItem() }
+                }
+            }
+            Then("enabled is emitted") {
+                subject.enableIcon.test {
+                    subject.onEnabledToggled(false)
+                    expectItem() shouldBe false
+                }
+            }
         }
     }
 
     Given("Title has changed") {
-        subject().onTitleChanged(TITLE)
+        subject.onTitleChanged(TITLE)
         Then("Interval store is updated") {
             verify(store).update(any())
         }
     }
 
-    Given("Validate title is called") {
-        val action: NavDirections = mock()
-        val mockScreen: CreateIntervalScreen = mock { on { nextAction() }.thenReturn(action) }
-        val subject = subject(mockScreen)
+    Given("next is clicked") {
         subject.navigateFlow.test {
-            subject.validateTitle(TITLE)
-            Then("Interval store is updated") { verify(store).update(any()) }
-            Then("Navigation action is fired") { assertEquals(action, expectItem()) }
-        }
-    }
-
-    Given("Clear store is called") {
-        subject().clearStore()
-        Then("Interval store is updated") {
-            verify(store).update(any())
-        }
-    }
-
-    Given("Fetch interval is called") {
-        subject().fetchInterval()
-        Then("Store is refreshed") {
-            verify(store).refresh()
+            subject.onNextClicked()
+            Then("navigation action is retrieved") { verify(directions).navToTime() }
+            Then("action is emitted") { expectItem() shouldBe navAction }
         }
     }
 })

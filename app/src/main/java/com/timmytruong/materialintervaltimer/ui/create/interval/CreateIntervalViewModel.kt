@@ -43,6 +43,15 @@ class CreateIntervalViewModel @Inject constructor(
         }
     }
 
+    fun fetchInterval(clearStore: Boolean) = startSuspending(ioDispatcher) { scope ->
+        intervalStore.observe.onEach { _title.emit(it.name) }.launchIn(scope)
+
+        when (clearStore) {
+            true -> intervalStore.update { it.clear() }
+            false -> intervalStore.refresh()
+        }
+    }
+
     fun onEnabledToggled(checked: Boolean) = startSuspending(ioDispatcher) {
         if (checked) _icons.emit(iconItems)
         _enableIcon.emit(checked)
@@ -54,15 +63,6 @@ class CreateIntervalViewModel @Inject constructor(
 
     fun onNextClicked() = startSuspending(ioDispatcher) {
         navigateWith(action = directions.navToTime())
-    }
-
-    fun fetchInterval(clearStore: Boolean) = startSuspending(ioDispatcher) { scope ->
-        intervalStore.observe.onEach { _title.emit(it.name) }.launchIn(scope)
-
-        when (clearStore) {
-            true -> intervalStore.update { it.clear() }
-            false -> intervalStore.refresh()
-        }
     }
 
     private suspend fun setIconSelected(predicate: suspend (Int) -> Boolean) {
