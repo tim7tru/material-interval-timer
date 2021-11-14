@@ -180,7 +180,6 @@
         <item name="fontFamily">@font/quicksand_bold</item>
         <item name="android:gravity">center</item>
         <item name="android:clickable">true</item>
-        <item name="android:padding">@dimen/material_xxsmall</item>
     </style>
 
     <style name="TimerCard" parent="Widget.MaterialComponents.CardView">

@@ -1,70 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    style="@style/TimerCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/material_small">
 
-    <data>
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerListScreenBinding" />
-    </data>
-
-    <com.google.android.material.card.MaterialCardView
-        style="@style/TimerCard"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> screen.click()}"
-        android:layout_marginBottom="@dimen/material_small">
+        android:layout_margin="@dimen/material_small"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/material_small"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <com.google.android.material.textview.MaterialTextView
-                    style="@style/TimerCardTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{screen.title}"
-                    tools:text="Title If applicable"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TimerCardSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{screen.intervalCount}"
-                        tools:text="XX Intervals" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TimerCardDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/material_small"
-                        android:text="@{screen.time}"
-                        tools:text="00h 00m 00s" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <ImageView
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                style="@style/TimerCardTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:contentDescription="@string/timer_click"
-                app:srcCompat="@drawable/ic_round_arrow_forward_24"
-                app:tint="@color/colorSecondaryDark" />
+                tools:text="Title If applicable" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/count"
+                    style="@style/TimerCardSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="XX Intervals" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/time"
+                    style="@style/TimerCardDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_small"
+                    tools:text="00h 00m 00s" />
+
+            </LinearLayout>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</layout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:contentDescription="@string/timer_click"
+            app:srcCompat="@drawable/ic_round_arrow_forward_24"
+            app:tint="@color/colorSecondaryDark" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

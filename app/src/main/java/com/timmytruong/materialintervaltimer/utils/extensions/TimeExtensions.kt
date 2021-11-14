@@ -1,16 +1,10 @@
-package com.timmytruong.materialintervaltimer.utils
+package com.timmytruong.materialintervaltimer.utils.extensions
 
-import androidx.databinding.ObservableField
-import androidx.fragment.app.Fragment
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_HOUR_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_MINS_L
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
-
-typealias ObservableString = ObservableField<String>
-
-fun Fragment.name(): String = this::class.java.simpleName
 
 fun Long.toDisplayTime(res: ResourceProvider): String {
     var time = this
@@ -31,5 +25,37 @@ fun Long.toDisplayTime(res: ResourceProvider): String {
         hours == 0L && mins > 0L -> res.string(R.string.noHourTimeFormat, mins, secsString)
         hours == 0L && mins == 0L -> res.string(R.string.secondsTimeFormat, secs)
         else -> ""
+    }
+}
+
+fun String.toInputTime(res: ResourceProvider): String {
+    val temp = fillTime()
+    return res.string(
+        R.string.inputTimeFormat,
+        temp.subSequence(0, 2),
+        temp.subSequence(2, 4),
+        temp.subSequence(4, 6)
+    )
+}
+
+fun String.getTimeMs(): Long {
+    val temp = fillTime()
+    var milliseconds = 0L
+    milliseconds += temp.subSequence(4, 6).toString().toLong() * MILLI_IN_SECS_L
+    milliseconds += temp.subSequence(2, 4).toString().toLong() * MILLI_IN_MINS_L
+    milliseconds += temp.subSequence(0, 2).toString().toLong() * MILLI_IN_HOUR_L
+    return milliseconds
+}
+
+private fun String.fillTime(): String {
+    var temp = this
+    return when (temp.length >= 6) {
+        true -> temp
+        false -> {
+            while (temp.length < 6) {
+                temp = "0${temp}"
+            }
+            temp
+        }
     }
 }

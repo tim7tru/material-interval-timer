@@ -12,14 +12,14 @@ interface TimerDao {
     @Query("SELECT * FROM Timers WHERE id = :id")
     suspend fun getTimerById(id: Int): Timer
 
-    @Query("UPDATE Timers SET is_favourite = :isFavourite, updated_date = :date WHERE id = :id")
-    suspend fun setFavourite(id: Int, isFavourite: Boolean, date: String)
+    @Query("UPDATE Timers SET is_favorite = :isFavorite, updated_date = :date WHERE id = :id")
+    suspend fun setFavorite(id: Int, isFavorite: Boolean, date: String)
 
     @Query("UPDATE Timers SET updated_date = :date WHERE id = :id")
     suspend fun setUpdatedDate(id: Int, date: String)
 
-    @Query("SELECT * FROM Timers WHERE is_favourite = 1")
-    fun getFavouritedTimers(): Flow<List<Timer>>
+    @Query("SELECT * FROM Timers WHERE is_Favorite = 1")
+    fun getFavoritedTimers(): Flow<List<Timer>>
 
     @Query("SELECT * FROM Timers ORDER BY updated_date DESC")
     fun getRecentTimers(): Flow<List<Timer>>

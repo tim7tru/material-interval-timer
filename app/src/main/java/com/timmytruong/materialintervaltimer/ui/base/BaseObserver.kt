@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.base
+package com.timmytruong.materialintervaltimer.ui.base
 
 import androidx.navigation.NavDirections
 import com.timmytruong.materialintervaltimer.utils.Event
@@ -11,5 +11,5 @@ interface BaseObserver<V: BaseViewModel> {
 
     fun eventHandler(event: Event)
 
-    fun navigationHandler(action: NavDirections): Unit? = null
+    fun navigationHandler(action: NavDirections): Unit?
 }

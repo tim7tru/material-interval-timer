@@ -1,201 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <data>
-        <import type="com.timmytruong.materialintervaltimer.ui.timer.TimerState"/>
-        <import type="android.view.View"/>
-        <variable
-            name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.timer.TimerViewModel" />
-
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.timer.TimerScreen" />
-    </data>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/colorBackgroundDark">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_action_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/left_action_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.025" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/right_action_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.975" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/timer_progress_left_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.075" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/timer_progress_right_guide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.925" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/ic_circle"
+            android:backgroundTint="@color/colorSecondaryDark"
+            android:contentDescription="@string/timer_circle"
+            android:elevation="10dp"
+            android:scaleType="centerCrop"
+            android:scaleX="0.875"
+            android:scaleY="0.875"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="@id/progress"
+            app:layout_constraintStart_toStartOf="@id/progress"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:layout_constraintTop_toTopOf="@id/progress"
+            app:tint="@color/colorSecondaryDark" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/timer_circle"
+            android:scaleType="centerCrop"
+            android:scaleX="0.90"
+            android:scaleY="0.90"
+            android:src="@drawable/ic_circle"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="@id/progress"
+            app:layout_constraintStart_toStartOf="@id/progress"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:layout_constraintTop_toTopOf="@id/progress" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/timer_circle"
+            android:scaleType="centerCrop"
+            android:scaleX="0.925"
+            android:scaleY="0.925"
+            android:src="@drawable/ic_circle"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="@id/progress"
+            app:layout_constraintStart_toStartOf="@id/progress"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:layout_constraintTop_toTopOf="@id/progress"
+            app:tint="@color/colorSecondaryDark" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress"
+            style="@style/TimerRoundProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material"
+            app:layout_constraintEnd_toEndOf="@id/timer_progress_right_guide"
+            app:layout_constraintStart_toStartOf="@id/timer_progress_left_guide"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/quicksand_light"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/material_text_xxxxlarge"
+            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintEnd_toEndOf="@id/progress"
+            app:layout_constraintStart_toStartOf="@id/progress"
+            app:layout_constraintTop_toTopOf="@id/progress"
+            tools:text="00:00:00" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/floating_action_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/play"
+            style="@style/TimerFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material"
+            android:contentDescription="@string/play"
+            android:src="@drawable/ic_play"
+            app:layout_constraintEnd_toStartOf="@id/stop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/pause"
+            style="@style/TimerFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material"
+            android:contentDescription="@string/pause"
+            android:src="@drawable/ic_pause_24px"
+            app:layout_constraintEnd_toStartOf="@id/stop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/stop"
+            style="@style/TimerFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material"
+            android:contentDescription="@string/stop"
+            android:src="@drawable/ic_stop_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/pause"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBackgroundDark">
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/material_large"
+            android:background="@color/colorBackgroundLight"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stop">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/top_action_guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.05" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/left_action_guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.025" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/right_action_guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.975" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/timer_progress_left_guide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.075" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/timer_progress_right_guide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.925" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                android:scaleX="0.875"
-                android:scaleY="0.875"
-                android:backgroundTint="@color/colorSecondaryDark"
-                android:background="@drawable/ic_circle"
-                android:elevation="10dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                android:contentDescription="@string/timer_circle"
-                app:tint="@color/colorSecondaryDark" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                android:scaleX="0.90"
-                android:scaleY="0.90"
-                android:src="@drawable/ic_circle"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                android:contentDescription="@string/timer_circle" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                android:scaleX="0.925"
-                android:scaleY="0.925"
-                android:src="@drawable/ic_circle"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                android:contentDescription="@string/timer_circle"
-                app:tint="@color/colorSecondaryDark" />
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/fragmentTimerProgressCircle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material"
-                app:progress="@{screen.progress}"
-                app:layout_constraintEnd_toEndOf="@id/timer_progress_right_guide"
-                app:layout_constraintStart_toStartOf="@id/timer_progress_left_guide"
-                app:layout_constraintTop_toTopOf="parent"
-                style="@style/TimerRoundProgress"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand_light"
-                android:text="@{screen.timeRemaining}"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/material_text_xxxxlarge"
-                app:layout_constraintBottom_toBottomOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintEnd_toEndOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintStart_toStartOf="@id/fragmentTimerProgressCircle"
-                app:layout_constraintTop_toTopOf="@id/fragmentTimerProgressCircle"
-                tools:text="00:00:00" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/floating_action_guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/timer_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material"
-                android:contentDescription="@string/play"
-                android:src="@drawable/ic_play"
-                android:onClick="@{() -> viewModel.handlePlay()}"
-                android:visibility="@{screen.timerState == TimerState.RUNNING ? View.GONE : View.VISIBLE}"
-                app:layout_constraintEnd_toStartOf="@id/timer_stop"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                style="@style/TimerFab" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/timer_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material"
-                android:contentDescription="@string/pause"
-                android:src="@drawable/ic_pause_24px"
-                android:onClick="@{() -> viewModel.handlePause()}"
-                android:visibility="@{screen.timerState == TimerState.RUNNING ? View.VISIBLE : View.INVISIBLE}"
-                app:layout_constraintEnd_toStartOf="@id/timer_stop"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                style="@style/TimerFab" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/timer_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material"
-                android:contentDescription="@string/stop"
-                android:src="@drawable/ic_stop_24px"
-                android:onClick="@{() -> viewModel.handleStop()}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/timer_pause"
-                app:layout_constraintTop_toBottomOf="@id/fragmentTimerProgressCircle"
-                style="@style/TimerFab" />
-
-            <LinearLayout
-                android:id="@+id/bottom_sheet"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bottom_sheet_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/material_large"
-                android:background="@color/colorBackgroundLight"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/timer_stop">
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/material"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/bottom_sheet_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:layout_margin="@dimen/material" />
-
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-</layout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

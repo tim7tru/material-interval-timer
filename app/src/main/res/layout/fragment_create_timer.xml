@@ -1,242 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark">
 
-    <data>
-
-        <import type="android.text.TextUtils" />
-
-        <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerViewModel" />
-
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.create.timer.CreateTimerScreen" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackgroundDark">
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/material"
+        app:layout_constraintBottom_toTopOf="@+id/next"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/material"
-            app:layout_constraintBottom_toTopOf="@+id/fragmentCreateTimerStartButton"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/HeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginTop="@dimen/material"
+                android:text="@string/timerTitle" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragmentCreateTimerTitleLayout"
+                style="@style/TimerEditTextLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/material"
+                android:hint="@string/nameThisTimer"
+                app:helperText="@string/optional">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorSecondaryDark" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginEnd="@dimen/material"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/HeaderText"
-                    android:id="@+id/fragmentCreateTimerTitleTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginTop="@dimen/material"
-                    android:text="@string/timerTitle" />
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_weight="1"
+                    android:text="@string/intervals" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/fragmentCreateTimerTitleLayout"
-                    style="@style/TimerEditTextLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/material"
-                    android:hint="@string/nameThisTimer"
-                    app:helperText="@string/optional"
-                    app:layout_constraintTop_toBottomOf="@id/fragmentCreateTimerTitleTitle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fragmentCreateTimerTitleInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{screen.timerTitle}"
-                        android:textColor="@color/colorSecondaryDark" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginEnd="@dimen/material"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/fragmentCreateTimerTaskTitle"
-                        style="@style/HeaderText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center_vertical|start"
-                        android:text="@string/intervals" />
-
-                    <ImageView
-                        style="@style/SelectableItemBackgroundBorderless"
-                        android:id="@+id/fragmentCreateTimerAddTaskButton"
-                        android:layout_width="@dimen/material_touch_small"
-                        android:layout_height="@dimen/material_touch_small"
-                        android:onClick="@{() -> viewModel.onGoToAddIntervalClicked()}"
-                        android:contentDescription="@string/add"
-                        app:srcCompat="@drawable/ic_add_24px"
-                        app:iconTint="@color/colorSecondaryDark" />
-
-                </LinearLayout>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/fragmentCreateTimerEmptyListText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/material"
-                    android:fontFamily="@font/quicksand_light"
-                    android:text="@string/noTasks"
-                    android:layout_gravity="center"
-                    android:textColor="@color/colorGray"
-                    android:textSize="@dimen/material_text_medium"
-                    android:visibility="@{screen.timerIntervalCount == 0 ? View.VISIBLE : View.GONE}" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fragmentCreateTimerTaskList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/material"
-                    android:visibility="@{screen.timerIntervalCount == 0 ? View.GONE : View.VISIBLE}"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/fragmentCreateTimerOptionsTitle"
-                    style="@style/HeaderText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginTop="@dimen/material"
-                    android:text="@string/options" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/SelectableItemBackground"
-                    android:id="@+id/fragmentCreateTimerRepeatContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginEnd="@dimen/material"
-                    android:onClick="@{() -> viewModel.setRepeat(!fragmentCreateTimerRepeatSwitch.isChecked())}">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TimerOptionsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/repeat"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/fragmentCreateTimerRepeatSwitch"
-                        style="@style/TimerSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{screen.timerIsRepeated}"
-                        android:clickable="false"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <include
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginEnd="@dimen/material"
-                    layout="@layout/separator_line" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/fragmentCreateTimerIntervalSoundContainer"
-                    style="@style/SelectableItemBackground"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginEnd="@dimen/material"
-                    android:onClick="@{() -> viewModel.onGoToSoundsBottomSheet()}">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TimerOptionsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/material"
-                        android:paddingBottom="@dimen/material"
-                        android:text="@string/intervalSound"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/fragmentCreateTimerIntervalSound"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/material_small"
-                        android:fontFamily="@font/quicksand_bold"
-                        android:text="@{screen.timerSelectedSound}"
-                        android:textColor="@color/colorSecondary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <include
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginEnd="@dimen/material"
-                    layout="@layout/separator_line" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/SelectableItemBackground"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:layout_marginStart="@dimen/material"
-                    android:layout_marginEnd="@dimen/material"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:onClick="@{() -> viewModel.setFavourite(!fragmentCreateTimerSavedSwitch.isChecked())}">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TimerOptionsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/saveTimer"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/fragmentCreateTimerSavedSwitch"
-                        style="@style/TimerSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{screen.timerIsSaved}"
-                        android:clickable="false"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/add_task"
+                    style="@style/SelectableItemBackgroundBorderless"
+                    android:layout_width="@dimen/material_touch_small"
+                    android:layout_height="@dimen/material_touch_small"
+                    android:contentDescription="@string/add"
+                    app:iconTint="@color/colorSecondaryDark"
+                    app:srcCompat="@drawable/ic_add_24px" />
 
             </LinearLayout>
-        </ScrollView>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/ContinueFlowButton"
-            android:id="@+id/fragmentCreateTimerStartButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/startTimer"
-            android:enabled="@{screen.timerIntervalCount != 0}"
-            android:backgroundTint="@{screen.timerIntervalCount == 0 ? @color/colorGray : @color/colorSecondaryDark}"
-            android:onClick="@{() -> viewModel.validateTimer(fragmentCreateTimerTitleInput.getText().toString())}"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/empty_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/material"
+                android:fontFamily="@font/quicksand_light"
+                android:text="@string/noTasks"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/material_text_medium" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/material"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/options"
+                style="@style/HeaderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginTop="@dimen/material"
+                android:text="@string/options" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/repeat_container"
+                style="@style/SelectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginEnd="@dimen/material">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TimerOptionsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repeat"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/repeat_switch"
+                    style="@style/TimerSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                layout="@layout/separator_line"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/material_xxxsmall"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginEnd="@dimen/material" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/sound_container"
+                style="@style/SelectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginEnd="@dimen/material">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TimerOptionsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/material"
+                    android:paddingBottom="@dimen/material"
+                    android:text="@string/intervalSound"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/sound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/material_small"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:text="@string/none"
+                    android:textColor="@color/colorSecondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                layout="@layout/separator_line"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/material_xxxsmall"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginEnd="@dimen/material" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/save_container"
+                style="@style/SelectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material"
+                android:layout_marginEnd="@dimen/material"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TimerOptionsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saveTimer"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/save_switch"
+                    style="@style/TimerSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next"
+        style="@style/ContinueFlowButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorGray"
+        android:text="@string/startTimer"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,48 +1,51 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
-import android.os.Bundle
-import android.view.View
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseFragment
-import com.timmytruong.materialintervaltimer.base.screen.BaseScreen
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalBinding
-import com.timmytruong.materialintervaltimer.utils.ObservableString
+import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.create.interval.grid.IconGridAdapter
 import com.timmytruong.materialintervaltimer.utils.Open
-import com.timmytruong.materialintervaltimer.utils.name
+import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
+import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
+import com.timmytruong.materialintervaltimer.utils.extensions.onTextChanged
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 private const val PROGRESS_ZERO = 0
 private const val PROGRESS_HALF = 50
 
 @AndroidEntryPoint
-class CreateIntervalFragment :
-    BaseFragment<CreateIntervalScreen, CreateIntervalViewModel, FragmentCreateIntervalBinding>() {
+class CreateIntervalFragment : BaseFragment<CreateIntervalViewModel, FragmentCreateIntervalBinding>(
+    FragmentCreateIntervalBinding::inflate
+) {
 
     @Inject
-    override lateinit var screen: CreateIntervalScreen
-
-    override val name: String = this.name()
+    lateinit var gridAdapter: IconGridAdapter
 
     override val viewModel: CreateIntervalViewModel by viewModels()
 
-    override val layoutId: Int = R.layout.fragment_create_interval
+    override val hasOptionsMenu: Boolean = false
+
+    override val hasBackPress: Boolean = false
+
+    override val fragmentTitle: Int = R.string.create_interval
 
     private val args: CreateIntervalFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.observe()
-        if (args.clearStores) { viewModel.clearStore() }
-    }
-
     override fun onStart() {
         super.onStart()
-        viewModel.fetchInterval()
+        viewModel.fetchInterval(args.clearStores)
+    }
+
+    override fun onResume() {
+        super.onResume()
         updateProgressBar(PROGRESS_HALF)
     }
 
@@ -51,19 +54,43 @@ class CreateIntervalFragment :
         super.onPause()
     }
 
-    override fun bindView() {
-        binding?.screen = screen
-        binding?.viewModel = viewModel
+    override fun bindView() = binding?.apply {
+        titleInput.onTextChanged { viewModel.onTitleChanged(it) }
+        enableContainer.setOnClickListener { viewModel.onEnabledToggled(!enableSwitch.isChecked) }
+        next.setOnClickListener { viewModel.onNextClicked() }
+        viewModel.onTitleChanged(titleInput.text.toString())
+        bindNextButton(text = titleInput.text.toString())
+        grid.layoutManager = GridLayoutManager(ctx, 4)
+        grid.adapter = gridAdapter
+    }
+
+    override fun onDestroyView() {
+        binding?.grid?.adapter = null
+        super.onDestroyView()
+    }
+
+    override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
+        viewModel.enableIcon.onEach { bindEnabled(it) }.launchIn(scope)
+        viewModel.title.onEach { bindNextButton(it) }.launchIn(scope)
+        viewModel.icons.onEach { gridAdapter.addList(it) }.launchIn(scope)
+    }
+
+    private fun bindNextButton(text: String) = binding?.apply {
+        next.isEnabled = text.isNotBlank()
+        next.setBackgroundColor(
+            if (text.isNotBlank()) resources.color(R.color.colorSecondaryDark)
+            else resources.color(R.color.colorGray)
+        )
+    }
+
+    private fun bindEnabled(isEnabled: Boolean) = binding?.apply {
+        grid.visibility = if (isEnabled) SHOW else HIDE
+        enableSwitch.isChecked = isEnabled
     }
 }
 
 @Open
-data class CreateIntervalScreen(
-    val enableIcon: ObservableBoolean = ObservableBoolean(false),
-    val intervalIconTag: ObservableString = ObservableString(""),
-    val intervalTitle: ObservableString = ObservableString("")
-) : BaseScreen() {
-
-    fun nextAction() =
-        CreateIntervalFragmentDirections.actionCreateIntervalFragmentToCreateIntervalTimeFragment()
+@ActivityRetainedScoped
+class CreateIntervalDirections @Inject constructor() {
+    fun navToTime() = CreateIntervalFragmentDirections.toTime()
 }

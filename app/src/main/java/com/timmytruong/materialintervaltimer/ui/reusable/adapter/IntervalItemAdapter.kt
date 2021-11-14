@@ -1,33 +1,59 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 
-import androidx.databinding.ObservableInt
+import androidx.annotation.DrawableRes
 import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.base.BaseListAdapter
-import com.timmytruong.materialintervaltimer.base.screen.Clicks
-import com.timmytruong.materialintervaltimer.base.screen.EmptyClicks
-import com.timmytruong.materialintervaltimer.base.screen.ListBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemIntervalBinding
-import com.timmytruong.materialintervaltimer.utils.ObservableString
+import com.timmytruong.materialintervaltimer.model.Interval
+import com.timmytruong.materialintervaltimer.ui.base.adapter.BaseListAdapter
+import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
+import com.timmytruong.materialintervaltimer.ui.base.adapter.EmptyClicks
+import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
+import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
+import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
+import com.timmytruong.materialintervaltimer.utils.extensions.set
+import com.timmytruong.materialintervaltimer.utils.extensions.toDisplayTime
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
+data class IntervalItem(
+    @DrawableRes val icon: Int? = null,
+    val title: String? = null,
+    val time: Long? = null,
+    val hasHeaders: Boolean = false,
+    override val clicks: Clicks = EmptyClicks
+): ListItem()
+
 @FragmentScoped
-class IntervalItemAdapter @Inject constructor():
-    BaseListAdapter<ItemIntervalBinding, IntervalItemScreenBinding>() {
+class IntervalItemAdapter @Inject constructor(
+    private val resources: ResourceProvider
+) : BaseListAdapter<ItemIntervalBinding, IntervalItem>(ItemIntervalBinding::inflate) {
 
-    override val bindingLayout: Int
-        get() = R.layout.item_interval
-
-    override fun onBindViewHolder(holder: BaseViewHolder<ItemIntervalBinding>, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder<ItemIntervalBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
-        holder.view.screen = list[position]
+        val interval = list[position]
+
+        with(holder.view) {
+            header.visibility = if (interval.hasHeaders) SHOW else HIDE
+
+            when (position) {
+                0 -> header.text = resources.string(R.string.currentIntervalTitle)
+                1 -> header.text = resources.string(R.string.upNextIntervalTitle)
+                else -> { /** No op **/ }
+            }
+
+            icon.set(interval.icon)
+            title.text = interval.title
+            time.text = interval.time?.toDisplayTime(resources)
+        }
     }
 }
 
-data class IntervalItemScreenBinding(
-    val header: ObservableString = ObservableString(""),
-    val iconId: ObservableInt = ObservableInt(0),
-    val title: ObservableString = ObservableString(""),
-    val description: ObservableString = ObservableString(""),
-    override val clicks: Clicks = EmptyClicks
-): ListBinding()
+fun List<Interval>.toListItems(hasHeaders: Boolean) = this.map {
+    IntervalItem(
+        icon = it.iconId,
+        title = it.name,
+        time = it.timeMs,
+        hasHeaders = hasHeaders
+    )
+}

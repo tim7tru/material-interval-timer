@@ -6,13 +6,13 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlin-allopen'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.timmytruong.materialintervaltimer"
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -41,7 +41,7 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
+        viewBinding = true
     }
 
     android.testOptions {
@@ -57,40 +57,40 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.30"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
 
     // AndroidX
     implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation "androidx.activity:activity-ktx:1.3.1"
+    implementation "androidx.activity:activity-ktx:1.4.0"
     implementation "androidx.fragment:fragment-ktx:1.3.6"
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.annotation:annotation:1.3.0'
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
     // MVVM
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1" // to remove
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0" // to remove
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0"
 
     //noinspection LifecycleAnnotationProcessorWithJava8
-    kapt "androidx.lifecycle:lifecycle-compiler:2.3.1"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.4.0"
 
     // UI
-    implementation 'com.google.android.material:material:1.5.0-alpha02'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'com.google.android.material:material:1.5.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
-    implementation 'androidx.browser:browser:1.3.0'
+    implementation 'androidx.browser:browser:1.4.0'
 
     // Room
     implementation "com.google.code.gson:gson:2.8.6"
-    implementation "androidx.room:room-runtime:2.4.0-alpha04"
-    implementation "androidx.room:room-ktx:2.4.0-alpha04"
-    kapt "androidx.room:room-compiler:2.4.0-alpha04"
+    implementation "androidx.room:room-runtime:2.4.0-beta01"
+    implementation "androidx.room:room-ktx:2.4.0-beta01"
+    kapt "androidx.room:room-compiler:2.4.0-beta01"
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
@@ -113,9 +113,10 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     // Testing
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
-    testImplementation 'io.kotest:kotest-runner-junit5:5.0.0.M2'
-    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
+    testImplementation 'io.kotest:kotest-runner-junit5:4.6.3'
+    testImplementation 'io.kotest:kotest-assertions-core:4.6.3'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
     testImplementation 'app.cash.turbine:turbine:0.5.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

@@ -2,149 +2,160 @@ package com.timmytruong.materialintervaltimer.ui.create.interval.time
 
 import androidx.navigation.NavDirections
 import app.cash.turbine.test
-import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.assertThrows
 import com.timmytruong.materialintervaltimer.data.local.Store
+import com.timmytruong.materialintervaltimer.model.INTERVAL
 import com.timmytruong.materialintervaltimer.model.Interval
+import com.timmytruong.materialintervaltimer.model.TIMER
 import com.timmytruong.materialintervaltimer.model.Timer
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.ui.base.adapter.EmptyClicks
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.junit.jupiter.api.Assertions.*
-import org.mockito.kotlin.*
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 class CreateIntervalTimeViewModelTest : BehaviorSpec({
 
+    val navAction: NavDirections = mock()
     val ioDispatcher = TestCoroutineDispatcher()
     val mainDispatcher = TestCoroutineDispatcher()
-    val resources: ResourceProvider = mock()
-    val timerStore: Store<Timer> = mock()
-    val intervalStore: Store<Interval> = mock()
-    val createIntervalTimeScreen = CreateIntervalTimeScreen()
+    val timerStore: Store<Timer> = mock {
+        on { observe } doReturn emptyFlow()
+        on { get() } doReturn TIMER
+    }
+    val intervalStore: Store<Interval> = mock {
+        on { observe } doReturn emptyFlow()
+        on { get() } doReturn INTERVAL
+    }
+    val directions: CreateIntervalTimeDirections = mock {
+        on { navToCreateInterval() } doReturn navAction
+        on { navToCreateTimer() } doReturn navAction
+    }
 
-    fun subject(screen: CreateIntervalTimeScreen = createIntervalTimeScreen) =
-        CreateIntervalTimeViewModel(
-            ioDispatcher = ioDispatcher,
-            mainDispatcher = mainDispatcher,
-            resources = resources,
-            timerStore = timerStore,
-            intervalStore = intervalStore,
-            screen = screen
-        )
+    val subject = CreateIntervalTimeViewModel(
+        ioDispatcher = ioDispatcher,
+        mainDispatcher = mainDispatcher,
+        timerStore = timerStore,
+        intervalStore = intervalStore,
+        directions = directions
+    )
 
-    Given("Add to time is called") {
-        When("Time length is less than six") {
-            val displayTime = "00h 00m 01s"
-            whenever(resources.string(any(), any(), any(), any())).thenReturn(displayTime)
-            val viewModel = subject()
-            viewModel.addToTime("1")
+    Given("Create numbers is called") {
+        subject.numbers.test {
+            subject.createNumbers()
+            val list = expectItem()
 
-            Then("1 is added to time") {
-                argumentCaptor<CharSequence>().apply {
-                    verify(resources).string(eq(R.string.inputTimeFormat), capture(), capture(), capture())
-                    val zeros = "00"
-                    assertEquals(zeros, firstValue)
-                    assertEquals(zeros, secondValue)
-                    assertEquals("01", thirdValue)
+            Then("12 items are emitted") {
+                list.size shouldBe 12
+            }
+            Then("numbers 1 to 9 are set") {
+                for (num in 0 until 9) {
+                    list[num].number shouldBe num + 1
                 }
             }
-
-            Then("Display time is set") {
-                assertEquals(displayTime, createIntervalTimeScreen.intervalDisplayTime.get())
+            Then("10th item empty") {
+                list[9].number shouldBe null
+                list[9].clicks shouldBe EmptyClicks
             }
-
-            Then("Display validity is set") {
-                assertTrue(createIntervalTimeScreen.intervalTimeLengthValidity.get())
+            Then("11th item is 0") {
+                list[10].number shouldBe 0
+            }
+            Then("12th item is empty") {
+                list[11].number shouldBe null
+                list[11].clicks shouldBe EmptyClicks
             }
         }
+    }
 
-        When("Time length is six") {
-            val displayTime = "12h 34m 56s"
-            whenever(resources.string(any(), any(), any(), any())).thenReturn(displayTime)
-            val viewModel = subject()
-            (1..7).forEach { viewModel.addToTime("$it") }
+    Given("number item is clicked") {
+        subject.numbers.test {
+            subject.createNumbers()
+            val number = expectItem().first()
 
-            Then("Time is formatted only six times") {
-                verify(resources, times(6)).string(any(), any(), any(), any())
-            }
+            subject.time.test {
 
-            Then("7 is not added to the time") {
-                assertEquals(displayTime, createIntervalTimeScreen.intervalDisplayTime.get())
-            }
+                When("number is clicked once") {
+                    number.clicks.invoke(-1)
+                    Then("initial item is empty") { expectItem() shouldBe "" }
+                    Then("time is 1") {
+                        expectItem() shouldBe ""
+                        expectItem() shouldBe "1"
+                    }
+                }
 
-            Then("Display validity is set") {
-                assertTrue(createIntervalTimeScreen.intervalTimeLengthValidity.get())
+                When("number is clicked more than 6 times") {
+                    var time = ""
+                    Then("time does not exceed 6") {
+                        repeat(7) {
+                            expectItem() shouldBe time
+                            number.click()
+                            time += "1"
+                        }
+                        expectItem() shouldBe time
+                    }
+                }
             }
         }
     }
 
     Given("Remove from time is called") {
-        When("Time length is more than zero") {
-            val displayTime = "01h 23m 45s"
-            whenever(resources.string(any(), any(), any(), any())).thenReturn(displayTime)
-            val viewModel = subject()
-            viewModel.fill()
-            viewModel.removeFromTime()
+        subject.numbers.test {
+            subject.createNumbers()
+            val number = expectItem().first()
 
-            Then("Display time is set") {
-                assertEquals(displayTime, createIntervalTimeScreen.intervalDisplayTime.get())
-            }
+            subject.time.test {
+                var time = ""
+                expectItem() shouldBe time
+                repeat(6) {
+                    number.click()
+                    time += "1"
+                    expectItem() shouldBe time
+                }
 
-            Then("Display validity is set") {
-                assertTrue(createIntervalTimeScreen.intervalTimeLengthValidity.get())
-            }
-        }
+                When("remove is called once") {
+                    subject.removeFromTime()
+                    Then("one digit is removed from time") { expectItem() shouldBe "11111" }
+                }
 
-        When ("Time length is zero") {
-            val displayTime = "00h 00m 00s"
-            whenever(resources.string(any(), any(), any(), any())).thenReturn(displayTime)
-            val viewModel = subject()
-            viewModel.removeFromTime()
-
-            Then("String was not formatted") {
-                verifyZeroInteractions(resources)
-            }
-
-            Then("Display time is empty") {
-                assertEquals("00h 00m 00s", createIntervalTimeScreen.intervalDisplayTime.get())
-            }
-
-            Then("Display validity is invalid") {
-                assertFalse(createIntervalTimeScreen.intervalTimeLengthValidity.get())
+                When("remove is more than 6 times") {
+                    Then("time goes to empty") {
+                        repeat(6) {
+                            subject.removeFromTime()
+                            time = time.dropLast(1)
+                            expectItem() shouldBe time
+                        }
+                        subject.removeFromTime()
+                        assertThrows<TimeoutCancellationException> { expectItem() }
+                    }
+                }
             }
         }
     }
 
-    Given("Add interval is called") {
-        val action: NavDirections = mock()
-        val mockScreen: CreateIntervalTimeScreen = mock {
-            on { navToCreateTimer() }.thenReturn(action)
-        }
-        val viewModel = subject(mockScreen)
-        viewModel.navigateFlow.test {
-            viewModel.addInterval()
-            Then("Interval store is updated") { verify(intervalStore).update(any()) }
-            Then("Timer store is updated") { verify(timerStore).update(any()) }
-            Then("Navigation action is fired") { assertEquals(action, expectItem()) }
+    Given("add interval is called") {
+        subject.navigateFlow.test {
+            subject.addInterval()
+            Then("interval store is updated") { verify(intervalStore).update(any()) }
+            Then("timer store is updated") { verify(timerStore).update(any()) }
+            Then("navigation action is retrieved") { verify(directions).navToCreateTimer() }
+            Then("navigation action is fired") { expectItem() shouldBe navAction }
         }
     }
 
-    Given("Back pressed is called") {
-        val action: NavDirections = mock()
-        val mockScreen: CreateIntervalTimeScreen = mock {
-            on { navToCreateInterval() }.thenReturn(action)
-        }
-        val viewModel = subject(mockScreen)
-        viewModel.navigateFlow.test {
-            viewModel.backPressed()
-            Then("Navigation action is fired") { assertEquals(action, expectItem()) }
+    Given("back pressed is called") {
+        subject.navigateFlow.test {
+            subject.backPressed()
+            Then("navigation action is retrieved") { verify(directions).navToCreateInterval() }
+            Then("Navigation action is fired") { expectItem() shouldBe navAction }
         }
     }
 })
-
-private fun CreateIntervalTimeViewModel.fill() {
-    (1..6).forEach { addToTime("$it") }
-}

@@ -31,4 +31,21 @@ object AppModule {
     @Singleton
     @Provides
     fun provideEmptySound() = EMPTY_SOUND
+
+    @Singleton
+    @Provides
+    fun provideIcons(): List<Int> = listOf(
+        R.drawable.ic_fitness_center,
+        R.drawable.ic_accessibility_24px,
+        R.drawable.ic_speed_24px,
+        R.drawable.ic_local_cafe_24px,
+        R.drawable.ic_android_24px,
+        R.drawable.ic_audiotrack_24px,
+        R.drawable.ic_language_24px,
+        R.drawable.ic_email_24px,
+        R.drawable.ic_eco_24px,
+        R.drawable.ic_call_24px,
+        R.drawable.ic_play,
+        R.drawable.ic_pause_24px
+    )
 }

@@ -1,127 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundDark">
 
-    <data>
-        <import type="android.view.View"/>
-
-        <variable
-            name="screen"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeScreen" />
-
-        <variable
-            name="viewModel"
-            type="com.timmytruong.materialintervaltimer.ui.home.HomeViewModel" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackgroundDark">
+        android:layout_marginStart="@dimen/material"
+        android:layout_marginEnd="@dimen/material"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/favorites_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/material"
-            android:layout_marginEnd="@dimen/material"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/material_large"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/material_large"
-                android:visibility="@{screen.isFavouritesEmpty ? View.GONE : View.VISIBLE}"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/HeaderText"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:text="@string/favoriteTimers" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/HeaderText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/favouriteTimers"
-                        android:layout_weight="1"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:onClick="@{() -> viewModel.onFavouritesSeeAllClicked()}"
-                        android:text="@string/seeAll"/>
-                </LinearLayout>
-
-                <include
-                    layout="@layout/horizontal_recycler"
-                    android:id="@+id/fragmentHomeFavouritesFrag"
-                    android:layout_marginTop="@dimen/material"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/favorites_see_all"
+                    style="@style/TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/seeAll" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/fragmentHomeRecentContainer"
+            <include
+                android:id="@+id/favorites"
+                layout="@layout/horizontal_recycler"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/material_large"
-                android:visibility="@{screen.isRecentsEmpty ? View.GONE : View.VISIBLE}"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/HeaderText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="@string/recentTimers"
-                        android:layout_weight="1"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:onClick="@{() -> viewModel.onRecentsSeeAllClicked()}"
-                        android:text="@string/seeAll"/>
-
-                </LinearLayout>
-
-                <include
-                    layout="@layout/horizontal_recycler"
-                    android:id="@+id/fragmentHomeRecentFrag"
-                    android:layout_marginTop="@dimen/material"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
+                android:layout_marginTop="@dimen/material" />
         </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            style="@style/HeaderText"
+        <LinearLayout
+            android:id="@+id/recents_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/noTimersText"
-            android:gravity="center"
-            android:visibility="@{screen.isRecentsEmpty &amp;&amp; screen.isFavouritesEmpty ? View.VISIBLE : View.GONE}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_marginTop="@dimen/material_large"
+            android:orientation="vertical">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            style="@style/TimerFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/material"
-            android:onClick="@{() -> viewModel.onAddClicked()}"
-            app:srcCompat="@drawable/ic_add_24px"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="@string/add" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/HeaderText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
+                    android:text="@string/recentTimers" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/recents_see_all"
+                    style="@style/TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="@string/seeAll" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/recents"
+                layout="@layout/horizontal_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/material" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/empty_state"
+        style="@style/HeaderText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/noTimersText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fab"
+        style="@style/TimerFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material"
+        android:contentDescription="@string/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_24px" />
+</androidx.constraintlayout.widget.ConstraintLayout>

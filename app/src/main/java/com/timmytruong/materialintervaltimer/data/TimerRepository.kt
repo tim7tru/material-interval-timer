@@ -8,11 +8,11 @@ interface TimerRepository {
 
     suspend fun getTimerById(id: Int): Timer
 
-    suspend fun setFavourite(id: Int, favourite: Boolean)
+    suspend fun setFavorite(id: Int, favorite: Boolean)
 
     suspend fun deleteTimer(id: Int)
 
     fun getRecentTimers(): Flow<List<Timer>>
 
-    fun getFavouritedTimers(): Flow<List<Timer>>
+    fun getFavoritedTimers(): Flow<List<Timer>>
 }

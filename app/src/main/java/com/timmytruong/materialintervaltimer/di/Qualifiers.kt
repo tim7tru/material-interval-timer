@@ -12,4 +12,4 @@ import javax.inject.Qualifier
 @Qualifier annotation class CircularProgress
 
 @Qualifier annotation class Recents
-@Qualifier annotation class Favourites
+@Qualifier annotation class Favorites

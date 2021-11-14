@@ -9,12 +9,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-private const val TICK_INTERVAL_MS = 100L
-
 @ActivityRetainedScoped
 class IntervalTimer @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) {
+    companion object {
+        private const val TICK_INTERVAL_MS = 100L
+    }
 
     private val _currentTimeRemaining = MutableStateFlow(0L)
     val currentTimeRemaining: StateFlow<Long> = _currentTimeRemaining

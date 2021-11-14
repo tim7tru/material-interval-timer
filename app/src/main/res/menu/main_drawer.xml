@@ -4,19 +4,19 @@
         android:id="@+id/drawer_top"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/homeFragment"
+            android:id="@+id/home"
             android:icon="@drawable/ic_home_24px"
             android:title="@string/home"/>
         <item
-            android:id="@+id/createTimerNavGraph"
+            android:id="@+id/createTimer"
             android:icon="@drawable/ic_timer_24px"
-            android:title="@string/newTimer" />
+            android:title="@string/create_timer" />
         <item
-            android:id="@+id/favouritesFragment"
+            android:id="@+id/favorites"
             android:icon="@drawable/ic_grade_24px"
-            android:title="@string/favourites" />
+            android:title="@string/favorites" />
         <item
-            android:id="@+id/recentsFragment"
+            android:id="@+id/recents"
             android:icon="@drawable/ic_history_24px"
             android:title="@string/recents"/>
     </group>
