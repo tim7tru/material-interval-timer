@@ -9,8 +9,7 @@ import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toTimerItems
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,13 +20,16 @@ class TimerListViewModel @Inject constructor(
     private val directions: TimerListDirctions
 ) : BaseViewModel() {
 
-    lateinit var timers: Flow<List<TimerItem>>
+    private val _timers = MutableSharedFlow<List<TimerItem>>(replay = 1)
+    val timers: Flow<List<TimerItem>> = _timers
 
     fun fetchTimers(type: TimerType) = startSuspending(ioDispatcher) {
-        timers = when (type) {
-            TimerType.FAVORITES -> timerRepository.getFavoritedTimers().toTimerItems()
-            TimerType.RECENTS -> timerRepository.getRecentTimers().toTimerItems()
-        }
+        _timers.emitAll(
+            when (type) {
+                TimerType.FAVORITES -> timerRepository.getFavoritedTimers().toTimerItems()
+                TimerType.RECENTS -> timerRepository.getRecentTimers().toTimerItems()
+            }
+        )
     }
 
     private fun Flow<List<Timer>>.toTimerItems() = map { it.toTimerItems(::onTimerClicked) }
