@@ -8,13 +8,12 @@ import com.timmytruong.materialintervaltimer.model.TITLE
 import com.timmytruong.materialintervaltimer.model.TOTAL_TIME
 import com.timmytruong.materialintervaltimer.model.timer
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.mockito.kotlin.*
 import kotlin.time.ExperimentalTime
 
@@ -47,15 +46,13 @@ class HomeViewModelTest : BehaviorSpec({
             Then("Favorites is fetched from repository") {
                 verify(timerRepository).getRecentTimers()
             }
-            Then("verify there is only one timer") {
-                assertEquals(1, item.size)
-            }
+            Then("verify there is only one timer") { item.size shouldBe 1 }
             Then("timer is transformed correctly") {
                 with (item.first()) {
-                    assertEquals(TIMER_ID, id)
-                    assertEquals(TOTAL_TIME, time)
-                    assertEquals(TITLE, title)
-                    assertEquals(1, intervalCount)
+                    id shouldBe TIMER_ID
+                    time shouldBe TOTAL_TIME
+                    title shouldBe TITLE
+                    intervalCount shouldBe 1
                 }
             }
         }
@@ -71,15 +68,13 @@ class HomeViewModelTest : BehaviorSpec({
             Then("favorites is fetched from repository") {
                 verify(timerRepository).getFavoritedTimers()
             }
-            Then("verify there is only one timer") {
-                assertEquals(1, item.size)
-            }
+            Then("verify there is only one timer") { item.size shouldBe 1 }
             Then("timer is transformed correctly") {
                 with (item.first()) {
-                    assertEquals(TIMER_ID, id)
-                    assertEquals(TOTAL_TIME, time)
-                    assertEquals(TITLE, title)
-                    assertEquals(1, intervalCount)
+                    id shouldBe TIMER_ID
+                    time shouldBe TOTAL_TIME
+                    title shouldBe TITLE
+                    intervalCount shouldBe 1
                 }
             }
         }
@@ -92,16 +87,12 @@ class HomeViewModelTest : BehaviorSpec({
 
             val item = expectItem()
 
-            Then("navigation action is retrieved") {
-                item.first().clicks.invoke(0)
-                verify(directions).toBottomSheet(TIMER_ID, false)
-            }
-
-            Then("action is emitted to nav flow") {
-                subject.navigateFlow.test {
-                    item.first().clicks.invoke(0)
-                    assertEquals(expectItem(), navAction)
+            subject.navigateFlow.test {
+                item.first().click()
+                Then("navigation action is retrieved") {
+                    verify(directions).toBottomSheet(TIMER_ID, false)
                 }
+                Then("action is emitted to nav flow") { expectItem() shouldBe navAction }
             }
         }
     }
@@ -113,16 +104,12 @@ class HomeViewModelTest : BehaviorSpec({
 
             val item = expectItem()
 
-            Then("navigation action is retrieved") {
-                item.first().clicks.invoke(0)
-                verify(directions).toBottomSheet(TIMER_ID, true)
-            }
-
-            Then("action is emitted to nav flow") {
-                subject.navigateFlow.test {
-                    item.first().clicks.invoke(0)
-                    assertEquals(expectItem(), navAction)
+            subject.navigateFlow.test {
+                item.first().click()
+                Then("navigation action is retrieved") {
+                    verify(directions).toBottomSheet(TIMER_ID, true)
                 }
+                Then("action is emitted to nav flow") { expectItem() shouldBe navAction }
             }
         }
     }
@@ -131,7 +118,7 @@ class HomeViewModelTest : BehaviorSpec({
         subject.navigateFlow.test {
             subject.onAddClicked()
             Then("navigation action is fetched from screen") { verify(directions).toCreateTimer() }
-            Then("navigation action is fired") { assertEquals(expectItem(), navAction) }
+            Then("navigation action is fired") { expectItem() shouldBe navAction }
         }
     }
 
@@ -139,7 +126,7 @@ class HomeViewModelTest : BehaviorSpec({
         subject.navigateFlow.test {
             subject.onFavoritesSeeAllClicked()
             Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.FAVORITES) }
-            Then("navigation action is fired") { assertEquals(expectItem(), navAction) }
+            Then("navigation action is fired") { expectItem() shouldBe navAction }
         }
     }
 
@@ -147,7 +134,7 @@ class HomeViewModelTest : BehaviorSpec({
         subject.navigateFlow.test {
             subject.onRecentsSeeAllClicked()
             Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.RECENTS) }
-            Then("navigation action is fired") { assertEquals(expectItem(), navAction) }
+            Then("navigation action is fired") { expectItem() shouldBe navAction }
         }
     }
 
@@ -171,9 +158,7 @@ class HomeViewModelTest : BehaviorSpec({
             subject.fetchRecents()
             val item = expectItem()
 
-            Then("length is trimmed to 7") {
-                assertEquals(7, item.size)
-            }
+            Then("length is trimmed to 7") { item.size shouldBe 7 }
         }
     }
 })
