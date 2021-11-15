@@ -88,8 +88,8 @@ class CreateTimerViewModelTest : BehaviorSpec({
                     item.size shouldBe 1
 
                     with(item.first()) {
-                        title shouldBe ""
-                        icon shouldBe 0
+                        title shouldBe TITLE
+                        icon shouldBe 1
                         time shouldBe TOTAL_TIME
                         hasHeaders shouldBe false
                     }
