@@ -51,5 +51,5 @@ class TimerActionViewModel @Inject constructor(
         Event.BottomSheet.TimerAction.ToastMessage(R.string.deleted).fire()
     }
 
-    fun onStartClicked() = navigateWith(directions.toTimer(timer.id))
+    fun onStartClicked() = Event.Navigate(directions.toTimer(timer.id)).fire()
 }

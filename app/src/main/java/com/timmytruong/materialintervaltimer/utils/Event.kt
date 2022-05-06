@@ -1,8 +1,11 @@
 package com.timmytruong.materialintervaltimer.utils
 
 import androidx.annotation.StringRes
+import androidx.navigation.NavDirections
 
 sealed class Event {
+
+    data class Navigate(val directions: NavDirections): Event()
 
     sealed class BottomSheet : Event() {
         object Dismiss : BottomSheet()

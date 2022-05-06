@@ -17,6 +17,7 @@ import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -84,8 +85,7 @@ abstract class BaseBottomSheet<ViewModel : BaseViewModel, Binding : ViewBinding>
         uiStateJobs.add(lifecycleScope.launchWhenStarted(block))
 
     private fun bindState() = uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.navigateFlow.onEach(::navigationHandler).launchIn(this)
-        viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
+        viewModel.eventFlow.collect(::eventHandler)
         bindState(this)
     })
 }

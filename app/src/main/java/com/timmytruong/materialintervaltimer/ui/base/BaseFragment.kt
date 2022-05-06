@@ -19,6 +19,7 @@ import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -107,9 +108,14 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
 
     override fun eventHandler(event: Event) {
         when (event) {
+            is Event.Navigate -> navigateWith(event.directions)
             is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
             else -> { /** noop **/ }
         }
+    }
+
+    private fun navigateWith(directions: NavDirections) = with(findNavController()) {
+        currentDestination?.getAction(directions.actionId)?.let { navigate(directions) }
     }
 
     override fun navigationHandler(action: NavDirections) = with(findNavController()) {
@@ -123,8 +129,7 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
         uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted(block))
 
     private fun bindState() = uiStateJobs.add(lifecycleScope.launchWhenStarted {
-        viewModel.navigateFlow.onEach(::navigationHandler).launchIn(this)
-        viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
+        viewModel.eventFlow.collect(::eventHandler)
         bindState(this)
     })
 }

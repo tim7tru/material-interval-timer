@@ -90,7 +90,7 @@ class TimerViewModel @Inject constructor(
 
     fun exit() {
         handleStop()
-        navigateWith(directions.toHome())
+        Event.Navigate(directions.toHome()).fire()
     }
 
     private suspend fun addRepeatIntervals() {

@@ -10,6 +10,7 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.base.adapter.EmptyClicks
 import com.timmytruong.materialintervaltimer.ui.create.interval.time.grid.NumberItem
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.extensions.getTimeMs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -50,10 +51,10 @@ class CreateIntervalTimeViewModel @Inject constructor(
             it.intervalCount = it.intervals.size
         }
 
-        navigateWith(directions.navToCreateTimer())
+        Event.Navigate(directions.navToCreateTimer()).fire()
     }
 
-    fun backPressed() = navigateWith(directions.navToCreateInterval())
+    fun backPressed() = Event.Navigate(directions.navToCreateInterval()).fire()
 
     fun createNumbers() = startSuspending(ioDispatcher) {
         val numberItems = mutableListOf<NumberItem>()

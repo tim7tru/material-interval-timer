@@ -7,6 +7,7 @@ import com.timmytruong.materialintervaltimer.model.INTERVAL
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.TITLE
 import com.timmytruong.materialintervaltimer.assertThrows
+import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.mockito.kotlin.*
 import kotlin.time.ExperimentalTime
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 private const val DRAWABLE = 1
 
@@ -150,10 +152,15 @@ class CreateIntervalViewModelTest : BehaviorSpec({
     }
 
     Given("next is clicked") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.onNextClicked()
             Then("navigation action is retrieved") { verify(directions).navToTime() }
-            Then("action is emitted") { expectItem() shouldBe navAction }
+            Then("action is emitted") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 })
