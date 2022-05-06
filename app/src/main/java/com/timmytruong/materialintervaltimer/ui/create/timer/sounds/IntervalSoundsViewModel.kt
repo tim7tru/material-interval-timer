@@ -31,13 +31,13 @@ class IntervalSoundsViewModel @Inject constructor(
         setSoundSelected { soundItems[it].id == soundId }
     }
 
-    fun dismissSoundsBottomSheet() = fireEvent(Event.BottomSheet.Dismiss)
+    fun dismissSoundsBottomSheet() = Event.BottomSheet.Dismiss.fire()
 
     private fun onSoundClicked(position: Int) = setSoundSelected {
         if (it == position) {
             startSuspending(ioDispatcher) {
                 timerStore.update { timer -> timer.intervalSound = sounds[position] }
-                if (sounds[position].id != -1) fireEvent(Event.PlaySound(sounds[position].id))
+                if (sounds[position].id != -1) Event.PlaySound(sounds[position].id).fire()
             }
             true
         } else {

@@ -52,9 +52,7 @@ fun ImageView.set(@DrawableRes id: Int?) = with(this) {
 fun TextInputEditText.onTextChanged(onTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun afterTextChanged(text: Editable?) {
-            onTextChanged.invoke(text.toString())
-        }
+        override fun afterTextChanged(text: Editable?) { onTextChanged(text.toString()) }
         override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {}
     })
 }

@@ -18,8 +18,8 @@ sealed class Event {
         data class Started(val timeRemaining: Long, val progress: Float) : Timer()
         data class IsSaved(val saved: Boolean) : Timer()
         data class HasSound(val hasSound: Boolean) : Timer()
-        object Stopped : Timer()
-        object Bindings : Timer()
+        data class Progress(val progress: Float): Timer()
+        object CancelAnimation : Timer()
     }
 
     sealed class Error : Event() {
