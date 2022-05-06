@@ -31,24 +31,26 @@ class TimerActionViewModel @Inject constructor(
     private val _favorite = MutableStateFlow(false)
     val favorite: Flow<Boolean> = _favorite
 
-    fun fetchTimer(id: Int) = startSuspending {
+    fun fetchTimer(id: Int) = startSuspending(ioDispatcher) {
         timer = timerRepository.getTimerById(id)
         _favorite.value = timer.isFavorited
     }
 
     fun onFavoriteClicked() = startSuspending(ioDispatcher) {
         timerRepository.setFavorite(id = timer.id, favorite = !timer.isFavorited)
-        Event.BottomSheet.TimerAction.ToastMessage(
+        Event.ToastMessage(
             when (!timer.isFavorited) {
                 true -> R.string.favorited
                 false -> R.string.unfavorited
             }
         ).fire()
+        Event.BottomSheet.Dismiss.fire()
     }
 
     fun onDeleteClicked() = startSuspending(ioDispatcher) {
         timerRepository.deleteTimer(id = timer.id)
-        Event.BottomSheet.TimerAction.ToastMessage(R.string.deleted).fire()
+        Event.ToastMessage(R.string.deleted).fire()
+        Event.BottomSheet.Dismiss.fire()
     }
 
     fun onStartClicked() = Event.Navigate(directions.toTimer(timer.id)).fire()

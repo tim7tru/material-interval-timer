@@ -38,18 +38,6 @@ class TimerActionBottomSheet : BaseBottomSheet<TimerActionViewModel, FragmentTim
         delete.setOnClickListener { viewModel.onDeleteClicked() }
     }
 
-    override fun eventHandler(event: Event) {
-        when(event) {
-            is Event.BottomSheet.TimerAction.ToastMessage -> toastAndDismiss(event.message)
-            else -> { /** No op **/ }
-        }
-    }
-
-    private fun toastAndDismiss(message: Int) {
-        popUpProvider.showToast(message)
-        close()
-    }
-
     override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
         viewModel.favorite.onEach {
             favorite.setTextColor(if (it) favoriteColor else unfavoriteColor)

@@ -15,7 +15,7 @@ abstract class BaseViewModel : ViewModel() {
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow: SharedFlow<Event> = _eventFlow
 
-    protected fun Event.fire() = startSuspending { _eventFlow.emit(this) }
+    protected fun Event.fire() = startSuspending(mainDispatcher) { _eventFlow.emit(this) }
 
     protected fun ViewModel.startSuspending(
         context: CoroutineContext = Dispatchers.Default,

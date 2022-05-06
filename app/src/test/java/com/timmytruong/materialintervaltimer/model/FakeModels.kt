@@ -9,7 +9,7 @@ internal const val SOUND_NAME = "sound"
 internal const val SOUND_ID = 1
 internal const val TIMER_ID = 1
 
-val INTERVAL = Interval(
+val INTERVAL get() = Interval(
     timeMs = TOTAL_TIME,
     name = TITLE,
     iconId = INTERVAL_ICON_ID
@@ -17,7 +17,7 @@ val INTERVAL = Interval(
 
 internal val INTERVAL_SOUND = IntervalSound(id = SOUND_ID, name = SOUND_NAME)
 
-internal val TIMER = Timer(
+internal val TIMER get() = Timer(
     title = TITLE,
     createdDate = DATE,
     updatedDate = DATE,
