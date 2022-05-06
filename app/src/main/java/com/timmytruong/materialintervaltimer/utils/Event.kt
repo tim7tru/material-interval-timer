@@ -6,13 +6,10 @@ import androidx.navigation.NavDirections
 sealed class Event {
 
     data class Navigate(val directions: NavDirections): Event()
+    data class ToastMessage(@StringRes val message: Int): Event()
 
     sealed class BottomSheet : Event() {
         object Dismiss : BottomSheet()
-
-        sealed class TimerAction : BottomSheet() {
-            data class ToastMessage(@StringRes val message: Int) : TimerAction()
-        }
     }
 
     data class PlaySound(val id: Int) : Event()

@@ -108,6 +108,7 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
 
     override fun eventHandler(event: Event) {
         when (event) {
+            is Event.ToastMessage -> popUpProvider.showToast(event.message)
             is Event.Navigate -> navigateWith(event.directions)
             is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
             else -> { /** noop **/ }
