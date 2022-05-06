@@ -7,6 +7,7 @@ import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.create.interval.grid.IconGridItem
+import com.timmytruong.materialintervaltimer.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -61,9 +62,7 @@ class CreateIntervalViewModel @Inject constructor(
         intervalStore.update { it.name = text }
     }
 
-    fun onNextClicked() = startSuspending(ioDispatcher) {
-        navigateWith(action = directions.navToTime())
-    }
+    fun onNextClicked() = Event.Navigate(directions.navToTime()).fire()
 
     private suspend fun setIconSelected(predicate: suspend (Int) -> Boolean) {
         iconItems.forEachIndexed { idx, icon -> icon.isSelected = predicate.invoke(idx) }

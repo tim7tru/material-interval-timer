@@ -5,9 +5,11 @@ import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
 import com.timmytruong.materialintervaltimer.model.*
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
@@ -161,30 +163,45 @@ class CreateTimerViewModelTest : BehaviorSpec({
 
     Given("validate timer is called") {
         whenever(timerRepository.saveNewTimer(any())).thenReturn(TIMER_ID.toLong())
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.validateTimer(TITLE)
             Then("date is fetched") { verify(date).getCurrentDate() }
             Then("timer is updated in store") { verify(timerStore).update(any()) }
             Then("timer is saved to repository") { verify(timerRepository).saveNewTimer(TIMER) }
             Then("navigate event is retrieved") { verify(directions).toTimer(TIMER_ID) }
             Then("timer is fetched from store") { verify(timerStore).get() }
-            Then("navigation event fired") { expectItem() shouldBe navAction }
+            Then("navigation event fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 
     Given("add interval is clicked") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.onGoToAddIntervalClicked()
             Then("navigate event is retrieved") { verify(directions).toCreateInterval() }
-            Then("navigation event fired") { expectItem() shouldBe navAction }
+            Then("navigation event fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 
     Given("sounds is clicked") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.onGoToSoundsBottomSheet()
             Then("navigate event is retrieved") { verify(directions).toSounds(SOUND_ID) }
-            Then("navigation event fired") { expectItem() shouldBe navAction }
+            Then("navigation event fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 })

@@ -8,9 +8,11 @@ import com.timmytruong.materialintervaltimer.model.TITLE
 import com.timmytruong.materialintervaltimer.model.TOTAL_TIME
 import com.timmytruong.materialintervaltimer.model.timer
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
+import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -20,7 +22,6 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 @ExperimentalCoroutinesApi
 class HomeViewModelTest : BehaviorSpec({
-    isolationMode = IsolationMode.InstancePerLeaf
 
     val navAction: NavDirections = mock()
     val timerRepository: TimerRepository = mock()
@@ -87,12 +88,17 @@ class HomeViewModelTest : BehaviorSpec({
 
             val item = expectItem()
 
-            subject.navigateFlow.test {
+            subject.eventFlow.test {
                 item.first().click()
                 Then("navigation action is retrieved") {
                     verify(directions).toBottomSheet(TIMER_ID, false)
                 }
-                Then("action is emitted to nav flow") { expectItem() shouldBe navAction }
+                Then("action is emitted to nav flow") {
+                    with(expectItem()) {
+                        this.shouldBeInstanceOf<Event.Navigate>()
+                        this.directions shouldBe navAction
+                    }
+                }
             }
         }
     }
@@ -104,37 +110,57 @@ class HomeViewModelTest : BehaviorSpec({
 
             val item = expectItem()
 
-            subject.navigateFlow.test {
+            subject.eventFlow.test {
                 item.first().click()
                 Then("navigation action is retrieved") {
                     verify(directions).toBottomSheet(TIMER_ID, true)
                 }
-                Then("action is emitted to nav flow") { expectItem() shouldBe navAction }
+                Then("action is emitted to nav flow") {
+                    with(expectItem()) {
+                        this.shouldBeInstanceOf<Event.Navigate>()
+                        this.directions shouldBe navAction
+                    }
+                }
             }
         }
     }
 
     Given("on add clicked") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.onAddClicked()
             Then("navigation action is fetched from screen") { verify(directions).toCreateTimer() }
-            Then("navigation action is fired") { expectItem() shouldBe navAction }
+            Then("navigation action is fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 
     Given("on see all favorites clicked") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.onFavoritesSeeAllClicked()
             Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.FAVORITES) }
-            Then("navigation action is fired") { expectItem() shouldBe navAction }
+            Then("navigation action is fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 
     Given("on see all recents clicked") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.onRecentsSeeAllClicked()
             Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.RECENTS) }
-            Then("navigation action is fired") { expectItem() shouldBe navAction }
+            Then("navigation action is fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 

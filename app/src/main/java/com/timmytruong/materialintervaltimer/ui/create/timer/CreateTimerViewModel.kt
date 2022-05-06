@@ -9,6 +9,7 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -78,11 +79,11 @@ class CreateTimerViewModel @Inject constructor(
         }
 
         val id = timerLocalDataSource.saveNewTimer(timer = timerStore.get())
-        navigateWith(directions.toTimer(id.toInt()))
+        Event.Navigate(directions.toTimer(id.toInt())).fire()
     }
 
-    fun onGoToAddIntervalClicked() = navigateWith(directions.toCreateInterval())
+    fun onGoToAddIntervalClicked() = Event.Navigate(directions.toCreateInterval()).fire()
 
     fun onGoToSoundsBottomSheet() =
-        navigateWith(directions.toSounds(timerStore.get().intervalSound.id))
+        Event.Navigate(directions.toSounds(timerStore.get().intervalSound.id)).fire()
 }

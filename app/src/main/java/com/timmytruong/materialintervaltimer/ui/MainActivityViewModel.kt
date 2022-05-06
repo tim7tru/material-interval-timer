@@ -4,6 +4,7 @@ import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.home.HomeDirections
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
+import com.timmytruong.materialintervaltimer.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
@@ -14,9 +15,9 @@ class MainActivityViewModel @Inject constructor(
     private val directions: HomeDirections
 ) : BaseViewModel() {
 
-    fun navToCreateTimer() = navigateWith(directions.toCreateTimer())
+    fun navToCreateTimer() = Event.Navigate(directions.toCreateTimer()).fire()
 
-    fun navToRecents() = navigateWith(directions.toTimerList(TimerType.RECENTS))
+    fun navToRecents() = Event.Navigate(directions.toTimerList(TimerType.RECENTS)).fire()
 
-    fun navToFavorites() = navigateWith(directions.toTimerList(TimerType.FAVORITES))
+    fun navToFavorites() = Event.Navigate(directions.toTimerList(TimerType.FAVORITES)).fire()
 }

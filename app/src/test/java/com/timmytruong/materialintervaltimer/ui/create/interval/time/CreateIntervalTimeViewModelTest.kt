@@ -9,8 +9,11 @@ import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.model.TIMER
 import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.adapter.EmptyClicks
+import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.emptyFlow
@@ -142,20 +145,30 @@ class CreateIntervalTimeViewModelTest : BehaviorSpec({
     }
 
     Given("add interval is called") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.addInterval()
             Then("interval store is updated") { verify(intervalStore).update(any()) }
             Then("timer store is updated") { verify(timerStore).update(any()) }
             Then("navigation action is retrieved") { verify(directions).navToCreateTimer() }
-            Then("navigation action is fired") { expectItem() shouldBe navAction }
+            Then("navigation action is fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 
     Given("back pressed is called") {
-        subject.navigateFlow.test {
+        subject.eventFlow.test {
             subject.backPressed()
             Then("navigation action is retrieved") { verify(directions).navToCreateInterval() }
-            Then("Navigation action is fired") { expectItem() shouldBe navAction }
+            Then("Navigation action is fired") {
+                with(expectItem()) {
+                    this.shouldBeInstanceOf<Event.Navigate>()
+                    this.directions shouldBe navAction
+                }
+            }
         }
     }
 })

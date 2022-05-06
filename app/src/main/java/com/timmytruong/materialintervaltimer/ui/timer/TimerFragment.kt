@@ -52,13 +52,21 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
 
     override fun onBackPressed() {
         viewModel.handlePause()
-        showExitDialog()
+
+        popUpProvider.showDialog(
+            activity = requireActivity(),
+            title = R.string.dialogCloseTimerTitle,
+            message = R.string.dialogCloseTimerMessage,
+            positiveMessage = R.string.exit,
+            negativeMessage = R.string.cancel,
+            clicks = this@TimerFragment
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item) {
             favoriteButton -> viewModel.setShouldSave()
-            mutedButton, unmutedButton -> soundToggled(item)
+            mutedButton, unmutedButton -> soundToggled(item.itemId)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -69,7 +77,7 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
     }
 
     override fun bindView() = binding?.apply {
-        favoriteButton?.show()
+        favoriteButton.show()
         play.setOnClickListener { viewModel.handlePlay() }
         pause.setOnClickListener { viewModel.handlePause() }
         stop.setOnClickListener { viewModel.handleStop() }
@@ -77,9 +85,8 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
     }
 
     override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
-        viewModel.timeRemaining.onEach { bindTimeRemaining(it) }.launchIn(scope)
+        viewModel.timeRemaining.onEach {  binding?.time?.text = it.toDisplayTime(resources) }.launchIn(scope)
         viewModel.timerState.onEach { bindTimerState(it) }.launchIn(scope)
-        viewModel.progress.onEach { progress.progress = it.toInt() }.launchIn(scope)
         viewModel.intervals.onEach { intervalItemAdapter.addList(it) }.launchIn(scope)
     }
 
@@ -104,28 +111,16 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
             is Event.Timer.HasSound -> unmutedButton.showIf(event.hasSound)
             is Event.Timer.IsSaved -> favoriteButton.showIf(event.saved)
             is Event.PlaySound -> MediaPlayer.create(requireContext(), event.id).start()
-            Event.Timer.Stopped -> progressBar.cancelAnimation()
+            is Event.Timer.Progress -> binding?.progress?.progress = event.progress.toInt()
+            Event.Timer.CancelAnimation -> progressBar.cancelAnimation()
             else -> { /** noop **/ }
         }
     }
 
-    private fun soundToggled(item: MenuItem) {
-        unmutedButton.showIf(item.itemId == R.id.soundOff)
-        mutedButton.showIf(item.itemId == R.id.soundOn)
-        viewModel.isMuted = item.itemId == R.id.soundOn
-    }
-
-    private fun showExitDialog() = popUpProvider.showDialog(
-        activity = requireActivity(),
-        title = R.string.dialogCloseTimerTitle,
-        message = R.string.dialogCloseTimerMessage,
-        positiveMessage = R.string.exit,
-        negativeMessage = R.string.cancel,
-        clicks = this@TimerFragment
-    )
-
-    private fun bindTimeRemaining(remaining: Long) = binding?.apply {
-        time.text = remaining.toDisplayTime(resources)
+    private fun soundToggled(id: Int) {
+        unmutedButton.showIf(id == R.id.soundOff)
+        mutedButton.showIf(id == R.id.soundOn)
+        viewModel.isMuted = id == R.id.soundOn
     }
 
     private fun bindTimerState(state: TimerState) = binding?.apply {

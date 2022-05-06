@@ -9,6 +9,7 @@ import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.IntervalTimer
+import com.timmytruong.materialintervaltimer.utils.TimerState
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,54 +25,63 @@ class TimerViewModel @Inject constructor(
     private val directions: TimerDirections
 ) : BaseViewModel() {
 
-    private val _timerState = MutableStateFlow(TimerState.STOPPED)
-    val timerState: Flow<TimerState> = _timerState
-
-    private val _timeRemaining = MutableStateFlow(0L)
-    val timeRemaining: Flow<Long> = _timeRemaining
-
-    private val _progress = MutableStateFlow(1000f)
-    val progress: Flow<Float> = _progress
-
     private val _intervals = MutableSharedFlow<List<IntervalItem>>()
-    val intervals: Flow<List<IntervalItem>> = _intervals
+    val intervals: SharedFlow<List<IntervalItem>> = _intervals
+
+    val timerState: StateFlow<TimerState> = intervalTimer.timerState
+
+    val timeRemaining: StateFlow<Long> = intervalTimer.currentTimeRemaining
 
     var isMuted: Boolean = false
 
     private lateinit var timer: Timer
-    private var currentIntervalTimeRemaining: Long = 0L
-    private var currentIntervalTotalTime: Long = 0L
-    private var intervalItems: MutableList<IntervalItem> = mutableListOf()
+
+    private val currentIntervalTimeRemaining: Long
+        get() = intervalTimer.currentTimeRemaining.value
+
+    private val progress: Float
+        get() = (currentIntervalTimeRemaining.toFloat() / currentIntervalTotalTime.toFloat()) * MILLI_IN_SECS_L
+
+    private val currentIntervalTotalTime: Long
+        get() = intervalTimer.currentIntervalTotalTime
+
+    private val shouldRepeatIntervals: Boolean
+        get() = timer.shouldRepeat &&
+                (intervalItems.size <= timer.intervalCount / 2 || intervalItems.size == 1)
+
+    private val intervalItems: MutableList<IntervalItem> = mutableListOf()
 
     fun fetchTimer(id: Int) = startSuspending(ioDispatcher) { scope ->
         timer = timerLocalDataSource.getTimerById(id = id)
-        intervalTimer.currentTimeRemaining.onEach { updateTimeRemaining(it) }.launchIn(scope)
-        fireEvent(
-            Event.Timer.IsSaved(timer.isFavorited),
-            Event.Timer.HasSound(timer.intervalSound.id != -1)
-        )
-        handleStop()
+        intervalTimer.currentTimeRemaining.onEach { onTick(it) }.launchIn(scope)
+        intervalTimer.load(timer.intervals.map { it.timeMs })
+        Event.Timer.IsSaved(timer.isFavorited).fire()
+        Event.Timer.HasSound(timer.intervalSound.id != -1).fire()
+        updateIntervalBindings()
+    }
+
+    private suspend fun onTick(ms: Long) {
+        if (shouldRepeatIntervals) addRepeatIntervals()
+        if (ms == 0L) onIntervalFinished()
     }
 
     fun handlePlay() = startSuspending(ioDispatcher) {
-        cancelAnimation()
-        _timerState.value = TimerState.RUNNING
+        Event.Timer.CancelAnimation.fire()
         intervalTimer.start()
-        fireEvent(Event.Timer.Started(currentIntervalTimeRemaining, _progress.value))
+        Event.Timer.Started(intervalTimer.currentTimeRemaining.value, progress).fire()
     }
 
     fun handlePause() = startSuspending(ioDispatcher) {
-        cancelAnimation()
-        _timerState.value = TimerState.PAUSED
-        intervalTimer.onTimerPaused()
-        resetProgress()
+        Event.Timer.CancelAnimation.fire()
+        intervalTimer.pause()
+        Event.Timer.Progress(progress).fire()
     }
 
     fun handleStop() = startSuspending(ioDispatcher) {
-        cancelAnimation()
-        _timerState.value = TimerState.STOPPED
-        intervalTimer.clearTimer()
-        setNewIntervalList()
+        Event.Timer.CancelAnimation.fire()
+        intervalTimer.stop()
+        updateIntervalBindings()
+        Event.Timer.Progress(progress).fire()
     }
 
     fun setShouldSave() = startSuspending(ioDispatcher) {
@@ -80,81 +90,41 @@ class TimerViewModel @Inject constructor(
 
     fun exit() {
         handleStop()
-        navigateWith(directions.toHome())
+        Event.Navigate(directions.toHome()).fire()
     }
 
-    private fun cancelAnimation() = fireEvent(Event.Timer.Stopped)
-
-    private fun resetProgress() {
-        val progress = ((currentIntervalTimeRemaining.toFloat() / currentIntervalTotalTime.toFloat()) * MILLI_IN_SECS_L)
-        _progress.value = progress
-    }
-
-    private fun setNewInterval() = startSuspending(mainDispatcher) {
-        val intervalTime = timer.intervals.first().timeMs
-        intervalTimer.buildIntervalTimer(intervalTime)
-        currentIntervalTimeRemaining = intervalTime
-        currentIntervalTotalTime = currentIntervalTimeRemaining
-        resetProgress()
-    }
-
-    private fun addRepeatIntervals() {
+    private suspend fun addRepeatIntervals() {
         intervalItems.addAll(timer.intervals.toListItems(hasHeaders = true))
-        updateIntervalBindings()
+        _intervals.emit(intervalItems)
     }
 
     private fun updateIntervalBindings() = startSuspending(ioDispatcher) {
         intervalItems.clear()
         intervalItems.addAll(timer.intervals.toListItems(hasHeaders = true))
-        fireEvent(Event.Timer.Bindings)
+        _intervals.emit(intervalItems)
     }
-
-    private fun updateTimeRemaining(timeRemaining: Long) {
-        setTimeRemaining(timeRemaining)
-
-        if (timer.shouldRepeat && (intervalItems.size <= timer.intervalCount / 2 || intervalItems.size == 1)) {
-            addRepeatIntervals()
-        }
-
-        if (timeRemaining == 0L) onIntervalFinished()
-    }
-
-    private fun setTimeRemaining(timeRemaining: Long) { _timeRemaining.value = timeRemaining }
 
     private fun onIntervalFinished() = startSuspending(ioDispatcher) {
-        popFinishedInterval()
-        playSound()
-
-        if (intervalItems.isEmpty()) {
-            handleStop()
+        if (!intervalTimer.isFinished) {
+            popFinishedInterval()
+            playSound()
+            intervalTimer.next()
+            Event.Timer.Progress(progress).fire()
+            Event.Timer.Started(intervalTimer.currentTimeRemaining.value, progress).fire()
         } else {
-            setNewInterval()
-            handlePlay()
+            handleStop()
         }
     }
 
-    private fun popFinishedInterval() {
+    private suspend fun popFinishedInterval() {
         if (intervalItems.isNotEmpty()) {
             intervalItems.removeFirst()
-            updateIntervalBindings()
+            _intervals.emit(intervalItems)
         }
     }
 
     private fun playSound() = startSuspending(mainDispatcher) {
         val soundId = timer.intervalSound.id
-        if (!isMuted && soundId != -1) fireEvent(Event.PlaySound(soundId))
+        if (!isMuted && soundId != -1) Event.PlaySound(soundId).fire()
     }
-
-    private suspend fun setNewIntervalList() {
-        intervalItems.clear()
-        intervalItems.addAll(timer.intervals.toListItems(hasHeaders = true))
-        updateIntervalBindings()
-        setNewInterval()
-    }
-}
-
-enum class TimerState {
-    STOPPED,
-    PAUSED,
-    RUNNING
 }

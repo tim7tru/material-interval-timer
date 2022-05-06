@@ -8,6 +8,7 @@ import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toTimerItems
+import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
 import dagger.Provides
@@ -45,15 +46,15 @@ class HomeViewModel @Inject constructor(
         _favorites.emitAll(timerRepository.getFavoritedTimers().toTimerItems())
     }
 
-    fun onAddClicked() = navigateWith(directions.toCreateTimer())
+    fun onAddClicked() = Event.Navigate(directions.toCreateTimer()).fire()
 
-    fun onFavoritesSeeAllClicked() = navigateWith(directions.toTimerList(TimerType.FAVORITES))
+    fun onFavoritesSeeAllClicked() = Event.Navigate(directions.toTimerList(TimerType.FAVORITES)).fire()
 
-    fun onRecentsSeeAllClicked() = navigateWith(directions.toTimerList(TimerType.RECENTS))
+    fun onRecentsSeeAllClicked() = Event.Navigate(directions.toTimerList(TimerType.RECENTS)).fire()
 
     private fun Flow<List<Timer>>.toTimerItems() = map { it.trim().toTimerItems(::onTimerClicked) }
 
-    private fun onTimerClicked(id: Int, favorited: Boolean) = navigateWith(directions.toBottomSheet(id, favorited))
+    private fun onTimerClicked(id: Int, favorited: Boolean) = Event.Navigate(directions.toBottomSheet(id, favorited)).fire()
 
     private fun List<Timer>.trim() = when {
         size < NUM_TIMERS_SHOWN -> subList(0, size)

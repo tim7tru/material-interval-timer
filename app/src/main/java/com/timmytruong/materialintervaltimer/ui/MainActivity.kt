@@ -27,6 +27,7 @@ import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -70,10 +71,7 @@ class MainActivity :
     override fun onStart() {
         super.onStart()
         uiStateJobs.add(
-            lifecycleScope.launchWhenStarted {
-                viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
-                viewModel.navigateFlow.onEach(::navigationHandler).launchIn(this)
-            }
+            lifecycleScope.launchWhenStarted { viewModel.eventFlow.collect(::eventHandler) }
         )
     }
 

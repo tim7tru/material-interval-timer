@@ -9,41 +9,90 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+private const val TICK_INTERVAL_MS = 10L
+
 @ActivityRetainedScoped
 class IntervalTimer @Inject constructor(
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    private val tickInterval: Long = TICK_INTERVAL_MS
 ) {
-    companion object {
-        private const val TICK_INTERVAL_MS = 100L
-    }
+
+    private val _timerState = MutableStateFlow(TimerState.STOPPED)
+    val timerState: StateFlow<TimerState> = _timerState
 
     private val _currentTimeRemaining = MutableStateFlow(0L)
     val currentTimeRemaining: StateFlow<Long> = _currentTimeRemaining
 
-    private var countDownTimer: CountDownTimer? = null
+    private var _timer: CountDownTimer? = null
 
-    suspend fun start() = withContext(mainDispatcher) { countDownTimer?.start() }
+    private var currentIntervalNumber: Int = 0
 
-    suspend fun clearTimer() = withContext(mainDispatcher) {
-        countDownTimer?.cancel()
-        countDownTimer = null
+    private val _intervals: ArrayList<Long> = arrayListOf()
+
+    val isEmpty: Boolean
+        get() = _intervals.isEmpty()
+
+    val currentIntervalTotalTime: Long
+        get() = _intervals[currentIntervalNumber]
+
+    val isFinished: Boolean
+        get() = currentIntervalNumber >= _intervals.size
+
+    suspend fun start() = withContext(mainDispatcher) {
+        _timerState.value = TimerState.RUNNING
+        _timer?.start()
     }
 
-    suspend fun onTimerPaused() = withContext(mainDispatcher) {
-        clearTimer()
-        buildIntervalTimer(_currentTimeRemaining.value)
+    suspend fun stop() = withContext(mainDispatcher) {
+        _timerState.value = TimerState.STOPPED
+        currentIntervalNumber = 0
+        cancel()
+        build()
     }
 
-    suspend fun buildIntervalTimer(time: Long) = withContext(mainDispatcher) {
-        _currentTimeRemaining.value = time
-        countDownTimer = object : CountDownTimer(time, TICK_INTERVAL_MS) {
+    suspend fun pause() = withContext(mainDispatcher) {
+        _timerState.value = TimerState.PAUSED
+        cancel()
+        build(currentTimeRemaining.value)
+    }
+
+    suspend fun load(intervals: List<Long>) = withContext(mainDispatcher) {
+        _intervals.addAll(intervals)
+        build()
+    }
+
+    suspend fun next() = withContext(mainDispatcher) {
+        if (isFinished) stop()
+        else {
+            build()
+            start()
+        }
+    }
+
+    private fun cancel() {
+        _timer?.cancel()
+        _timer = null
+    }
+
+    private fun build(time: Long? = null) {
+        val intervalTime = time ?: _intervals[currentIntervalNumber]
+        _currentTimeRemaining.value = intervalTime
+
+        _timer = object : CountDownTimer(intervalTime, tickInterval) {
             override fun onTick(millisUntilFinished: Long) {
                 _currentTimeRemaining.value = millisUntilFinished
             }
 
             override fun onFinish() {
+                currentIntervalNumber++
                 _currentTimeRemaining.value = 0L
             }
         }
     }
+}
+
+enum class TimerState {
+    STOPPED,
+    PAUSED,
+    RUNNING
 }

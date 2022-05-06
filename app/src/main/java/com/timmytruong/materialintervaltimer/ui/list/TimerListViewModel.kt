@@ -7,6 +7,7 @@ import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toTimerItems
+import com.timmytruong.materialintervaltimer.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -34,5 +35,5 @@ class TimerListViewModel @Inject constructor(
 
     private fun Flow<List<Timer>>.toTimerItems() = map { it.toTimerItems(::onTimerClicked) }
 
-    private fun onTimerClicked(id: Int, favorited: Boolean) = navigateWith(directions.navToBottomSheet(id, favorited))
+    private fun onTimerClicked(id: Int, favorited: Boolean) = Event.Navigate(directions.navToBottomSheet(id, favorited)).fire()
 }

@@ -8,10 +8,7 @@ import com.timmytruong.materialintervaltimer.ui.base.adapter.BaseListAdapter
 import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
 import com.timmytruong.materialintervaltimer.ui.base.adapter.EmptyClicks
 import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
-import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
-import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
-import com.timmytruong.materialintervaltimer.utils.extensions.set
-import com.timmytruong.materialintervaltimer.utils.extensions.toDisplayTime
+import com.timmytruong.materialintervaltimer.utils.extensions.*
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
@@ -34,7 +31,7 @@ class IntervalItemAdapter @Inject constructor(
         val interval = list[position]
 
         with(holder.view) {
-            header.visibility = if (interval.hasHeaders) SHOW else HIDE
+            header.showIf(interval.hasHeaders)
 
             when (position) {
                 0 -> header.text = resources.string(R.string.currentIntervalTitle)
