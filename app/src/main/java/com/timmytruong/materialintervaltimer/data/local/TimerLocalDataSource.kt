@@ -2,7 +2,7 @@ package com.timmytruong.materialintervaltimer.data.local
 
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
-import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

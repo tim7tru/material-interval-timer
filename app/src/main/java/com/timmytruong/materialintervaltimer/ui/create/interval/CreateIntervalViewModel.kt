@@ -1,16 +1,20 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
 import com.timmytruong.materialintervaltimer.data.local.Store
+import com.timmytruong.materialintervaltimer.data.model.Interval
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.IntervalStore
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
-import com.timmytruong.materialintervaltimer.model.Interval
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.ui.create.interval.grid.IconGridItem
+import com.timmytruong.materialintervaltimer.ui.reusable.item.IconGridItem
+import com.timmytruong.materialintervaltimer.ui.reusable.item.toIconGridItem
 import com.timmytruong.materialintervaltimer.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +26,7 @@ class CreateIntervalViewModel @Inject constructor(
     private val iconIds: List<Int>
 ) : BaseViewModel() {
 
-    private val iconItems: List<IconGridItem> = iconIds.map { it.toListItem() }
+    private val iconItems: List<IconGridItem> = iconIds.map { it.toIconGridItem(::setIntervalIcon) }
 
     private val _enableIcon = MutableSharedFlow<Boolean>(replay = 1)
     val enableIcon: Flow<Boolean> = _enableIcon
@@ -68,10 +72,4 @@ class CreateIntervalViewModel @Inject constructor(
         iconItems.forEachIndexed { idx, icon -> icon.isSelected = predicate.invoke(idx) }
         _icons.emit(iconItems)
     }
-
-    private fun Int.toListItem() = IconGridItem(
-        id = this,
-        isSelected = false,
-        clicks = { setIntervalIcon(it) }
-    )
 }

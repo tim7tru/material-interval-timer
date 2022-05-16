@@ -3,22 +3,12 @@ package com.timmytruong.materialintervaltimer.ui.reusable.adapter
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerHorizontalBinding
 import com.timmytruong.materialintervaltimer.databinding.ItemTimerVerticalBinding
-import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.adapter.BaseListAdapter
-import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
-import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
+import com.timmytruong.materialintervaltimer.ui.reusable.item.TimerItem
 import com.timmytruong.materialintervaltimer.utils.extensions.toDisplayTime
+import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
-
-data class TimerItem(
-    val id: Int,
-    val time: Long? = null,
-    val title: String? = null,
-    val intervalCount: Int? = null,
-    override val clicks: Clicks
-) : ListItem()
 
 @FragmentScoped
 class VerticalTimerAdapter @Inject constructor(private val resources: ResourceProvider) :
@@ -54,14 +44,4 @@ class HorizontalTimerAdapter @Inject constructor(private val resources: Resource
             time.text = timer.time?.toDisplayTime(resources)
         }
     }
-}
-
-fun List<Timer>.toTimerItems(clicks: (Int, Boolean) -> Unit) = map { timer ->
-    TimerItem(
-        id = timer.id,
-        time = timer.totalTimeMs,
-        title = timer.title,
-        intervalCount = timer.intervalCount,
-        clicks = { clicks.invoke(timer.id, timer.isFavorited) }
-    )
 }
