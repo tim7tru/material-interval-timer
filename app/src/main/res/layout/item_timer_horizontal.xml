@@ -26,7 +26,7 @@
         <include
             layout="@layout/separator_line"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/material_xxsmall"
+            android:layout_height="@dimen/material_xxxsmall"
             android:layout_marginStart="@dimen/material_small"
             android:layout_marginTop="@dimen/material_xsmall"
             android:layout_marginEnd="@dimen/material_small" />

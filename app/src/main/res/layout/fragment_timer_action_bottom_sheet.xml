@@ -18,7 +18,11 @@
         app:iconTint="@color/colorSecondaryDark"
         app:rippleColor="@color/colorSecondaryAccent" />
 
-    <include layout="@layout/separator_line" />
+    <include
+        layout="@layout/separator_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/material_xxxsmall"
+        android:layout_marginHorizontal="@dimen/material"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/favorite"
@@ -27,7 +31,11 @@
         android:layout_height="match_parent"
         app:icon="@drawable/ic_grade_24px" />
 
-    <include layout="@layout/separator_line" />
+    <include
+        layout="@layout/separator_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/material_xxxsmall"
+        android:layout_marginHorizontal="@dimen/material" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/delete"
