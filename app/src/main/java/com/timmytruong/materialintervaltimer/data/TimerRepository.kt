@@ -1,6 +1,6 @@
 package com.timmytruong.materialintervaltimer.data
 
-import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import kotlinx.coroutines.flow.Flow
 
 interface TimerRepository {

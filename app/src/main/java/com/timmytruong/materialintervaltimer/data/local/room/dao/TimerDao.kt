@@ -1,7 +1,7 @@
 package com.timmytruong.materialintervaltimer.data.local.room.dao
 
 import androidx.room.*
-import com.timmytruong.materialintervaltimer.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import kotlinx.coroutines.flow.Flow
 
 @Dao

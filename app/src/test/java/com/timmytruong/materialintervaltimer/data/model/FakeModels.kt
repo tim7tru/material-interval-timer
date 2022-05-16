@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.model
+package com.timmytruong.materialintervaltimer.data.model
 
 internal const val TITLE = "title"
 internal const val DATE = "date"

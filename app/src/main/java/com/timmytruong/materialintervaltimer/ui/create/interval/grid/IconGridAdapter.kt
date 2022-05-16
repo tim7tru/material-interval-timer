@@ -1,11 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval.grid
 
-import androidx.annotation.DrawableRes
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.ItemIconBinding
 import com.timmytruong.materialintervaltimer.ui.base.adapter.BaseListAdapter
-import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
-import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
+import com.timmytruong.materialintervaltimer.ui.reusable.item.IconGridItem
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
@@ -28,10 +26,3 @@ class IconGridAdapter @Inject constructor(private val resources: ResourceProvide
         }
     }
 }
-
-data class IconGridItem(
-    @DrawableRes val id: Int,
-    var isSelected: Boolean,
-    override val clicks: Clicks
-): ListItem()
-

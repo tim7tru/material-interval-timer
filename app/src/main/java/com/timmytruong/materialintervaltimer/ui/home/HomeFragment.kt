@@ -9,8 +9,8 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentHomeBinding
 import com.timmytruong.materialintervaltimer.di.Favorites
 import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
-import com.timmytruong.materialintervaltimer.ui.list.TimerType
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.HorizontalTimerAdapter
+import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.show
 import com.timmytruong.materialintervaltimer.utils.extensions.showIf
@@ -66,7 +66,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
     private fun checkEmptyStates() = binding?.apply {
         favoritesContainer.showIf(!isFavoritesEmpty)
         recentsContainer.showIf(!isRecentsEmpty)
-        emptyState.showIf(isFavoritesEmpty && isRecentsEmpty)
     }
 
     override fun bindView() = binding?.apply {

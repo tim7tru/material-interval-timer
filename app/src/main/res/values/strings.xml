@@ -103,4 +103,6 @@
     <string name="exit">Exit</string>
 
     <string name="database_name">TimerDB</string>
+
+    <string name="preset_timers">Preset timers</string>
 </resources>
