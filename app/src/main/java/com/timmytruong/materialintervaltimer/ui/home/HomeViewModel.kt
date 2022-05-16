@@ -3,21 +3,16 @@ package com.timmytruong.materialintervaltimer.ui.home
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
-import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.ui.list.TimerType
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.TimerItem
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toTimerItems
+import com.timmytruong.materialintervaltimer.ui.reusable.item.TimerItem
+import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
+import com.timmytruong.materialintervaltimer.ui.reusable.item.toTimerItems
 import com.timmytruong.materialintervaltimer.utils.Event
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.emitAll
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,11 +34,11 @@ class HomeViewModel @Inject constructor(
     val favorites: Flow<List<TimerItem>> = _favorites
 
     fun fetchRecents() = startSuspending(ioDispatcher) {
-        _recents.emitAll(timerRepository.getRecentTimers().toTimerItems())
+        _recents.emitAll(timerRepository.getRecentTimers().toTimerItems(NUM_TIMERS_SHOWN, ::onTimerClicked))
     }
 
     fun fetchFavorites() = startSuspending(ioDispatcher) {
-        _favorites.emitAll(timerRepository.getFavoritedTimers().toTimerItems())
+        _favorites.emitAll(timerRepository.getFavoritedTimers().toTimerItems(NUM_TIMERS_SHOWN, ::onTimerClicked))
     }
 
     fun onAddClicked() = Event.Navigate(directions.toCreateTimer()).fire()
@@ -52,12 +47,5 @@ class HomeViewModel @Inject constructor(
 
     fun onRecentsSeeAllClicked() = Event.Navigate(directions.toTimerList(TimerType.RECENTS)).fire()
 
-    private fun Flow<List<Timer>>.toTimerItems() = map { it.trim().toTimerItems(::onTimerClicked) }
-
     private fun onTimerClicked(id: Int, favorited: Boolean) = Event.Navigate(directions.toBottomSheet(id, favorited)).fire()
-
-    private fun List<Timer>.trim() = when {
-        size < NUM_TIMERS_SHOWN -> subList(0, size)
-        else -> subList(0, NUM_TIMERS_SHOWN)
-    }
 }

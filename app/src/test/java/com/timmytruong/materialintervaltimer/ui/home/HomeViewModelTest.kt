@@ -3,13 +3,12 @@ package com.timmytruong.materialintervaltimer.ui.home
 import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.data.TimerRepository
-import com.timmytruong.materialintervaltimer.model.TIMER_ID
-import com.timmytruong.materialintervaltimer.model.TITLE
-import com.timmytruong.materialintervaltimer.model.TOTAL_TIME
-import com.timmytruong.materialintervaltimer.model.timer
+import com.timmytruong.materialintervaltimer.data.model.TIMER_ID
+import com.timmytruong.materialintervaltimer.data.model.TITLE
+import com.timmytruong.materialintervaltimer.data.model.TOTAL_TIME
+import com.timmytruong.materialintervaltimer.data.model.timer
 import com.timmytruong.materialintervaltimer.ui.list.TimerType
 import com.timmytruong.materialintervaltimer.utils.Event
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf

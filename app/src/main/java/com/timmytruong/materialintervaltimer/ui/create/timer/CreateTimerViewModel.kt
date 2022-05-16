@@ -2,18 +2,21 @@ package com.timmytruong.materialintervaltimer.ui.create.timer
 
 import com.timmytruong.materialintervaltimer.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.local.Store
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.di.TimerStore
-import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
+import com.timmytruong.materialintervaltimer.ui.reusable.item.IntervalItem
+import com.timmytruong.materialintervaltimer.ui.reusable.item.toListItem
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,10 +45,10 @@ class CreateTimerViewModel @Inject constructor(
     val isSaved: Flow<Boolean> = _isSaved
 
     fun fetchCurrentTimer(clearTimer: Boolean) = startSuspending(ioDispatcher) { scope ->
-        timerStore.observe.onEach {
-            _intervals.value = it.intervals.toListItems(hasHeaders = false)
-            _title.value = it.title
-            _sound.value = it.intervalSound.name
+        timerStore.observe.onEach { timer ->
+            _intervals.value = timer.intervals.map { it.toListItem(hasHeaders = false) }
+            _title.value = timer.title
+            _sound.value = timer.intervalSound.name
         }.launchIn(scope)
 
         when (clearTimer) {

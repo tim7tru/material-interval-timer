@@ -60,7 +60,7 @@ class CreateIntervalFragment : BaseFragment<CreateIntervalViewModel, FragmentCre
         next.setOnClickListener { viewModel.onNextClicked() }
         viewModel.onTitleChanged(titleInput.text.toString())
         bindNextButton(text = titleInput.text.toString())
-        grid.layoutManager = GridLayoutManager(ctx, 4)
+        grid.layoutManager = GridLayoutManager(requireContext(), 4)
         grid.adapter = gridAdapter
     }
 

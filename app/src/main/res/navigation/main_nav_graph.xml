@@ -126,7 +126,7 @@
         android:name="com.timmytruong.materialintervaltimer.ui.list.TimerListFragment">
         <argument
             android:name="type"
-            app:argType="com.timmytruong.materialintervaltimer.ui.list.TimerType"/>
+            app:argType="com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType"/>
         <action
             android:id="@+id/to_action_bottom_sheet"
             app:destination="@id/timerActionBottomSheet" />

@@ -1,12 +1,12 @@
 package com.timmytruong.materialintervaltimer.ui.timer
 
 import com.timmytruong.materialintervaltimer.data.TimerRepository
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
 import com.timmytruong.materialintervaltimer.di.MainDispatcher
-import com.timmytruong.materialintervaltimer.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItem
-import com.timmytruong.materialintervaltimer.ui.reusable.adapter.toListItems
+import com.timmytruong.materialintervaltimer.ui.reusable.item.IntervalItem
+import com.timmytruong.materialintervaltimer.ui.reusable.item.toListItem
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.IntervalTimer
 import com.timmytruong.materialintervaltimer.utils.TimerState
@@ -94,13 +94,13 @@ class TimerViewModel @Inject constructor(
     }
 
     private suspend fun addRepeatIntervals() {
-        intervalItems.addAll(timer.intervals.toListItems(hasHeaders = true))
+        intervalItems.addAll(timer.intervals.map { it.toListItem(hasHeaders = true) })
         _intervals.emit(intervalItems)
     }
 
     private fun updateIntervalBindings() = startSuspending(ioDispatcher) {
         intervalItems.clear()
-        intervalItems.addAll(timer.intervals.toListItems(hasHeaders = true))
+        intervalItems.addAll(timer.intervals.map { it.toListItem(hasHeaders = true) })
         _intervals.emit(intervalItems)
     }
 

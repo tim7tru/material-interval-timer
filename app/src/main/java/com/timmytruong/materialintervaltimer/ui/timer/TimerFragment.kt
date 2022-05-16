@@ -113,7 +113,7 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
             is Event.PlaySound -> MediaPlayer.create(requireContext(), event.id).start()
             is Event.Timer.Progress -> binding?.progress?.progress = event.progress.toInt()
             Event.Timer.CancelAnimation -> progressBar.cancelAnimation()
-            else -> { /** noop **/ }
+            else -> super.eventHandler(event)
         }
     }
 

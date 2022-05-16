@@ -9,7 +9,9 @@ interface BaseObserver<V: BaseViewModel> {
 
     val uiStateJobs: ArrayList<Job>
 
-    fun eventHandler(event: Event)
+    fun eventHandler(event: Event) {
+        throw Error("Unknown event left unhandled: $event")
+    }
 
     fun navigationHandler(action: NavDirections): Unit?
 }

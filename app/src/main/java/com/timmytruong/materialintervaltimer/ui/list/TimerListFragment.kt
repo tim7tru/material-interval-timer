@@ -1,14 +1,13 @@
 package com.timmytruong.materialintervaltimer.ui.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerListBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
+import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.VerticalTimerAdapter
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
@@ -81,9 +80,4 @@ class TimerListFragment : BaseFragment<TimerListViewModel, FragmentTimerListBind
 class TimerListDirctions @Inject constructor() {
     fun navToBottomSheet(id: Int, favorited: Boolean) =
         TimerListFragmentDirections.toActionBottomSheet(timerId = id, favorited = favorited)
-}
-
-enum class TimerType {
-    RECENTS,
-    FAVORITES
 }

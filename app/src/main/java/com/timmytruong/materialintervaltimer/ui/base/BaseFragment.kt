@@ -6,6 +6,7 @@ import android.view.*
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -27,10 +28,6 @@ import javax.inject.Inject
 abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
     private val bindingInflater: Inflater<Binding>
 ) : Fragment(), BaseObserver<ViewModel>, ProgressBar, BackPress {
-
-    protected val ctx: Context by lazy { requireContext() }
-
-    protected val v: View by lazy { requireView() }
 
     protected var menu: Menu? = null
 
@@ -104,14 +101,12 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
         super.onDestroyView()
     }
 
-    override fun onBackPressed() { /** No op **/ }
-
     override fun eventHandler(event: Event) {
         when (event) {
             is Event.ToastMessage -> popUpProvider.showToast(event.message)
             is Event.Navigate -> navigateWith(event.directions)
-            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
-            else -> { /** noop **/ }
+            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(requireView(), R.string.somethingWentWrong)
+            else -> super.eventHandler(event)
         }
     }
 
