@@ -125,7 +125,7 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
         uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted(block))
 
     private fun bindState() = uiStateJobs.add(lifecycleScope.launchWhenStarted {
-        viewModel.eventFlow.collect(::eventHandler)
+        viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
         bindState(this)
     })
 }
