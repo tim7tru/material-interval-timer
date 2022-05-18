@@ -51,93 +51,53 @@ class CreateIntervalTimeViewModelTest : BehaviorSpec({
         directions = directions
     )
 
-    Given("Create numbers is called") {
-        subject.numbers.test {
-            subject.createNumbers()
-            val list = expectItem()
-
-            Then("12 items are emitted") {
-                list.size shouldBe 12
-            }
-            Then("numbers 1 to 9 are set") {
-                for (num in 0 until 9) {
-                    list[num].number shouldBe num + 1
-                }
-            }
-            Then("10th item empty") {
-                list[9].number shouldBe null
-                list[9].clicks shouldBe EmptyClicks
-            }
-            Then("11th item is 0") {
-                list[10].number shouldBe 0
-            }
-            Then("12th item is empty") {
-                list[11].number shouldBe null
-                list[11].clicks shouldBe EmptyClicks
-            }
-        }
-    }
-
     Given("number item is clicked") {
-        subject.numbers.test {
-            subject.createNumbers()
-            val number = expectItem().first()
-
-            subject.time.test {
-
-                When("number is clicked once") {
-                    number.clicks.invoke(-1)
-                    Then("initial item is empty") { expectItem() shouldBe "" }
-                    Then("time is 1") {
-                        expectItem() shouldBe ""
-                        expectItem() shouldBe "1"
-                    }
+        subject.time.test {
+            When("number is added one") {
+                subject.addToTime(1)
+                Then("initial item is empty") { expectItem() shouldBe "" }
+                Then("time is 1") {
+                    expectItem() shouldBe ""
+                    expectItem() shouldBe "1"
                 }
+            }
 
-                When("number is clicked more than 6 times") {
-                    var time = ""
-                    Then("time does not exceed 6") {
-                        repeat(7) {
-                            expectItem() shouldBe time
-                            number.click()
-                            time += "1"
-                        }
+            When("number is clicked more than 6 times") {
+                var time = ""
+                Then("time does not exceed 6") {
+                    repeat(7) {
                         expectItem() shouldBe time
+                        subject.addToTime(1)
+                        time += "1"
                     }
+                    expectItem() shouldBe time
                 }
             }
         }
     }
 
     Given("Remove from time is called") {
-        subject.numbers.test {
-            subject.createNumbers()
-            val number = expectItem().first()
-
-            subject.time.test {
-                var time = ""
+        subject.time.test {
+            var time = ""
+            expectItem() shouldBe time
+            repeat(6) {
+                subject.addToTime(1)
+                time += "1"
                 expectItem() shouldBe time
-                repeat(6) {
-                    number.click()
-                    time += "1"
-                    expectItem() shouldBe time
-                }
-
-                When("remove is called once") {
-                    subject.removeFromTime()
-                    Then("one digit is removed from time") { expectItem() shouldBe "11111" }
-                }
-
-                When("remove is more than 6 times") {
-                    Then("time goes to empty") {
-                        repeat(6) {
-                            subject.removeFromTime()
-                            time = time.dropLast(1)
-                            expectItem() shouldBe time
-                        }
+            }
+            When("remove is called once") {
+                subject.removeFromTime()
+                Then("one digit is removed from time") { expectItem() shouldBe "11111" }
+            }
+            When("remove is more than 6 times") {
+                Then("time goes to empty") {
+                    repeat(6) {
                         subject.removeFromTime()
-                        assertThrows<TimeoutCancellationException> { expectItem() }
+                        time = time.dropLast(1)
+                        expectItem() shouldBe time
                     }
+                    subject.removeFromTime()
+                    assertThrows<TimeoutCancellationException> { expectItem() }
                 }
             }
         }

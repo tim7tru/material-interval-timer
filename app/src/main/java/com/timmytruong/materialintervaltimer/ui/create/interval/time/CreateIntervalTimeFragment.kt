@@ -1,11 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval.time
 
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
-import com.timmytruong.materialintervaltimer.ui.create.interval.time.grid.NumberGridAdapter
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.toInputTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,9 +20,6 @@ class CreateIntervalTimeFragment : BaseFragment<CreateIntervalTimeViewModel, Fra
     FragmentCreateIntervalTimeBinding::inflate
 ) {
 
-    @Inject
-    lateinit var numbersAdapter: NumberGridAdapter
-
     override val viewModel: CreateIntervalTimeViewModel by viewModels()
 
     override val hasBackPress: Boolean = false
@@ -38,18 +33,25 @@ class CreateIntervalTimeFragment : BaseFragment<CreateIntervalTimeViewModel, Fra
     override fun onStart() {
         super.onStart()
         updateProgressBar(PROGRESS_FULL)
-        viewModel.createNumbers()
     }
 
     override fun bindView() = binding?.apply {
         delete.setOnClickListener { viewModel.removeFromTime() }
         next.setOnClickListener { viewModel.addInterval() }
-        grid.adapter = numbersAdapter
+        one.setOnClickListener { viewModel.addToTime(1) }
+        two.setOnClickListener { viewModel.addToTime(2) }
+        three.setOnClickListener { viewModel.addToTime(3) }
+        four.setOnClickListener { viewModel.addToTime(4) }
+        five.setOnClickListener { viewModel.addToTime(5) }
+        six.setOnClickListener { viewModel.addToTime(6) }
+        seven.setOnClickListener { viewModel.addToTime(7) }
+        eight.setOnClickListener { viewModel.addToTime(8) }
+        nine.setOnClickListener { viewModel.addToTime(9) }
+        zero.setOnClickListener { viewModel.addToTime(0) }
     }
 
     override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
         viewModel.time.onEach { bindTime(it) }.launchIn(scope)
-        viewModel.numbers.onEach { numbersAdapter.addList(it) }.launchIn(scope)
     }
 
     private fun bindTime(input: String) = binding?.apply {

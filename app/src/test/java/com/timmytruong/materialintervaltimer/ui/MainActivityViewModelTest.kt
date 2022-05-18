@@ -3,7 +3,7 @@ package com.timmytruong.materialintervaltimer.ui
 import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.ui.home.HomeDirections
-import com.timmytruong.materialintervaltimer.ui.list.TimerType
+import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
