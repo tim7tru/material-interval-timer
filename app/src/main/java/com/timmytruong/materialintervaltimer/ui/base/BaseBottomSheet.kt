@@ -85,7 +85,7 @@ abstract class BaseBottomSheet<ViewModel : BaseViewModel, Binding : ViewBinding>
         uiStateJobs.add(lifecycleScope.launchWhenStarted(block))
 
     private fun bindState() = uiStateJobs.add(viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.eventFlow.collect(::eventHandler)
+        viewModel.eventFlow.onEach(::eventHandler).launchIn(this)
         bindState(this)
     })
 }
