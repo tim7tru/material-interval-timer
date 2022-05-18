@@ -7,7 +7,7 @@ import com.timmytruong.materialintervaltimer.data.model.TIMER_ID
 import com.timmytruong.materialintervaltimer.data.model.TITLE
 import com.timmytruong.materialintervaltimer.data.model.TOTAL_TIME
 import com.timmytruong.materialintervaltimer.data.model.timer
-import com.timmytruong.materialintervaltimer.ui.list.TimerType
+import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -140,7 +140,8 @@ class HomeViewModelTest : BehaviorSpec({
     Given("on see all favorites clicked") {
         subject.eventFlow.test {
             subject.onFavoritesSeeAllClicked()
-            Then("navigation action is fetched from screen") { verify(directions).toTimerList(TimerType.FAVORITES) }
+            Then("navigation action is fetched from screen") { verify(directions).toTimerList(
+                TimerType.FAVORITES) }
             Then("navigation action is fired") {
                 with(expectItem()) {
                     this.shouldBeInstanceOf<Event.Navigate>()

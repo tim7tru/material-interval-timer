@@ -48,15 +48,146 @@
         android:layout_marginTop="@dimen/material"
         android:layout_marginEnd="@dimen/material" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/grid"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="@dimen/material"
         android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
-        tools:listitem="@layout/item_number" />
+        android:layout_marginHorizontal="@dimen/material"
+        android:layout_marginVertical="@dimen/material"
+        android:layout_height="0dp">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/one"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/one"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/two"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/four"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/two"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/two"
+            app:layout_constraintStart_toEndOf="@id/one"
+            app:layout_constraintEnd_toStartOf="@id/three"
+            app:layout_constraintBottom_toTopOf="@id/five"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/three"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/three"
+            app:layout_constraintStart_toEndOf="@id/two"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/six"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/four"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/four"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/five"
+            app:layout_constraintTop_toBottomOf="@id/one"
+            app:layout_constraintBottom_toTopOf="@id/seven"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/five"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/five"
+            app:layout_constraintStart_toEndOf="@id/one"
+            app:layout_constraintEnd_toStartOf="@id/three"
+            app:layout_constraintTop_toBottomOf="@id/two"
+            app:layout_constraintBottom_toTopOf="@id/eight" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/six"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/six"
+            app:layout_constraintStart_toEndOf="@id/five"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/three"
+            app:layout_constraintBottom_toTopOf="@id/nine"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/seven"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/seven"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/eight"
+            app:layout_constraintTop_toBottomOf="@id/four"
+            app:layout_constraintBottom_toTopOf="@id/ignore_1"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/eight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/eight"
+            app:layout_constraintStart_toEndOf="@id/seven"
+            app:layout_constraintEnd_toStartOf="@id/nine"
+            app:layout_constraintTop_toBottomOf="@id/five"
+            app:layout_constraintBottom_toTopOf="@id/zero"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/nine"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/nine"
+            app:layout_constraintStart_toEndOf="@id/eight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/six"
+            app:layout_constraintBottom_toTopOf="@id/ignore_2"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/ignore_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/zero"
+            app:layout_constraintTop_toBottomOf="@id/seven"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/zero"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/zero"
+            app:layout_constraintStart_toEndOf="@id/ignore_1"
+            app:layout_constraintEnd_toStartOf="@id/ignore_2"
+            app:layout_constraintTop_toBottomOf="@id/eight"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/TimeButton"
+            android:id="@+id/ignore_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:enabled="false"
+            app:layout_constraintStart_toEndOf="@id/zero"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nine"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/next"
