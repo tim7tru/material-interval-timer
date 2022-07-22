@@ -12,7 +12,10 @@ data class TimerItem(
     val title: String? = null,
     val intervalCount: Int? = null,
     override val clicks: Clicks
-) : ListItem()
+) : ListItem() {
+
+    fun getDisplayTitle(fallback: String) = if (title.isNullOrEmpty()) fallback else title
+}
 
 fun Flow<List<Timer>>.toTimerItems(number: Int = 0, onTimerClicked: (Int, Boolean) -> Unit) = map { list ->
     if (number == 0) list.map { it.toTimerItem(onTimerClicked) }

@@ -26,7 +26,6 @@ class IntervalItemAdapter @Inject constructor(
             when (position) {
                 0 -> header.text = resources.string(R.string.currentIntervalTitle)
                 1 -> header.text = resources.string(R.string.upNextIntervalTitle)
-                else -> { /** No op **/ }
             }
 
             icon.set(interval.icon)
