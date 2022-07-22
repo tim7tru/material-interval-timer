@@ -66,6 +66,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
     private fun checkEmptyStates() = binding?.apply {
         favoritesContainer.showIf(!isFavoritesEmpty)
         recentsContainer.showIf(!isRecentsEmpty)
+        emptyState.showIf(isRecentsEmpty && isFavoritesEmpty)
     }
 
     override fun bindView() = binding?.apply {
