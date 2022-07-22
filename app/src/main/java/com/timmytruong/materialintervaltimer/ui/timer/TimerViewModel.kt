@@ -62,7 +62,7 @@ class TimerViewModel @Inject constructor(
 
     private suspend fun onTick(ms: Long) {
         if (shouldRepeatIntervals) addRepeatIntervals()
-        if (ms == 0L) onIntervalFinished()
+        if (ms == 0L && timerState.value != TimerState.STOPPED) onIntervalFinished()
     }
 
     fun handlePlay() = startSuspending(ioDispatcher) {
