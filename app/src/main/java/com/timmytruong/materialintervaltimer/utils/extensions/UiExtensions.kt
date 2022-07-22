@@ -46,7 +46,7 @@ fun ImageView.set(@DrawableRes id: Int?) = with(this) {
         setImageResource(id)
         return@with
     }
-    hide()
+    invisible()
 }
 
 fun TextInputEditText.onTextChanged(onTextChanged: (String) -> Unit) {
