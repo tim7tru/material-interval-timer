@@ -27,9 +27,6 @@ import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
 import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -98,6 +95,7 @@ class MainActivity :
     override fun eventHandler(event: Event) {
         when (event) {
             is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(binding.root, R.string.somethingWentWrong)
+            is Event.Navigate -> navigationHandler(event.directions)
             else -> { /** noop **/ }
         }
     }
