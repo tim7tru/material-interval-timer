@@ -3,11 +3,51 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.583" />
         <entry key="app/src/main/res/drawable/circular_progress.xml" value="0.23453947368421052" />
         <entry key="app/src/main/res/drawable/enabled_color_list.xml" value="0.3828947368421053" />
         <entry key="app/src/main/res/drawable/favourite_color.xml" value="0.3828947368421053" />
+        <entry key="app/src/main/res/drawable/ic_accessibility_24px.xml" value="0.583" />
         <entry key="app/src/main/res/drawable/ic_add_24px.xml" value="0.3828947368421053" />
+        <entry key="app/src/main/res/drawable/ic_all_inclusive_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_android_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_audiotrack_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_backspace_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_bookmarks_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_call_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_circle.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_delete_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_drag_indicator_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_eco_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_email_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_fitness_center.xml" value="0.583" />
         <entry key="app/src/main/res/drawable/ic_grade_24px.xml" value="0.27072368421052634" />
+        <entry key="app/src/main/res/drawable/ic_history_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_home_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_info_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_language_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_local_cafe_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_loop_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_pause_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_pause_circle_filled_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_play.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_remove_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_restaurant_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_round_arrow_forward_24.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_round_menu.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_save_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_settings_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_speed_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_stop_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_timer_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_volume_off_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/ic_volume_up_24px.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/navigation_drawer_item_color.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/navigation_drawer_ripple_color.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/rounded_background.xml" value="0.583" />
+        <entry key="app/src/main/res/drawable/rounded_selection.xml" value="0.583" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_create_interval.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_create_interval_time.xml" value="0.165" />
@@ -19,7 +59,7 @@
         <entry key="app/src/main/res/layout/fragment_timer_list.xml" value="0.1830963154492566" />
         <entry key="app/src/main/res/layout/horizontal_recycler.xml" value="0.274931693989071" />
         <entry key="app/src/main/res/layout/item_icon.xml" value="0.2568306010928962" />
-        <entry key="app/src/main/res/layout/item_interval.xml" value="0.30669398907103823" />
+        <entry key="app/src/main/res/layout/item_interval.xml" value="0.16751269035532995" />
         <entry key="app/src/main/res/layout/item_number.xml" value="0.3726973684210526" />
         <entry key="app/src/main/res/layout/item_preset_cards.xml" value="0.23105417853433877" />
         <entry key="app/src/main/res/layout/item_sound.xml" value="0.30669398907103823" />

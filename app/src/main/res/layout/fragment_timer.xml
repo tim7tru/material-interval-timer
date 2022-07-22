@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackgroundDark">
+        android:background="@color/color_background_dark">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/top_action_guideline"
@@ -50,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/ic_circle"
-            android:backgroundTint="@color/colorSecondaryDark"
+            android:backgroundTint="@color/color_secondary_dark"
             android:contentDescription="@string/timer_circle"
             android:elevation="10dp"
             android:scaleType="centerCrop"
@@ -61,7 +61,7 @@
             app:layout_constraintStart_toStartOf="@id/progress"
             app:layout_constraintTop_toBottomOf="@id/progress"
             app:layout_constraintTop_toTopOf="@id/progress"
-            app:tint="@color/colorSecondaryDark" />
+            app:tint="@color/color_secondary_dark" />
 
         <ImageView
             android:layout_width="0dp"
@@ -90,7 +90,7 @@
             app:layout_constraintStart_toStartOf="@id/progress"
             app:layout_constraintTop_toBottomOf="@id/progress"
             app:layout_constraintTop_toTopOf="@id/progress"
-            app:tint="@color/colorSecondaryDark" />
+            app:tint="@color/color_secondary_dark" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress"
@@ -107,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/quicksand_light"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/color_black"
             android:textSize="@dimen/material_text_xxxxlarge"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintEnd_toEndOf="@id/progress"
@@ -163,7 +163,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/material_large"
-            android:background="@color/colorBackgroundLight"
+            android:background="@color/color_background_light"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/stop">

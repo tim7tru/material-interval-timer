@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundDark"
+    android:background="@color/color_background_dark"
     android:orientation="vertical">
 
     <LinearLayout
@@ -194,6 +194,6 @@
         style="@style/ContinueFlowButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/addInterval"
+        android:text="@string/add_interval"
         app:layout_constraintBottom_toBottomOf="parent" />
 </LinearLayout>

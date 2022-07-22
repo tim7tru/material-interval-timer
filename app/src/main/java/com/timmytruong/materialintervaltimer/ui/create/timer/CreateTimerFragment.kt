@@ -83,8 +83,8 @@ class CreateTimerFragment : BaseFragment<CreateTimerViewModel, FragmentCreateTim
         if (isEmpty) recycler.hide() else recycler.show()
         next.isEnabled = !isEmpty
         next.setBackgroundColor(
-            if (isEmpty) resources.color(R.color.colorGray)
-            else resources.color(R.color.colorSecondaryDark)
+            if (isEmpty) resources.color(R.color.color_gray)
+            else resources.color(R.color.color_secondary_dark)
         )
     }
 }

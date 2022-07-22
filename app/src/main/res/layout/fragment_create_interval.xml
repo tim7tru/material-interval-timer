@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundDark">
+    android:background="@color/color_background_dark">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/material"
                 android:layout_marginTop="@dimen/material"
-                android:text="@string/intervalTitle" />
+                android:text="@string/interval_title" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/TimerEditTextLayout"
@@ -33,7 +33,7 @@
                 android:layout_marginStart="@dimen/material"
                 android:layout_marginTop="@dimen/material"
                 android:layout_marginEnd="@dimen/material"
-                android:hint="@string/nameThisInterval"
+                android:hint="@string/name_this_interval"
                 app:counterEnabled="true"
                 app:counterMaxLength="20"
                 app:helperText="@string/required"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/material"
                 android:layout_marginTop="@dimen/material_large"
-                android:text="@string/intervalIcon" />
+                android:text="@string/interval_icon" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/enable_container"
@@ -67,7 +67,7 @@
                     style="@style/TimerOptionsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/enableIcon"
+                    android:text="@string/enable_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

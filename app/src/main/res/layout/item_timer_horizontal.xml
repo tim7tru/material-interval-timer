@@ -67,7 +67,7 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/timer_click"
                 app:srcCompat="@drawable/ic_round_arrow_forward_24"
-                app:tint="@color/colorSecondaryDark" />
+                app:tint="@color/color_secondary_dark" />
 
         </LinearLayout>
     </LinearLayout>

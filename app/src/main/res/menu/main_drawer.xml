@@ -8,7 +8,7 @@
             android:icon="@drawable/ic_home_24px"
             android:title="@string/home"/>
         <item
-            android:id="@+id/createTimer"
+            android:id="@+id/create_timer"
             android:icon="@drawable/ic_timer_24px"
             android:title="@string/create_timer" />
         <item
@@ -29,7 +29,7 @@
             android:icon="@drawable/ic_settings_24px"
             android:title="@string/settings" />
         <item
-            android:id="@+id/aboutFragment"
+            android:id="@+id/about_fragment"
             android:icon="@drawable/ic_info_24px"
             android:title="@string/about"/>
     </group>

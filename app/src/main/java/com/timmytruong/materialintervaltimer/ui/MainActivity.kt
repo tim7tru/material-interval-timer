@@ -84,7 +84,7 @@ class MainActivity :
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.createTimer -> viewModel.navToCreateTimer()
+            R.id.create_timer -> viewModel.navToCreateTimer()
             R.id.recents -> viewModel.navToRecents()
             R.id.favorites -> viewModel.navToFavorites()
         }
@@ -94,7 +94,7 @@ class MainActivity :
 
     override fun eventHandler(event: Event) {
         when (event) {
-            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(binding.root, R.string.somethingWentWrong)
+            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(binding.root, R.string.something_went_wrong)
             is Event.Navigate -> navigationHandler(event.directions)
             else -> { /** noop **/ }
         }
@@ -152,7 +152,7 @@ class MainActivity :
 
     private fun setupAppBar() = with(binding) {
         setSupportActionBar(toolbar)
-        appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment), drawerLayout)
+        appBarConfig = AppBarConfiguration(setOf(R.id.home_fragment), drawerLayout)
         NavigationUI.setupActionBarWithNavController(this@MainActivity, navController, appBarConfig)
     }
 

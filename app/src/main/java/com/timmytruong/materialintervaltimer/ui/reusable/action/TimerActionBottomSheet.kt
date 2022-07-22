@@ -23,9 +23,9 @@ class TimerActionBottomSheet : BaseBottomSheet<TimerActionViewModel, FragmentTim
 
     private val args: TimerActionBottomSheetArgs by navArgs()
 
-    private val favoriteColor by lazy { resources.color(R.color.colorGolden) }
+    private val favoriteColor by lazy { resources.color(R.color.color_golden) }
 
-    private val unfavoriteColor by lazy { resources.color(R.color.colorSecondaryDark) }
+    private val unfavoriteColor by lazy { resources.color(R.color.color_secondary_dark) }
 
     override fun onStart() {
         super.onStart()
@@ -42,8 +42,8 @@ class TimerActionBottomSheet : BaseBottomSheet<TimerActionViewModel, FragmentTim
         viewModel.favorite.onEach {
             favorite.setTextColor(if (it) favoriteColor else unfavoriteColor)
             favorite.text = resources.string(if (it) R.string.unfavorite else R.string.favorite)
-            favorite.setRippleColorResource(if (it) R.color.colorGoldenAccent else R.color.colorSecondaryAccent)
-            favorite.setIconTintResource(if (it) R.color.colorGolden else R.color.colorSecondaryDark)
+            favorite.setRippleColorResource(if (it) R.color.color_golden_accent else R.color.color_secondary_accent)
+            favorite.setIconTintResource(if (it) R.color.color_golden else R.color.color_secondary_dark)
         }.launchIn(scope)
     }
 }

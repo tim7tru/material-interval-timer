@@ -7,9 +7,9 @@
             android:useLevel="true">
 
             <gradient
-                android:centerColor="@color/colorGray"
-                android:endColor="@color/colorGray"
-                android:startColor="@color/colorGray"
+                android:centerColor="@color/color_gray"
+                android:endColor="@color/color_gray"
+                android:startColor="@color/color_gray"
                 android:type="sweep" />
         </shape>
     </item>
@@ -35,9 +35,9 @@
                     android:toDegrees="360" />
 
                 <gradient
-                    android:centerColor="@color/colorSecondaryAccent"
-                    android:endColor="@color/colorSecondaryAccent"
-                    android:startColor="@color/colorSecondaryAccent"
+                    android:centerColor="@color/color_secondary_accent"
+                    android:endColor="@color/color_secondary_accent"
+                    android:startColor="@color/color_secondary_accent"
                     android:type="sweep" />
 
             </shape>

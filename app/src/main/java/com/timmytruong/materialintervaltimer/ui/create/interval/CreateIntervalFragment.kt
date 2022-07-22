@@ -78,8 +78,8 @@ class CreateIntervalFragment : BaseFragment<CreateIntervalViewModel, FragmentCre
     private fun bindNextButton(text: String) = binding?.apply {
         next.isEnabled = text.isNotBlank()
         next.setBackgroundColor(
-            if (text.isNotBlank()) resources.color(R.color.colorSecondaryDark)
-            else resources.color(R.color.colorGray)
+            if (text.isNotBlank()) resources.color(R.color.color_secondary_dark)
+            else resources.color(R.color.color_gray)
         )
     }
 

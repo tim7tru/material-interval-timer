@@ -32,8 +32,8 @@ class TimerListFragment : BaseFragment<TimerListViewModel, FragmentTimerListBind
     override val hasOptionsMenu: Boolean = false
 
     override val fragmentTitle: Int get() = when (args.type) {
-        TimerType.RECENTS -> R.string.recentTimers
-        TimerType.FAVORITES -> R.string.favoriteTimers
+        TimerType.RECENTS -> R.string.recent_timers
+        TimerType.FAVORITES -> R.string.favorite_timers
     }
 
     private val args: TimerListFragmentArgs by navArgs()
@@ -51,8 +51,8 @@ class TimerListFragment : BaseFragment<TimerListViewModel, FragmentTimerListBind
     override fun bindView() = binding?.apply {
         recycler.adapter = verticalTimerAdapter
         when (args.type) {
-            TimerType.RECENTS -> header.text = resources.string(R.string.recentTimers)
-            TimerType.FAVORITES -> header.text = resources.string(R.string.favoriteTimers)
+            TimerType.RECENTS -> header.text = resources.string(R.string.recent_timers)
+            TimerType.FAVORITES -> header.text = resources.string(R.string.favorite_timers)
         }
     }
 

@@ -10,7 +10,7 @@
         style="@style/HeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorSecondaryDark"
+        android:textColor="@color/color_secondary_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Current interval" />
@@ -37,11 +37,11 @@
                 android:layout_marginStart="@dimen/material"
                 android:layout_marginTop="@dimen/material_small"
                 android:layout_marginBottom="@dimen/material_small"
-                android:contentDescription="@string/intervalIconDesc"
+                android:contentDescription="@string/interval_icon_desc"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/colorSecondary"
+                app:tint="@color/color_secondary"
                 tools:src="@drawable/ic_accessibility_24px" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -77,7 +77,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/color_white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

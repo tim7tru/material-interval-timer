@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundDark">
+    android:background="@color/color_background_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/favoriteTimers" />
+                    android:text="@string/favorite_timers" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/favorites_see_all"
@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:text="@string/seeAll" />
+                    android:text="@string/see_all" />
             </LinearLayout>
 
             <include
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_weight="1"
-                    android:text="@string/recentTimers" />
+                    android:text="@string/recent_timers" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/recents_see_all"
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:text="@string/seeAll" />
+                    android:text="@string/see_all" />
 
             </LinearLayout>
 
@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/noTimersText"
+        android:text="@string/no_timers_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -7,23 +7,23 @@
         android:icon="@drawable/ic_grade_24px"
         android:title="@string/favorite"
         android:visible="false"
-        android:contentDescription="@string/favoriteDescription"
+        android:contentDescription="@string/favorite_description"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/soundOn"
+        android:id="@+id/sound_on"
         android:icon="@drawable/ic_volume_up_24px"
-        android:title="@string/soundOn"
+        android:title="@string/sound_on"
         android:visible="false"
-        android:contentDescription="@string/soundOnDescription"
+        android:contentDescription="@string/sound_on_description"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/soundOff"
+        android:id="@+id/sound_off"
         android:icon="@drawable/ic_volume_off_24px"
-        android:title="@string/soundOn"
+        android:title="@string/sound_off"
         android:visible="false"
-        android:contentDescription="@string/soundOffDescription"
+        android:contentDescription="@string/sound_off_description"
         app:showAsAction="ifRoom"/>
 
     <item

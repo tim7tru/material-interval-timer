@@ -31,8 +31,8 @@ interface PopUpProvider {
 class PopUpProviderImpl(private val resources: ResourceProvider): PopUpProvider {
     override fun showErrorSnackbar(view: View, @StringRes message: Int) {
         Snackbar.make(view, resources.string(message), Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(resources.color(R.color.colorRed))
-            .setTextColor(resources.color(R.color.colorWhite))
+            .setBackgroundTint(resources.color(R.color.color_red))
+            .setTextColor(resources.color(R.color.color_white))
             .show()
     }
 

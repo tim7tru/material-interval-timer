@@ -10,6 +10,6 @@
     android:layout_marginStart="@dimen/material"
     android:layout_marginEnd="@dimen/material"
     android:layout_marginBottom="@dimen/material_small"
-    android:contentDescription="@string/intervalIcon"
-    app:tint="@color/colorSecondaryDark"
+    android:contentDescription="@string/interval_icon"
+    app:tint="@color/color_secondary_dark"
     tools:src="@drawable/ic_play" />

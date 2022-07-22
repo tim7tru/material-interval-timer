@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBackgroundLight"
+    android:background="@color/color_background_light"
     android:orientation="vertical"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
@@ -22,5 +22,5 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/material"
         android:text="@string/close"
-        android:textColor="@color/colorSecondaryDark" />
+        android:textColor="@color/color_secondary_dark" />
 </LinearLayout>

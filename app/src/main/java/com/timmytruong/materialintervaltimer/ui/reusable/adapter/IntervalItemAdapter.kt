@@ -24,8 +24,8 @@ class IntervalItemAdapter @Inject constructor(
             header.showIf(interval.hasHeaders)
 
             when (position) {
-                0 -> header.text = resources.string(R.string.currentIntervalTitle)
-                1 -> header.text = resources.string(R.string.upNextIntervalTitle)
+                0 -> header.text = resources.string(R.string.current_interval_title)
+                1 -> header.text = resources.string(R.string.up_next_interval_title)
                 else -> { /** No op **/ }
             }
 
