@@ -41,12 +41,12 @@ fun View.showIf(condition: Boolean) { visibility = if (condition) SHOW else HIDE
 fun ViewGroup.showIf(condition: Boolean) { visibility = if (condition) SHOW else HIDE}
 
 fun ImageView.set(@DrawableRes id: Int?) = with(this) {
-    id?.let {
+    if (id != null) {
         show()
         setImageResource(id)
-        return@with
+    } else {
+        hide()
     }
-    invisible()
 }
 
 fun TextInputEditText.onTextChanged(onTextChanged: (String) -> Unit) {
