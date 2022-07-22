@@ -58,12 +58,12 @@ class CreateIntervalTimeFragment : BaseFragment<CreateIntervalTimeViewModel, Fra
         time.text = input.toInputTime(resources)
 
         time.setTextColor(
-            if (input.isNotEmpty()) resources.color(R.color.colorSecondary)
-            else resources.color(R.color.colorPrimaryDark)
+            if (input.isNotEmpty()) resources.color(R.color.color_secondary)
+            else resources.color(R.color.color_primary_dark)
         )
         next.setBackgroundColor(
-            if (input.isNotEmpty()) resources.color(R.color.colorSecondaryDark)
-            else resources.color(R.color.colorGray)
+            if (input.isNotEmpty()) resources.color(R.color.color_secondary_dark)
+            else resources.color(R.color.color_gray)
         )
 
         next.isClickable = input.isNotEmpty()

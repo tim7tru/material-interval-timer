@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundDark">
+    android:background="@color/color_background_dark">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/material"
                 android:layout_marginTop="@dimen/material"
-                android:text="@string/timerTitle" />
+                android:text="@string/timer_title" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fragmentCreateTimerTitleLayout"
@@ -32,14 +32,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/material"
-                android:hint="@string/nameThisTimer"
+                android:hint="@string/name_this_interval"
                 app:helperText="@string/optional">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorSecondaryDark" />
+                    android:textColor="@color/color_secondary_dark" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -63,7 +63,7 @@
                     android:layout_width="@dimen/material_touch_small"
                     android:layout_height="@dimen/material_touch_small"
                     android:contentDescription="@string/add"
-                    app:iconTint="@color/colorSecondaryDark"
+                    app:iconTint="@color/color_secondary_dark"
                     app:srcCompat="@drawable/ic_add_24px" />
 
             </LinearLayout>
@@ -75,8 +75,8 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/material"
                 android:fontFamily="@font/quicksand_light"
-                android:text="@string/noTasks"
-                android:textColor="@color/colorGray"
+                android:text="@string/no_tasks"
+                android:textColor="@color/color_gray"
                 android:textSize="@dimen/material_text_medium" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -144,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/material"
                     android:paddingBottom="@dimen/material"
-                    android:text="@string/intervalSound"
+                    android:text="@string/interval_sound"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -156,7 +156,7 @@
                     android:layout_marginEnd="@dimen/material_small"
                     android:fontFamily="@font/quicksand_bold"
                     android:text="@string/none"
-                    android:textColor="@color/colorSecondary"
+                    android:textColor="@color/color_secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -184,7 +184,7 @@
                     style="@style/TimerOptionsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/saveTimer"
+                    android:text="@string/save_timer"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -207,7 +207,7 @@
         style="@style/ContinueFlowButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorGray"
-        android:text="@string/startTimer"
+        android:backgroundTint="@color/color_gray"
+        android:text="@string/start_timer"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

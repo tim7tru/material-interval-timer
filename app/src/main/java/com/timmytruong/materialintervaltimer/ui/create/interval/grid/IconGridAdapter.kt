@@ -18,8 +18,8 @@ class IconGridAdapter @Inject constructor(private val resources: ResourceProvide
         val item = list[position]
         with(holder.view) {
             icon.setBackgroundColor(
-                if (item.isSelected) resources.color(R.color.colorSecondaryAccent)
-                else resources.color(R.color.colorBackgroundDark)
+                if (item.isSelected) resources.color(R.color.color_secondary_accent)
+                else resources.color(R.color.color_background_dark)
             )
             icon.setImageResource(item.id)
             icon.setOnClickListener { item.clicks.invoke(position) }

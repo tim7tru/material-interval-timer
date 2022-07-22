@@ -42,9 +42,9 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
 
     override val fragmentTitle: Int = R.string.timer
 
-    private val mutedButton: MenuItem? by lazy { menu?.findItem(R.id.soundOff) }
+    private val mutedButton: MenuItem? by lazy { menu?.findItem(R.id.sound_off) }
 
-    private val unmutedButton: MenuItem? by lazy { menu?.findItem(R.id.soundOn) }
+    private val unmutedButton: MenuItem? by lazy { menu?.findItem(R.id.sound_on) }
 
     private val favoriteButton: MenuItem? by lazy { menu?.findItem(R.id.favorite) }
 
@@ -55,8 +55,8 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
 
         popUpProvider.showDialog(
             activity = requireActivity(),
-            title = R.string.dialogCloseTimerTitle,
-            message = R.string.dialogCloseTimerMessage,
+            title = R.string.dialog_close_timer_title,
+            message = R.string.dialog_close_timer_message,
             positiveMessage = R.string.exit,
             negativeMessage = R.string.cancel,
             clicks = this@TimerFragment
@@ -118,9 +118,9 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
     }
 
     private fun soundToggled(id: Int) {
-        unmutedButton.showIf(id == R.id.soundOff)
-        mutedButton.showIf(id == R.id.soundOn)
-        viewModel.isMuted = id == R.id.soundOn
+        unmutedButton.showIf(id == R.id.sound_off)
+        mutedButton.showIf(id == R.id.sound_on)
+        viewModel.isMuted = id == R.id.sound_on
     }
 
     private fun bindTimerState(state: TimerState) = binding?.apply {

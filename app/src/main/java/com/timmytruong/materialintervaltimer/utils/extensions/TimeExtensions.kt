@@ -20,9 +20,9 @@ fun Long.toDisplayTime(res: ResourceProvider): String {
     val minsString = if (mins < 10) "0$mins" else "$mins"
 
     return when {
-        hours != 0 -> res.string(R.string.fullTimeFormat, hours, minsString, secsString)
-        hours == 0 && mins > 0 -> res.string(R.string.noHourTimeFormat, mins, secsString)
-        hours == 0 && mins == 0 -> res.string(R.string.secondsTimeFormat, secs)
+        hours != 0 -> res.string(R.string.full_time_format, hours, minsString, secsString)
+        hours == 0 && mins > 0 -> res.string(R.string.no_hour_time_format, mins, secsString)
+        hours == 0 && mins == 0 -> res.string(R.string.seconds_time_format, secs)
         else -> ""
     }
 }
@@ -30,7 +30,7 @@ fun Long.toDisplayTime(res: ResourceProvider): String {
 fun String.toInputTime(res: ResourceProvider): String {
     val temp = fillTime()
     return res.string(
-        R.string.inputTimeFormat,
+        R.string.input_time_format,
         temp.subSequence(0, 2),
         temp.subSequence(2, 4),
         temp.subSequence(4, 6)

@@ -3,24 +3,24 @@
 
     <string name="favorite">Favorite</string>
     <string name="unfavorite">Unfavorite</string>
-    <string name="favoriteDescription">Favorite this timer</string>
+    <string name="favorite_description">Favorite this timer</string>
 
-    <string name="soundOn">Sound On</string>
-    <string name="soundOnDescription">Sound On</string>
+    <string name="sound_on">Sound On</string>
+    <string name="sound_on_description">Sound On</string>
 
-    <string name="soundOff">Sound Off</string>
-    <string name="soundOffDescription">Sound Off</string>
+    <string name="sound_off">Sound Off</string>
+    <string name="sound_off_description">Sound Off</string>
 
-    <string name="tagAppBarFrag">AppBarFrag</string>
+    <string name="tag_app_bar_frag">AppBarFrag</string>
 
-    <string name="intervalIconDesc">Interval Icon</string>
+    <string name="interval_icon_desc">Interval Icon</string>
 
-    <string name="timerCardTotalTime">Total time:</string>
-    <string name="timerCardTotalCycles">Total cycles:</string>
-    <string name="timerCardTasksInCycle">Tasks in cycle:</string>
-    <string name="timerCardLastUsed">Last used:</string>
+    <string name="timer_card_total_time">Total time:</string>
+    <string name="timer_card_total_cycles">Total cycles:</string>
+    <string name="timer_card_tasks_in_cycle">Tasks in cycle:</string>
+    <string name="timer_card_last_used">Last used:</string>
     <string name="ellipses">…</string>
-    <string name="intervalIcon">Interval icon</string>
+    <string name="interval_icon">Interval icon</string>
     <string name="intervals">Intervals</string>
     <string name="interval">Interval</string>
     <string name="untitled">Untitled</string>
@@ -28,27 +28,27 @@
     <string name="create_timer">Create timer</string>
     <string name="options">Options</string>
     <string name="required">Required</string>
-    <string name="noTitleError">Please enter a title for your interval</string>
+    <string name="no_title_error">Please enter a title for your interval</string>
     <string name="close">Close</string>
     <string name="optional">Optional</string>
-    <string name="intervalSound">Interval sound</string>
+    <string name="interval_sound">Interval sound</string>
     <string name="title">Title</string>
-    <string name="nameThisTimer">Name this timer</string>
-    <string name="nameThisInterval">Name this interval</string>
+    <string name="name_this_timer">Name this timer</string>
+    <string name="name_this_interval">Name this interval</string>
     <string name="home">Home</string>
     <string name="timer">Timer</string>
     <string name="settings">Settings</string>
     <string name="favorites">Favorites</string>
 
-    <string name="enableIcon">Enable icon</string>
-    <string name="startTimer">Start timer</string>
+    <string name="enable_icon">Enable icon</string>
+    <string name="start_timer">Start timer</string>
     <string name="delete">Delete timer</string>
     <string name="next">Next</string>
 
-    <string name="noTasks">You currently have no intervals loaded.</string>
-    <string name="recentTimers">Recent timers</string>
-    <string name="favoriteTimers">Favorite timers</string>
-    <string name="noTimersText">You have no timers yet!</string>
+    <string name="no_tasks">You currently have no intervals loaded.</string>
+    <string name="recent_timers">Recent timers</string>
+    <string name="favorite_timers">Favorite timers</string>
+    <string name="no_timers_text">You have no timers yet!</string>
 
     <string name="recents">Recents</string>
     <string name="about">About</string>
@@ -56,16 +56,16 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 
-    <string name="addInterval">Add Interval</string>
-    <string name="emptyTime">00h 00m 00s</string>
-    <string name="inputTimeFormat">%1$sh %2$sm %3$ss</string>
-    <string name="fullTimeFormat">%1$s:%2$s:%3$s</string>
-    <string name="noHourTimeFormat">%1$s:%2$s</string>
-    <string name="secondsTimeFormat">%s</string>
+    <string name="add_interval">Add Interval</string>
+    <string name="empty_time">00h 00m 00s</string>
+    <string name="input_time_format">%1$sh %2$sm %3$ss</string>
+    <string name="full_time_format">%1$s:%2$s:%3$s</string>
+    <string name="no_hour_time_format">%1$s:%2$s</string>
+    <string name="seconds_time_format">%s</string>
     <string name="create_interval">Create interval</string>
     <string name="number_of_intervals_format">%s intervals</string>
     <string name="repeat">Repeat</string>
-    <string name="saveTimer">Save timer</string>
+    <string name="save_timer">Save timer</string>
     <string name="backspace">Backspace</string>
     <string name="play_pause">Play Pause</string>
     <string name="stop">Stop</string>
@@ -75,19 +75,19 @@
     <string name="timer_click">Timer Click</string>
     <string name="drag">Drag interval</string>
 
-    <string name="fitnessTag">Fitness</string>
-    <string name="personTag">Person</string>
-    <string name="speedTag">Speed</string>
-    <string name="cafeTag">Cafe</string>
-    <string name="androidTag">Android</string>
-    <string name="musicTag">Music</string>
-    <string name="worldTag">World</string>
-    <string name="emailTag">Email</string>
-    <string name="ecoTag">Eco</string>
-    <string name="phoneTag">Phone</string>
-    <string name="playTag">Play</string>
-    <string name="pauseTag">Pause</string>
-    <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
+    <string name="fitness_tag">Fitness</string>
+    <string name="person_tag">Person</string>
+    <string name="speed_tag">Speed</string>
+    <string name="cafe_tag">Cafe</string>
+    <string name="android_tag">Android</string>
+    <string name="music_tag">Music</string>
+    <string name="world_tag">World</string>
+    <string name="email_tag">Email</string>
+    <string name="eco_tag">Eco</string>
+    <string name="phone_tag">Phone</string>
+    <string name="play_tag">Play</string>
+    <string name="pause_tag">Pause</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
 
     <string name="one">1</string>
     <string name="two">2</string>
@@ -100,18 +100,18 @@
     <string name="nine">9</string>
     <string name="zero">0</string>
 
-    <string name="seeAll">See all</string>
+    <string name="see_all">See all</string>
     <string name="favorited">Timer favorited</string>
     <string name="unfavorited">Timer unfavorited</string>
     <string name="deleted">Timer deleted</string>
-    <string name="timerTitle">Timer title</string>
-    <string name="intervalTitle">Interval title</string>
-    <string name="currentIntervalTitle">Current interval</string>
-    <string name="upNextIntervalTitle">Up next</string>
-    <string name="emptyIntervalListError">Please add at least 1 interval</string>
-    <string name="somethingWentWrong">Something went wrong, please try again</string>
-    <string name="dialogCloseTimerTitle">Exit timer?</string>
-    <string name="dialogCloseTimerMessage">Are you sure you want to exit this timer?</string>
+    <string name="timer_title">Timer title</string>
+    <string name="interval_title">Interval title</string>
+    <string name="current_interval_title">Current interval</string>
+    <string name="up_next_interval_title">Up next</string>
+    <string name="empty_interval_list_error">Please add at least 1 interval</string>
+    <string name="something_went_wrong">Something went wrong, please try again</string>
+    <string name="dialog_close_timer_title">Exit timer?</string>
+    <string name="dialog_close_timer_message">Are you sure you want to exit this timer?</string>
     <string name="exit">Exit</string>
 
     <string name="database_name">TimerDB</string>

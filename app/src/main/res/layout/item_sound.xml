@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/material"
         tools:text="Sound"
-        tools:textColor="@color/colorGray" />
+        tools:textColor="@color/color_gray" />
 
     <include
         layout="@layout/separator_line"

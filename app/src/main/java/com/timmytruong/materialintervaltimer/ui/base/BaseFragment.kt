@@ -105,7 +105,7 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
         when (event) {
             is Event.ToastMessage -> popUpProvider.showToast(event.message)
             is Event.Navigate -> navigateWith(event.directions)
-            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(requireView(), R.string.somethingWentWrong)
+            is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(requireView(), R.string.something_went_wrong)
             else -> super.eventHandler(event)
         }
     }

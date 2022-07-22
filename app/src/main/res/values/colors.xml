@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#cfd8dc</color>
-    <color name="colorPrimaryDark">#9ea7aa</color>
-    <color name="colorAccent">#ffffff</color>
+    <color name="color_primary">#cfd8dc</color>
+    <color name="color_primary_dark">#9ea7aa</color>
+    <color name="color_accent">#ffffff</color>
 
-    <color name="colorSecondary">#00838f</color>
-    <color name="colorSecondaryDark">#005662</color>
-    <color name="colorSecondaryAccent">#4fb3bf</color>
+    <color name="color_secondary">#00838f</color>
+    <color name="color_secondary_dark">#005662</color>
+    <color name="color_secondary_accent">#4fb3bf</color>
 
-    <color name="colorBackgroundDark">#E1E2E1</color>
-    <color name="colorBackgroundLight">#F5F5F6</color>
-    <color name="colorGray">#444444</color>
-    <color name="colorWhite">#ffffff</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorBlue">#24a0ed</color>
-    <color name="colorGreen">#00AB66</color>
-    <color name="colorRed">#CF142B</color>
-    <color name="colorGolden">#FFB300</color>
-    <color name="colorGoldenAccent">#FFE099</color>
+    <color name="color_background_dark">#E1E2E1</color>
+    <color name="color_background_light">#F5F5F6</color>
+    <color name="color_gray">#444444</color>
+    <color name="color_white">#ffffff</color>
+    <color name="color_black">#000000</color>
+    <color name="color_blue">#24a0ed</color>
+    <color name="color_green">#00AB66</color>
+    <color name="color_red">#CF142B</color>
+    <color name="color_golden">#FFB300</color>
+    <color name="color_golden_accent">#FFE099</color>
 </resources>

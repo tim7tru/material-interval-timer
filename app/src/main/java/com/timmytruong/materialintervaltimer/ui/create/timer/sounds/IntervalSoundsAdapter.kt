@@ -12,9 +12,9 @@ import javax.inject.Inject
 class IntervalSoundsAdapter @Inject constructor(resources: ResourceProvider) :
     BaseListAdapter<ItemSoundBinding, IntervalSoundItem>(ItemSoundBinding::inflate) {
 
-    private val selectedColor = resources.color(R.color.colorSecondaryAccent)
+    private val selectedColor = resources.color(R.color.color_secondary_accent)
 
-    private val unselectedColor = resources.color(R.color.colorGray)
+    private val unselectedColor = resources.color(R.color.color_gray)
 
     override fun onBindViewHolder(holder: ViewHolder<ItemSoundBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
