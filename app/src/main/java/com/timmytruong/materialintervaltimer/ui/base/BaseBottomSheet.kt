@@ -70,6 +70,7 @@ abstract class BaseBottomSheet<ViewModel : BaseViewModel, Binding : ViewBinding>
     override fun eventHandler(event: Event) {
         when (event) {
             Event.BottomSheet.Dismiss -> close()
+            is Event.Navigate -> navigationHandler(event.directions)
             is Event.Error.Unknown ->  popUpProvider.showErrorSnackbar(v, R.string.somethingWentWrong)
             else -> {}
         }
