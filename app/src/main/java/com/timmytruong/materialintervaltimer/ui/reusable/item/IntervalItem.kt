@@ -8,7 +8,7 @@ import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
 
 data class IntervalItem(
     @DrawableRes val icon: Int? = null,
-    val title: String? = null,
+    val title: String,
     val time: Long? = null,
     val hasHeaders: Boolean = false,
     override val clicks: Clicks = EmptyClicks

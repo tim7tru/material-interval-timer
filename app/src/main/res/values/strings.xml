@@ -22,6 +22,8 @@
     <string name="ellipses">…</string>
     <string name="intervalIcon">Interval icon</string>
     <string name="intervals">Intervals</string>
+    <string name="interval">Interval</string>
+    <string name="untitled">Untitled</string>
     <string name="add">Add</string>
     <string name="create_timer">Create timer</string>
     <string name="options">Options</string>

@@ -14,12 +14,14 @@ import javax.inject.Inject
 class VerticalTimerAdapter @Inject constructor(private val resources: ResourceProvider) :
     BaseListAdapter<ItemTimerVerticalBinding, TimerItem>(ItemTimerVerticalBinding::inflate) {
 
+    private val fallbackTitle = resources.string(R.string.untitled)
+
     override fun onBindViewHolder(holder: ViewHolder<ItemTimerVerticalBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
         val timer = list[position]
         with(holder.view) {
             card.setOnClickListener { timer.click() }
-            title.text = timer.title
+            title.text = timer.getDisplayTitle(fallbackTitle)
             timer.intervalCount?.let {
                 count.text = resources.string(R.string.number_of_intervals_format, it)
             }
@@ -32,12 +34,14 @@ class VerticalTimerAdapter @Inject constructor(private val resources: ResourcePr
 class HorizontalTimerAdapter @Inject constructor(private val resources: ResourceProvider) :
     BaseListAdapter<ItemTimerHorizontalBinding, TimerItem>(ItemTimerHorizontalBinding::inflate) {
 
+    private val fallbackTitle = resources.string(R.string.untitled)
+
     override fun onBindViewHolder(holder: ViewHolder<ItemTimerHorizontalBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
         val timer = list[position]
         with(holder.view) {
             card.setOnClickListener { timer.click() }
-            title.text = timer.title
+            title.text = timer.getDisplayTitle(fallbackTitle)
             timer.intervalCount?.let {
                 count.text = resources.string(R.string.number_of_intervals_format, it)
             }
