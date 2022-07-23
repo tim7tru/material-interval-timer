@@ -32,6 +32,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
 
     @Inject @Favorites lateinit var favoritesAdapter: HorizontalTimerAdapter
 
+    @Inject lateinit var presetsGridAdapter: PresetsGridAdapter
+
     override val viewModel: HomeViewModel by viewModels()
 
     override val hasOptionsMenu: Boolean = true
@@ -60,6 +62,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
         super.onStart()
         viewModel.fetchRecents()
         viewModel.fetchFavorites()
+        viewModel.fetchPresets()
     }
 
     private fun checkEmptyStates() = binding?.apply {
@@ -72,6 +75,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
         addFab.setOnClickListener { viewModel.onAddClicked() }
         favoritesSeeAll.setOnClickListener { viewModel.onFavoritesSeeAllClicked() }
         recentsSeeAll.setOnClickListener { viewModel.onRecentsSeeAllClicked() }
+        presets.adapter = presetsGridAdapter
         recents.recycler.adapter = recentsAdapter
         favorites.recycler.adapter = favoritesAdapter
     }
@@ -79,6 +83,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
     override fun onDestroyView() {
         binding?.recents?.recycler?.adapter = null
         binding?.favorites?.recycler?.adapter = null
+        binding?.presets?.adapter = null
         super.onDestroyView()
     }
 
@@ -93,6 +98,10 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>(FragmentHo
             isFavoritesEmpty = list.isEmpty()
             checkEmptyStates()
             favoritesAdapter.addList(list)
+        }.launchIn(scope)
+
+        viewModel.presets.onEach { list ->
+            presetsGridAdapter.addList(list)
         }.launchIn(scope)
     }
 }

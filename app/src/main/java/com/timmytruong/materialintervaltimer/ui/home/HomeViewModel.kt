@@ -33,12 +33,19 @@ class HomeViewModel @Inject constructor(
     private val _favorites = MutableSharedFlow<List<TimerItem>>()
     val favorites: Flow<List<TimerItem>> = _favorites
 
+    private val _presets = MutableSharedFlow<List<TimerItem>>()
+    val presets: Flow<List<TimerItem>> = _presets
+
     fun fetchRecents() = startSuspending(ioDispatcher) {
         _recents.emitAll(timerRepository.getRecentTimers().toTimerItems(NUM_TIMERS_SHOWN, ::onTimerClicked))
     }
 
     fun fetchFavorites() = startSuspending(ioDispatcher) {
         _favorites.emitAll(timerRepository.getFavoritedTimers().toTimerItems(NUM_TIMERS_SHOWN, ::onTimerClicked))
+    }
+
+    fun fetchPresets() = startSuspending(ioDispatcher) {
+        _presets.emitAll(timerRepository.getPresetTimers().toTimerItems(number = 6, ::onTimerClicked))
     }
 
     fun onAddClicked() = Event.Navigate(directions.toCreateTimer()).fire()

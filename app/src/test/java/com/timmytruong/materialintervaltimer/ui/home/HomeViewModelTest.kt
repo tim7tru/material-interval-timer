@@ -80,6 +80,28 @@ class HomeViewModelTest : BehaviorSpec({
         }
     }
 
+    Given("fetch presets is called") {
+        whenever(timerRepository.getPresetTimers()).thenReturn(flowOf(listOf(timer(isFavorited = true))))
+        subject.presets.test {
+            subject.fetchPresets()
+
+            val item = expectItem()
+
+            Then("presets is fetched from repository") {
+                verify(timerRepository).getPresetTimers()
+            }
+            Then("verify there is only one timer") { item.size shouldBe 1 }
+            Then("timer is transformed correctly") {
+                with (item.first()) {
+                    id shouldBe TIMER_ID
+                    time shouldBe TOTAL_TIME
+                    title shouldBe TITLE
+                    intervalCount shouldBe 1
+                }
+            }
+        }
+    }
+
     Given("recent timer is clicked") {
         whenever(timerRepository.getRecentTimers()).thenReturn(flowOf(listOf(timer(isFavorited = false))))
         subject.recents.test {
