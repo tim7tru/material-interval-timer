@@ -4,7 +4,7 @@ import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.data.TimerRepository
 import com.timmytruong.data.local.Store
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.data.model.*
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider

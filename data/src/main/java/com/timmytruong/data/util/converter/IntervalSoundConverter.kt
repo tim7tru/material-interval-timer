@@ -2,7 +2,7 @@ package com.timmytruong.data.util.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.timmytruong.data.model.IntervalSound
+import com.timmytruong.materialintervaltimer.data.model.IntervalSound
 
 class IntervalSoundConverter {
     @TypeConverter

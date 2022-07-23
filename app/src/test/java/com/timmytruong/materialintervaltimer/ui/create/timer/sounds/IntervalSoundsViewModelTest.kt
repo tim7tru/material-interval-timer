@@ -3,7 +3,7 @@ package com.timmytruong.materialintervaltimer.ui.create.timer.sounds
 import app.cash.turbine.test
 import com.timmytruong.data.local.Store
 import com.timmytruong.materialintervaltimer.data.model.TIMER
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.data.model.sounds
 import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.style.BehaviorSpec

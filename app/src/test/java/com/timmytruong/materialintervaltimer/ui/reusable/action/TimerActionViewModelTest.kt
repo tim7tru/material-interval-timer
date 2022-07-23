@@ -6,6 +6,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.model.TIMER
 import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -22,12 +23,14 @@ class TimerActionViewModelTest : BehaviorSpec({
     val navAction = mock<NavDirections>()
     val timerRepository = mock<TimerRepository>()
     val directions = mock<TimerActionDirections> { on { toTimer(any()) } doReturn navAction }
+    val dateProvider = mock<DateProvider> { on { getCurrentDate(any()) } doReturn "date" }
 
     val subject = TimerActionViewModel(
         ioDispatcher = dispatcher,
         mainDispatcher = dispatcher,
         timerRepository = timerRepository,
-        directions = directions
+        directions = directions,
+        dateProvider = dateProvider
     )
 
     Given("fetch timer is called") {
@@ -76,7 +79,7 @@ class TimerActionViewModelTest : BehaviorSpec({
 
                 subject.onFavoriteClicked()
                 Then("timer repository is called") {
-                    verify(timerRepository).setFavorite(TIMER.id, favorite = true)
+                    verify(timerRepository).setFavorite(TIMER.id, favorite = true, currentDate = "date")
                 }
                 Then("events are fired") {
                     with(expectItem()) {
@@ -101,7 +104,7 @@ class TimerActionViewModelTest : BehaviorSpec({
                 subject.onFavoriteClicked()
 
                 Then("timer repository is called") {
-                    verify(timerRepository).setFavorite(TIMER.id, favorite = false)
+                    verify(timerRepository).setFavorite(TIMER.id, favorite = false, currentDate = "date")
                 }
                 Then("events are fired") {
                     with(expectItem()) {

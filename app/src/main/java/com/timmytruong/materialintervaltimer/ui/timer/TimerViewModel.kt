@@ -3,7 +3,7 @@ package com.timmytruong.materialintervaltimer.ui.timer
 import com.timmytruong.data.TimerRepository
 import com.timmytruong.data.di.BackgroundDispatcher
 import com.timmytruong.data.di.MainDispatcher
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.reusable.item.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.item.toListItem

@@ -1,4 +1,4 @@
-package com.timmytruong.data.model
+package com.timmytruong.materialintervaltimer.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

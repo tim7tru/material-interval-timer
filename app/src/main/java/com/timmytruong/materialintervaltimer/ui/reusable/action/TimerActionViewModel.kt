@@ -5,7 +5,7 @@ import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.data.TimerRepository
 import com.timmytruong.data.di.BackgroundDispatcher
 import com.timmytruong.data.di.MainDispatcher
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.hilt.android.lifecycle.HiltViewModel

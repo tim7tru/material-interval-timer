@@ -1,4 +1,4 @@
-package com.timmytruong.data.model
+package com.timmytruong.materialintervaltimer.data.model
 
 data class Interval(
     var name: String = "",

@@ -1,7 +1,7 @@
 package com.timmytruong.data.di.module
 
 import com.timmytruong.data.R
-import com.timmytruong.data.model.IntervalSound
+import com.timmytruong.materialintervaltimer.data.model.IntervalSound
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,7 +1,5 @@
 package com.timmytruong.materialintervaltimer.data.model
 
-import com.timmytruong.data.model.Timer
-
 internal const val TITLE = "title"
 internal const val DATE = "date"
 internal const val INTERVAL_COUNT = 1

@@ -1,8 +1,7 @@
 package com.timmytruong.data
 
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import kotlinx.coroutines.flow.Flow
-import java.util.*
 
 interface TimerRepository {
     suspend fun saveNewTimer(timer: Timer): Long

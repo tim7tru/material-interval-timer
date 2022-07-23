@@ -5,8 +5,8 @@ import com.timmytruong.data.di.IntervalStore
 import com.timmytruong.data.di.MainDispatcher
 import com.timmytruong.data.di.TimerStore
 import com.timmytruong.data.local.Store
-import com.timmytruong.data.model.Interval
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Interval
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.extensions.getTimeMs

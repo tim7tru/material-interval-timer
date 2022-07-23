@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     id("dagger.hilt.android.plugin")
 }
 
@@ -34,6 +35,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    allOpen {
+        annotation("com.timmytruong.data.util.Open")
     }
 }
 

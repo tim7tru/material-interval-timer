@@ -4,10 +4,10 @@ import androidx.navigation.NavDirections
 import app.cash.turbine.test
 import com.timmytruong.materialintervaltimer.assertThrows
 import com.timmytruong.data.local.Store
-import com.timmytruong.materialintervaltimer.data.model.INTERVAL
 import com.timmytruong.materialintervaltimer.data.model.Interval
+import com.timmytruong.materialintervaltimer.data.model.INTERVAL
 import com.timmytruong.materialintervaltimer.data.model.TIMER
-import com.timmytruong.data.model.Timer
+import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.utils.Event
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
