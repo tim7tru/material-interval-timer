@@ -82,7 +82,7 @@ class HomeViewModelTest : BehaviorSpec({
 
     Given("fetch presets is called") {
         whenever(timerRepository.getPresetTimers()).thenReturn(flowOf(listOf(timer(isFavorited = true))))
-        subject.favorites.test {
+        subject.presets.test {
             subject.fetchPresets()
 
             val item = expectItem()
