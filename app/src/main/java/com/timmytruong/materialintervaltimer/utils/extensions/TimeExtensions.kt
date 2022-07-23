@@ -1,36 +1,32 @@
 package com.timmytruong.materialintervaltimer.utils.extensions
 
-import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.constants.*
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlin.math.ceil
 
-fun Long.toDisplayTime(res: ResourceProvider): String {
+fun Long.toDisplayTime(isCountdown: Boolean = false): Triple<String?, String?, String> {
     var time = this
 
-    val hours = (time.toDouble() / MILLI_IN_HOUR_D).toInt()
+    val hours = (time / MILLI_IN_HOUR_L).toInt()
     time %= MILLI_IN_HOUR_L
 
-    val mins = (time.toDouble() / MILLI_IN_MINS_D).toInt()
+    val mins = (time / MILLI_IN_MINS_L).toInt()
     time %= MILLI_IN_MINS_L
 
-    val secs = ceil(time.toDouble() / MILLI_IN_SECS_D).toInt()
+    val secs = ceil((time / MILLI_IN_SECS_L).toDouble()).toInt()
 
-    val secsString = if (secs < 10) "0$secs" else "$secs"
-    val minsString = if (mins < 10) "0$mins" else "$mins"
+    val secsString = if (secs < 10 && !isCountdown) "0$secs" else "$secs"
+    val minsString = if (mins < 10 && !isCountdown) "0$mins" else "$mins"
 
     return when {
-        hours != 0 -> res.string(R.string.full_time_format, hours, minsString, secsString)
-        hours == 0 && mins > 0 -> res.string(R.string.no_hour_time_format, mins, secsString)
-        hours == 0 && mins == 0 -> res.string(R.string.seconds_time_format, secs)
-        else -> ""
+        hours != 0 -> Triple("$hours", minsString, secsString)
+        else-> Triple(null, minsString, secsString)
     }
 }
 
-fun String.toInputTime(res: ResourceProvider): String {
+fun String.toInputTime(format: String): String {
     val temp = fillTime()
-    return res.string(
-        R.string.input_time_format,
+    return String.format(
+        format,
         temp.subSequence(0, 2),
         temp.subSequence(2, 4),
         temp.subSequence(4, 6)

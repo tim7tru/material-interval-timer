@@ -85,7 +85,7 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
     }
 
     override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
-        viewModel.timeRemaining.onEach {  binding?.time?.text = it.toDisplayTime(resources) }.launchIn(scope)
+        viewModel.timeRemaining.onEach { bindTime(it) }.launchIn(scope)
         viewModel.timerState.onEach { bindTimerState(it) }.launchIn(scope)
         viewModel.intervals.onEach { intervalItemAdapter.addList(it) }.launchIn(scope)
     }
@@ -133,6 +133,18 @@ class TimerFragment : BaseFragment<TimerViewModel, FragmentTimerBinding>(
                 play.show()
                 pause.invisible()
             }
+        }
+    }
+
+    private fun bindTime(timeMs: Long) = binding?.apply {
+        timeMs.toDisplayTime(isCountdown = true).let {
+            val displayTime = when {
+                it.first == null && it.second == "0" -> root.context.getString(R.string.seconds_time_format, it.third)
+                it.first == null -> root.context.getString(R.string.no_hour_time_format, it.second, it.third)
+                else -> root.context.getString(R.string.full_time_format, it.first, it.second, it.third)
+            }
+
+            time.text = displayTime
         }
     }
 }

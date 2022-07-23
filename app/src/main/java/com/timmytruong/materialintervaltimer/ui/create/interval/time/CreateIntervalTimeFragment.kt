@@ -57,7 +57,7 @@ class CreateIntervalTimeFragment : BaseFragment<CreateIntervalTimeViewModel, Fra
     }
 
     private fun bindTime(input: String) = binding?.apply {
-        time.text = input.toInputTime(resources)
+        time.text = input.toInputTime(root.context.getString(R.string.input_time_format))
 
         time.setTextColor(
             if (input.isNotEmpty()) root.context.color(R.color.color_secondary)

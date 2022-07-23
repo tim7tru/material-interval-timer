@@ -61,7 +61,7 @@
     <string name="input_time_format">%1$sh %2$sm %3$ss</string>
     <string name="full_time_format">%1$s:%2$s:%3$s</string>
     <string name="no_hour_time_format">%1$s:%2$s</string>
-    <string name="seconds_time_format">0:%s</string>
+    <string name="seconds_time_format">%s</string>
     <string name="create_interval">Create interval</string>
     <string name="number_of_intervals_format">%s intervals</string>
     <string name="repeat">Repeat</string>
