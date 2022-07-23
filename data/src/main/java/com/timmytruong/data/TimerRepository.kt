@@ -15,4 +15,6 @@ interface TimerRepository {
     fun getRecentTimers(): Flow<List<Timer>>
 
     fun getFavoritedTimers(): Flow<List<Timer>>
+
+    fun getPresetTimers(): Flow<List<Timer>>
 }

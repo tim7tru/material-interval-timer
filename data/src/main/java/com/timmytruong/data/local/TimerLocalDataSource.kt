@@ -2,9 +2,11 @@ package com.timmytruong.data.local
 
 import com.timmytruong.data.TimerRepository
 import com.timmytruong.data.local.room.dao.TimerDao
+import com.timmytruong.materialintervaltimer.data.model.Interval
 import com.timmytruong.materialintervaltimer.data.model.Timer
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 
 class TimerLocalDataSource(
@@ -31,4 +33,22 @@ class TimerLocalDataSource(
     override fun getRecentTimers(): Flow<List<Timer>> = timerDao.getRecentTimers()
 
     override fun getFavoritedTimers(): Flow<List<Timer>> = timerDao.getFavoritedTimers()
+
+    override fun getPresetTimers(): Flow<List<Timer>> = flowOf(
+        mutableListOf<Timer>().apply {
+            repeat(6) {
+                add(
+                    Timer(
+                        title = "Preset #$it",
+                        intervals = arrayListOf(
+                            Interval(),
+                            Interval()
+                        ),
+                        intervalCount = it,
+                        totalTimeMs = 25000L
+                    )
+                )
+            }
+        }
+    )
 }

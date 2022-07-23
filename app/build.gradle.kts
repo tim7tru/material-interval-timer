@@ -1,11 +1,10 @@
-import org.jetbrains.kotlin.builtins.StandardNames.FqNames.annotation
-
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     id("androidx.navigation.safeargs.kotlin")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -93,6 +92,10 @@ dependencies {
 
     // Preferences
     implementation("androidx.preference:preference-ktx:1.2.0")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.40.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.40.1")
 
     // Hilt ViewModels
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
