@@ -25,8 +25,8 @@ object ProviderModule {
 
     @Singleton
     @Provides
-    fun providePopUpProvider(resourceProvider: ResourceProvider): PopUpProvider =
-        PopUpProviderImpl(resourceProvider)
+    fun providePopUpProvider(): PopUpProvider =
+        PopUpProviderImpl()
 
     @Singleton
     @Provides

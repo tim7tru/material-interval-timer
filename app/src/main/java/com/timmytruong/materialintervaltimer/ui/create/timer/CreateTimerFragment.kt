@@ -8,6 +8,7 @@ import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.reusable.item.IntervalItem
 import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.materialintervaltimer.utils.extensions.color
 import com.timmytruong.materialintervaltimer.utils.extensions.hide
 import com.timmytruong.materialintervaltimer.utils.extensions.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,8 +84,8 @@ class CreateTimerFragment : BaseFragment<CreateTimerViewModel, FragmentCreateTim
         if (isEmpty) recycler.hide() else recycler.show()
         next.isEnabled = !isEmpty
         next.setBackgroundColor(
-            if (isEmpty) resources.color(R.color.color_gray)
-            else resources.color(R.color.color_secondary_dark)
+            if (isEmpty) root.context.color(R.color.color_gray)
+            else root.context.color(R.color.color_secondary_dark)
         )
     }
 }

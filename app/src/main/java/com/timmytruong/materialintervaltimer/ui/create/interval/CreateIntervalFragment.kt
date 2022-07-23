@@ -1,5 +1,6 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,6 +11,7 @@ import com.timmytruong.materialintervaltimer.ui.create.interval.grid.IconGridAda
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
 import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
+import com.timmytruong.materialintervaltimer.utils.extensions.color
 import com.timmytruong.materialintervaltimer.utils.extensions.onTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityRetainedScoped
@@ -78,8 +80,8 @@ class CreateIntervalFragment : BaseFragment<CreateIntervalViewModel, FragmentCre
     private fun bindNextButton(text: String) = binding?.apply {
         next.isEnabled = text.isNotBlank()
         next.setBackgroundColor(
-            if (text.isNotBlank()) resources.color(R.color.color_secondary_dark)
-            else resources.color(R.color.color_gray)
+            if (text.isNotBlank()) root.context.color(R.color.color_secondary_dark)
+            else  root.context.color(R.color.color_gray)
         )
     }
 

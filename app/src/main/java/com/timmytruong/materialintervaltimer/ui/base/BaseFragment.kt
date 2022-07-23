@@ -6,7 +6,6 @@ import android.view.*
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -17,10 +16,8 @@ import com.timmytruong.materialintervaltimer.ui.reusable.ProgressBar
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.extensions.Inflater
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -40,8 +37,6 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
     abstract val hasOptionsMenu: Boolean
 
     @Inject lateinit var popUpProvider: PopUpProvider
-
-    @Inject lateinit var resources: ResourceProvider
 
     abstract fun bindView(): Binding?
 
@@ -69,7 +64,7 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity() as MainActivity).supportActionBar?.title = resources.string(fragmentTitle)
+        (requireActivity() as MainActivity).supportActionBar?.title = requireContext().getString(fragmentTitle)
         binding = bindingInflater.invoke(inflater, container, false)
         return requireNotNull(binding?.root)
     }
@@ -103,7 +98,7 @@ abstract class BaseFragment<ViewModel : BaseViewModel, Binding: ViewBinding>(
 
     override fun eventHandler(event: Event) {
         when (event) {
-            is Event.ToastMessage -> popUpProvider.showToast(event.message)
+            is Event.ToastMessage -> popUpProvider.showToast(requireContext(), event.message)
             is Event.Navigate -> navigateWith(event.directions)
             is Event.Error.Unknown -> popUpProvider.showErrorSnackbar(requireView(), R.string.something_went_wrong)
             else -> super.eventHandler(event)

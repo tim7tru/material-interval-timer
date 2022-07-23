@@ -51,8 +51,8 @@ class TimerListFragment : BaseFragment<TimerListViewModel, FragmentTimerListBind
     override fun bindView() = binding?.apply {
         recycler.adapter = verticalTimerAdapter
         when (args.type) {
-            TimerType.RECENTS -> header.text = resources.string(R.string.recent_timers)
-            TimerType.FAVORITES -> header.text = resources.string(R.string.favorite_timers)
+            TimerType.RECENTS -> header.text = root.context.getString(R.string.recent_timers)
+            TimerType.FAVORITES -> header.text = root.context.getString(R.string.favorite_timers)
         }
     }
 

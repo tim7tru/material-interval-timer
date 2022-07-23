@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.data.local.room.TimerDatabase
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,10 +18,9 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideRoomDatabase(
-        @ApplicationContext context: Context,
-        resources: ResourceProvider
+        @ApplicationContext context: Context
     ): TimerDatabase =
-        Room.databaseBuilder(context, TimerDatabase::class.java, resources.string(R.string.database_name)).build()
+        Room.databaseBuilder(context, TimerDatabase::class.java, context.getString(R.string.database_name)).build()
 
     @Singleton
     @Provides

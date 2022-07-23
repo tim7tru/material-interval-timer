@@ -1,10 +1,12 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval.time
 
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.materialintervaltimer.utils.extensions.color
 import com.timmytruong.materialintervaltimer.utils.extensions.toInputTime
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityRetainedScoped
@@ -58,17 +60,17 @@ class CreateIntervalTimeFragment : BaseFragment<CreateIntervalTimeViewModel, Fra
         time.text = input.toInputTime(resources)
 
         time.setTextColor(
-            if (input.isNotEmpty()) resources.color(R.color.color_secondary)
-            else resources.color(R.color.color_primary_dark)
+            if (input.isNotEmpty()) root.context.color(R.color.color_secondary)
+            else root.context.color(R.color.color_primary_dark)
         )
         next.setBackgroundColor(
-            if (input.isNotEmpty()) resources.color(R.color.color_secondary_dark)
-            else resources.color(R.color.color_gray)
+            if (input.isNotEmpty()) root.context.color(R.color.color_secondary_dark)
+            else root.context.color(R.color.color_gray)
         )
 
         next.isClickable = input.isNotEmpty()
         delete.isEnabled = input.isNotEmpty()
-        delete.imageTintList = resources.colorList(R.color.enabled_color_list)
+        delete.imageTintList = ContextCompat.getColorStateList(root.context, R.color.enabled_color_list)
     }
 }
 

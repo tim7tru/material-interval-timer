@@ -24,7 +24,6 @@ import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.extensions.hideKeyboard
 import com.timmytruong.materialintervaltimer.utils.extensions.showIf
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import javax.inject.Inject
@@ -40,9 +39,6 @@ class MainActivity :
     @Inject
     @HorizontalProgress
     lateinit var progressAnimation: ProgressAnimation
-
-    @Inject
-    lateinit var resources: ResourceProvider
 
     @Inject lateinit var popUpProvider: PopUpProvider
 

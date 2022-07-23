@@ -14,10 +14,8 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.extensions.Inflater
 import com.timmytruong.materialintervaltimer.utils.providers.PopUpProvider
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -35,8 +33,6 @@ abstract class BaseBottomSheet<ViewModel : BaseViewModel, Binding : ViewBinding>
     protected val v: View by lazy { requireView() }
 
     @Inject lateinit var popUpProvider: PopUpProvider
-
-    @Inject lateinit var resources: ResourceProvider
 
     abstract fun bindView(): Binding?
 
