@@ -1,9 +1,9 @@
 package com.timmytruong.materialintervaltimer.ui.timer
 
-import com.timmytruong.materialintervaltimer.data.TimerRepository
-import com.timmytruong.materialintervaltimer.data.model.Timer
-import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.data.TimerRepository
+import com.timmytruong.data.di.BackgroundDispatcher
+import com.timmytruong.data.di.MainDispatcher
+import com.timmytruong.data.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.reusable.item.IntervalItem
 import com.timmytruong.materialintervaltimer.ui.reusable.item.toListItem
@@ -11,6 +11,7 @@ import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.IntervalTimer
 import com.timmytruong.materialintervaltimer.utils.TimerState
 import com.timmytruong.materialintervaltimer.utils.constants.MILLI_IN_SECS_L
+import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -22,7 +23,8 @@ class TimerViewModel @Inject constructor(
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val intervalTimer: IntervalTimer,
     private val timerLocalDataSource: TimerRepository,
-    private val directions: TimerDirections
+    private val directions: TimerDirections,
+    private val dateProvider: DateProvider
 ) : BaseViewModel() {
 
     private val _intervals = MutableSharedFlow<List<IntervalItem>>()
@@ -85,7 +87,11 @@ class TimerViewModel @Inject constructor(
     }
 
     fun setShouldSave() = startSuspending(ioDispatcher) {
-        timerLocalDataSource.setFavorite(id = timer.id, favorite = !timer.isFavorited)
+        timerLocalDataSource.setFavorite(
+            id = timer.id,
+            favorite = !timer.isFavorited,
+            currentDate = dateProvider.getCurrentDate()
+        )
     }
 
     fun exit() {

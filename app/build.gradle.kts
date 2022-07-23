@@ -52,6 +52,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    implementation(project(":data"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
@@ -81,12 +82,6 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.percentlayout:percentlayout:1.0.0")
     implementation("androidx.browser:browser:1.4.0")
-
-    // Room
-    implementation("com.google.code.gson:gson:2.9.0")
-    implementation("androidx.room:room-runtime:2.5.0-alpha02")
-    implementation("androidx.room:room-ktx:2.5.0-alpha02")
-    kapt("androidx.room:room-compiler:2.5.0-alpha02")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")

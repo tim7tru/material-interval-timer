@@ -9,7 +9,7 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentTimerListBindin
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.VerticalTimerAdapter
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
 import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
 import dagger.hilt.android.AndroidEntryPoint

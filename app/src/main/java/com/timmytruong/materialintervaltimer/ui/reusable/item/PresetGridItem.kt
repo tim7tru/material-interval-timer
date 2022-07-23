@@ -1,6 +1,6 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.item
 
-import com.timmytruong.materialintervaltimer.data.model.Timer
+import com.timmytruong.data.model.Timer
 import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
 import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem
 

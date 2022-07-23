@@ -1,7 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.item
 
 import androidx.annotation.DrawableRes
-import com.timmytruong.materialintervaltimer.data.model.Interval
+import com.timmytruong.data.model.Interval
 import com.timmytruong.materialintervaltimer.ui.base.adapter.Clicks
 import com.timmytruong.materialintervaltimer.ui.base.adapter.EmptyClicks
 import com.timmytruong.materialintervaltimer.ui.base.adapter.ListItem

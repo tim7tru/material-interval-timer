@@ -2,11 +2,12 @@ package com.timmytruong.materialintervaltimer.ui.reusable.action
 
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
-import com.timmytruong.materialintervaltimer.data.TimerRepository
-import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
-import com.timmytruong.materialintervaltimer.data.model.Timer
+import com.timmytruong.data.TimerRepository
+import com.timmytruong.data.di.BackgroundDispatcher
+import com.timmytruong.data.di.MainDispatcher
+import com.timmytruong.data.model.Timer
 import com.timmytruong.materialintervaltimer.utils.Event
+import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +19,8 @@ class TimerActionViewModel @Inject constructor(
     @BackgroundDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher override val mainDispatcher: CoroutineDispatcher,
     private val timerRepository: TimerRepository,
-    private val directions: TimerActionDirections
+    private val directions: TimerActionDirections,
+    private val dateProvider: DateProvider
 ) : BaseViewModel() {
 
     private lateinit var timer: Timer
@@ -32,7 +34,11 @@ class TimerActionViewModel @Inject constructor(
     }
 
     fun onFavoriteClicked() = startSuspending(ioDispatcher) {
-        timerRepository.setFavorite(id = timer.id, favorite = !timer.isFavorited)
+        timerRepository.setFavorite(
+            id = timer.id,
+            favorite = !timer.isFavorited,
+            currentDate = dateProvider.getCurrentDate()
+        )
         Event.ToastMessage(
             when (!timer.isFavorited) {
                 true -> R.string.favorited

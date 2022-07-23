@@ -11,7 +11,7 @@ import com.timmytruong.materialintervaltimer.di.Recents
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.HorizontalTimerAdapter
 import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.show
 import com.timmytruong.materialintervaltimer.utils.extensions.showIf
 import dagger.Module

@@ -1,8 +1,8 @@
 package com.timmytruong.materialintervaltimer.ui.list
 
-import com.timmytruong.materialintervaltimer.data.TimerRepository
-import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.data.TimerRepository
+import com.timmytruong.data.di.BackgroundDispatcher
+import com.timmytruong.data.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.reusable.item.TimerItem
 import com.timmytruong.materialintervaltimer.ui.reusable.item.toTimerItems

@@ -2,7 +2,7 @@ package com.timmytruong.materialintervaltimer.ui.list
 
 import androidx.navigation.NavDirections
 import app.cash.turbine.test
-import com.timmytruong.materialintervaltimer.data.TimerRepository
+import com.timmytruong.data.TimerRepository
 import com.timmytruong.materialintervaltimer.data.model.*
 import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.utils.Event

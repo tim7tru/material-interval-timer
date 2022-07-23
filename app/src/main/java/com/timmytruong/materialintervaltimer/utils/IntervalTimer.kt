@@ -1,7 +1,7 @@
 package com.timmytruong.materialintervaltimer.utils
 
 import android.os.CountDownTimer
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.data.di.MainDispatcher
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,6 +1,6 @@
 package com.timmytruong.materialintervaltimer.ui
 
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.data.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.ui.base.BaseViewModel
 import com.timmytruong.materialintervaltimer.ui.home.HomeDirections
 import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType

@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerBinding
 import com.timmytruong.materialintervaltimer.di.CircularProgress
