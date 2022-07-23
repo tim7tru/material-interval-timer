@@ -1,12 +1,13 @@
 package com.timmytruong.materialintervaltimer.ui.reusable.action
 
+import android.content.Context
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerActionBottomSheetBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseBottomSheet
-import com.timmytruong.materialintervaltimer.utils.Event
 import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.materialintervaltimer.utils.extensions.color
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.CoroutineScope
@@ -23,10 +24,6 @@ class TimerActionBottomSheet : BaseBottomSheet<TimerActionViewModel, FragmentTim
 
     private val args: TimerActionBottomSheetArgs by navArgs()
 
-    private val favoriteColor by lazy { resources.color(R.color.color_golden) }
-
-    private val unfavoriteColor by lazy { resources.color(R.color.color_secondary_dark) }
-
     override fun onStart() {
         super.onStart()
         viewModel.fetchTimer(args.timerId)
@@ -40,11 +37,24 @@ class TimerActionBottomSheet : BaseBottomSheet<TimerActionViewModel, FragmentTim
 
     override suspend fun bindState(scope: CoroutineScope) = binding?.apply {
         viewModel.favorite.onEach {
-            favorite.setTextColor(if (it) favoriteColor else unfavoriteColor)
-            favorite.text = resources.string(if (it) R.string.unfavorite else R.string.favorite)
+            val textColor = root.context.getTextColor(isFavorite = it)
+            favorite.setTextColor(textColor)
+            favorite.text = root.context.getText(isFavorite = it)
             favorite.setRippleColorResource(if (it) R.color.color_golden_accent else R.color.color_secondary_accent)
             favorite.setIconTintResource(if (it) R.color.color_golden else R.color.color_secondary_dark)
         }.launchIn(scope)
+    }
+
+    private fun Context.getTextColor(isFavorite: Boolean) = if (isFavorite) {
+        color(R.color.color_golden)
+    } else {
+        color(R.color.color_secondary_dark)
+    }
+
+    private fun Context.getText(isFavorite: Boolean) = if (isFavorite) {
+        getString(R.string.unfavorite)
+    } else {
+        getString(R.string.favorite)
     }
 }
 

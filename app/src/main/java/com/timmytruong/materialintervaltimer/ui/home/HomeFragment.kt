@@ -14,7 +14,6 @@ import com.timmytruong.materialintervaltimer.ui.reusable.type.TimerType
 import com.timmytruong.materialintervaltimer.utils.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.show
 import com.timmytruong.materialintervaltimer.utils.extensions.showIf
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -116,10 +115,10 @@ class HomeFragmentModule {
 
     @Recents
     @Provides
-    fun provideRecentsAdapter(resources: ResourceProvider) = HorizontalTimerAdapter(resources)
+    fun provideRecentsAdapter() = HorizontalTimerAdapter()
 
     @Favorites
     @Provides
-    fun providefavoritesAdapter(resources: ResourceProvider) = HorizontalTimerAdapter(resources)
+    fun providefavoritesAdapter() = HorizontalTimerAdapter()
 }
 

@@ -1,6 +1,7 @@
 package com.timmytruong.materialintervaltimer.utils.providers
 
 import android.app.Activity
+import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.annotation.StringRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.materialintervaltimer.utils.extensions.color
 
 interface PopUpProvider {
     fun showErrorSnackbar(view: View, @StringRes message: Int)
@@ -23,16 +25,18 @@ interface PopUpProvider {
     ): AlertDialog
 
     fun showToast(
+        context: Context,
         @StringRes message: Int,
         short: Boolean = true
     )
 }
 
-class PopUpProviderImpl(private val resources: ResourceProvider): PopUpProvider {
+class PopUpProviderImpl: PopUpProvider {
     override fun showErrorSnackbar(view: View, @StringRes message: Int) {
-        Snackbar.make(view, resources.string(message), Snackbar.LENGTH_SHORT)
-            .setBackgroundTint(resources.color(R.color.color_red))
-            .setTextColor(resources.color(R.color.color_white))
+        val context = view.context
+        Snackbar.make(view, context.getString(message), Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(context.color(R.color.color_red))
+            .setTextColor(context.color(R.color.color_white))
             .show()
     }
 
@@ -44,16 +48,16 @@ class PopUpProviderImpl(private val resources: ResourceProvider): PopUpProvider 
         positiveMessage: Int,
         clicks: DialogInterface.OnClickListener
     ): AlertDialog = MaterialAlertDialogBuilder(activity)
-        .setTitle(resources.string(title))
-        .setMessage(resources.string(message))
-        .setNegativeButton(resources.string(negativeMessage), clicks)
-        .setPositiveButton(resources.string(positiveMessage), clicks)
+        .setTitle(activity.getString(title))
+        .setMessage(activity.getString(message))
+        .setNegativeButton(activity.getString(negativeMessage), clicks)
+        .setPositiveButton(activity.getString(positiveMessage), clicks)
         .show()
 
-    override fun showToast(message: Int, short: Boolean) {
+    override fun showToast(context: Context, message: Int, short: Boolean) {
         Toast.makeText(
-            resources.ctx,
-            resources.string(message),
+            context,
+            context.getString(message),
             if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG
         ).show()
     }

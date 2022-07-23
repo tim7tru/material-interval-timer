@@ -6,46 +6,57 @@ import com.timmytruong.materialintervaltimer.databinding.ItemTimerVerticalBindin
 import com.timmytruong.materialintervaltimer.ui.base.adapter.BaseListAdapter
 import com.timmytruong.materialintervaltimer.ui.reusable.item.TimerItem
 import com.timmytruong.materialintervaltimer.utils.extensions.toDisplayTime
-import com.timmytruong.materialintervaltimer.utils.providers.ResourceProvider
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @FragmentScoped
-class VerticalTimerAdapter @Inject constructor(private val resources: ResourceProvider) :
+class VerticalTimerAdapter @Inject constructor() :
     BaseListAdapter<ItemTimerVerticalBinding, TimerItem>(ItemTimerVerticalBinding::inflate) {
-
-    private val fallbackTitle = resources.string(R.string.untitled)
 
     override fun onBindViewHolder(holder: ViewHolder<ItemTimerVerticalBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
         val timer = list[position]
         with(holder.view) {
             card.setOnClickListener { timer.click() }
-            title.text = timer.getDisplayTitle(fallbackTitle)
+            title.text = timer.getDisplayTitle(root.context.getString(R.string.untitled))
             timer.intervalCount?.let {
-                count.text = resources.string(R.string.number_of_intervals_format, it)
+                count.text = root.context.getString(R.string.number_of_intervals_format, it)
             }
-            time.text = timer.time?.toDisplayTime(resources)
+            timer.time?.toDisplayTime()?.run {
+                val displayTime = if (first == null) {
+                    root.context.getString(R.string.no_hour_time_format, second, third)
+                } else {
+                    root.context.getString(R.string.full_time_format, first, second, third)
+                }
+
+                time.text = displayTime
+            }
         }
     }
 }
 
 @FragmentScoped
-class HorizontalTimerAdapter @Inject constructor(private val resources: ResourceProvider) :
+class HorizontalTimerAdapter @Inject constructor() :
     BaseListAdapter<ItemTimerHorizontalBinding, TimerItem>(ItemTimerHorizontalBinding::inflate) {
-
-    private val fallbackTitle = resources.string(R.string.untitled)
 
     override fun onBindViewHolder(holder: ViewHolder<ItemTimerHorizontalBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
         val timer = list[position]
         with(holder.view) {
             card.setOnClickListener { timer.click() }
-            title.text = timer.getDisplayTitle(fallbackTitle)
+            title.text = timer.getDisplayTitle(root.context.getString(R.string.untitled))
             timer.intervalCount?.let {
-                count.text = resources.string(R.string.number_of_intervals_format, it)
+                count.text = root.context.getString(R.string.number_of_intervals_format, it)
             }
-            time.text = timer.time?.toDisplayTime(resources)
+            timer.time?.toDisplayTime()?.run {
+                val displayTime = if (first == null) {
+                    root.context.getString(R.string.no_hour_time_format, second, third)
+                } else {
+                    root.context.getString(R.string.full_time_format, first, second, third)
+                }
+
+                time.text = displayTime
+            }
         }
     }
 }
