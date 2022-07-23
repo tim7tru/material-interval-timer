@@ -29,9 +29,6 @@ class IntervalTimer @Inject constructor(
 
     private val _intervals: ArrayList<Long> = arrayListOf()
 
-    val isEmpty: Boolean
-        get() = _intervals.isEmpty()
-
     val currentIntervalTotalTime: Long
         get() = _intervals[currentIntervalNumber]
 
@@ -57,6 +54,7 @@ class IntervalTimer @Inject constructor(
     }
 
     suspend fun load(intervals: List<Long>) = withContext(mainDispatcher) {
+        _intervals.clear()
         _intervals.addAll(intervals)
         build()
     }
