@@ -1,7 +1,7 @@
-package com.timmytruong.materialintervaltimer.di.modules
+package com.timmytruong.data.di.module
 
-import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.data.di.BackgroundDispatcher
+import com.timmytruong.data.di.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

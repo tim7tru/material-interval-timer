@@ -1,4 +1,4 @@
-package com.timmytruong.materialintervaltimer.data
+package com.timmytruong.data
 
 import com.timmytruong.materialintervaltimer.data.model.Timer
 import kotlinx.coroutines.flow.Flow
@@ -8,7 +8,7 @@ interface TimerRepository {
 
     suspend fun getTimerById(id: Int): Timer
 
-    suspend fun setFavorite(id: Int, favorite: Boolean)
+    suspend fun setFavorite(id: Int, favorite: Boolean, currentDate: String)
 
     suspend fun deleteTimer(id: Int)
 

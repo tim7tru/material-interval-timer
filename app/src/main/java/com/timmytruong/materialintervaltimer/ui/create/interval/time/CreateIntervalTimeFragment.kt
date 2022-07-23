@@ -5,7 +5,7 @@ import androidx.fragment.app.viewModels
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalTimeBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.color
 import com.timmytruong.materialintervaltimer.utils.extensions.toInputTime
 import dagger.hilt.android.AndroidEntryPoint

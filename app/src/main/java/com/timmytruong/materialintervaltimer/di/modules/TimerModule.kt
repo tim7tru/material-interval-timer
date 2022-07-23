@@ -1,6 +1,6 @@
 package com.timmytruong.materialintervaltimer.di.modules
 
-import com.timmytruong.materialintervaltimer.di.MainDispatcher
+import com.timmytruong.data.di.MainDispatcher
 import com.timmytruong.materialintervaltimer.utils.IntervalTimer
 import dagger.Module
 import dagger.Provides

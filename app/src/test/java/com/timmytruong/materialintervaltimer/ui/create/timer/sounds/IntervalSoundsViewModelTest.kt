@@ -1,7 +1,7 @@
 package com.timmytruong.materialintervaltimer.ui.create.timer.sounds
 
 import app.cash.turbine.test
-import com.timmytruong.materialintervaltimer.data.local.Store
+import com.timmytruong.data.local.Store
 import com.timmytruong.materialintervaltimer.data.model.TIMER
 import com.timmytruong.materialintervaltimer.data.model.Timer
 import com.timmytruong.materialintervaltimer.data.model.sounds

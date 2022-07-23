@@ -68,6 +68,12 @@
         <entry key="app/src/main/res/layout/separator_line.xml" value="0.1" />
         <entry key="app/src/main/res/menu/app_bar.xml" value="0.375" />
         <entry key="app/src/main/res/menu/main_drawer.xml" value="0.3726973684210526" />
+        <entry key="data/src/main/res/drawable/ic_accessibility_24px.xml" value="0.557" />
+        <entry key="data/src/main/res/drawable/ic_android_24px.xml" value="0.557" />
+        <entry key="data/src/main/res/drawable/ic_audiotrack_24px.xml" value="0.557" />
+        <entry key="data/src/main/res/drawable/ic_call_24px.xml" value="0.557" />
+        <entry key="data/src/main/res/drawable/ic_fitness_center.xml" value="0.557" />
+        <entry key="data/src/main/res/drawable/ic_speed_24px.xml" value="0.557" />
       </map>
     </option>
   </component>

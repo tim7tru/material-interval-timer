@@ -1,10 +1,11 @@
+import org.jetbrains.kotlin.builtins.StandardNames.FqNames.annotation
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     id("androidx.navigation.safeargs.kotlin")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -43,7 +44,7 @@ android {
     }
 
     allOpen {
-        annotation("com.timmytruong.materialintervaltimer.utils.Open")
+        annotation("com.timmytruong.data.util.Open")
     }
 }
 
@@ -52,6 +53,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    implementation(project(":data"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.21")
@@ -82,12 +84,6 @@ dependencies {
     implementation("androidx.percentlayout:percentlayout:1.0.0")
     implementation("androidx.browser:browser:1.4.0")
 
-    // Room
-    implementation("com.google.code.gson:gson:2.9.0")
-    implementation("androidx.room:room-runtime:2.5.0-alpha02")
-    implementation("androidx.room:room-ktx:2.5.0-alpha02")
-    kapt("androidx.room:room-compiler:2.5.0-alpha02")
-
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 
@@ -97,10 +93,6 @@ dependencies {
 
     // Preferences
     implementation("androidx.preference:preference-ktx:1.2.0")
-
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.40.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.40.1")
 
     // Hilt ViewModels
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")

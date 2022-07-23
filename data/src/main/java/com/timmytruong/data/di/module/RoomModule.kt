@@ -1,9 +1,9 @@
-package com.timmytruong.materialintervaltimer.di.modules
+package com.timmytruong.data.di.module
 
 import android.content.Context
 import androidx.room.Room
-import com.timmytruong.materialintervaltimer.R
-import com.timmytruong.materialintervaltimer.data.local.room.TimerDatabase
+import com.timmytruong.data.R
+import com.timmytruong.data.local.room.TimerDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

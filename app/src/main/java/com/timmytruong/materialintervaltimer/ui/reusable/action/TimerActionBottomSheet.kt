@@ -6,7 +6,7 @@ import androidx.navigation.fragment.navArgs
 import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentTimerActionBottomSheetBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseBottomSheet
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.color
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityRetainedScoped

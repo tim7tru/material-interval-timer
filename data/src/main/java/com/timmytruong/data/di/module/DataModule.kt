@@ -1,6 +1,6 @@
-package com.timmytruong.materialintervaltimer.di.modules
+package com.timmytruong.data.di.module
 
-import com.timmytruong.materialintervaltimer.R
+import com.timmytruong.data.R
 import com.timmytruong.materialintervaltimer.data.model.IntervalSound
 import dagger.Module
 import dagger.Provides
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object AppModule {
+object DataModule {
 
     val EMPTY_SOUND = IntervalSound(-1, "None", true)
 

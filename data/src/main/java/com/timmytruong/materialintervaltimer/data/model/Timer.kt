@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.timmytruong.materialintervaltimer.di.modules.AppModule
-import com.timmytruong.materialintervaltimer.utils.converters.IntervalConverter
-import com.timmytruong.materialintervaltimer.utils.converters.IntervalSoundConverter
+import com.timmytruong.data.util.converter.IntervalConverter
+import com.timmytruong.data.util.converter.IntervalSoundConverter
+import com.timmytruong.data.di.module.DataModule
 
 @Entity(tableName = "Timers")
 data class Timer(
@@ -37,7 +37,7 @@ data class Timer(
 
     @ColumnInfo(name = "interval_sound")
     @TypeConverters(IntervalSoundConverter::class)
-    var intervalSound: IntervalSound = AppModule.EMPTY_SOUND
+    var intervalSound: IntervalSound = DataModule.EMPTY_SOUND
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
@@ -51,7 +51,7 @@ data class Timer(
         intervals = arrayListOf()
         intervalCount = 0
         totalTimeMs = 0L
-        intervalSound = AppModule.EMPTY_SOUND
+        intervalSound = DataModule.EMPTY_SOUND
         id = 0
     }
 

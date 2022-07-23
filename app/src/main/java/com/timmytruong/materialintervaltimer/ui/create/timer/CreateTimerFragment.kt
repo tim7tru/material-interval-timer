@@ -7,7 +7,7 @@ import com.timmytruong.materialintervaltimer.databinding.FragmentCreateTimerBind
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.ui.reusable.adapter.IntervalItemAdapter
 import com.timmytruong.materialintervaltimer.ui.reusable.item.IntervalItem
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.color
 import com.timmytruong.materialintervaltimer.utils.extensions.hide
 import com.timmytruong.materialintervaltimer.utils.extensions.show

@@ -1,6 +1,5 @@
 package com.timmytruong.materialintervaltimer.ui.create.interval
 
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -8,7 +7,7 @@ import com.timmytruong.materialintervaltimer.R
 import com.timmytruong.materialintervaltimer.databinding.FragmentCreateIntervalBinding
 import com.timmytruong.materialintervaltimer.ui.base.BaseFragment
 import com.timmytruong.materialintervaltimer.ui.create.interval.grid.IconGridAdapter
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import com.timmytruong.materialintervaltimer.utils.extensions.HIDE
 import com.timmytruong.materialintervaltimer.utils.extensions.SHOW
 import com.timmytruong.materialintervaltimer.utils.extensions.color

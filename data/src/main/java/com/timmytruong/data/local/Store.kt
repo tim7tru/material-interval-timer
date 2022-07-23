@@ -1,6 +1,6 @@
-package com.timmytruong.materialintervaltimer.data.local
+package com.timmytruong.data.local
 
-import com.timmytruong.materialintervaltimer.utils.Open
+import com.timmytruong.data.util.Open
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

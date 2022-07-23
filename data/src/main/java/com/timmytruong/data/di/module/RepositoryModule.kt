@@ -1,15 +1,14 @@
-package com.timmytruong.materialintervaltimer.di.modules
+package com.timmytruong.data.di.module
 
-import com.timmytruong.materialintervaltimer.data.TimerRepository
-import com.timmytruong.materialintervaltimer.data.local.Store
-import com.timmytruong.materialintervaltimer.data.local.TimerLocalDataSource
-import com.timmytruong.materialintervaltimer.data.local.room.dao.TimerDao
-import com.timmytruong.materialintervaltimer.di.BackgroundDispatcher
-import com.timmytruong.materialintervaltimer.di.IntervalStore
-import com.timmytruong.materialintervaltimer.di.TimerStore
+import com.timmytruong.data.TimerRepository
+import com.timmytruong.data.di.BackgroundDispatcher
+import com.timmytruong.data.di.IntervalStore
+import com.timmytruong.data.di.TimerStore
+import com.timmytruong.data.local.Store
+import com.timmytruong.data.local.TimerLocalDataSource
+import com.timmytruong.data.local.room.dao.TimerDao
 import com.timmytruong.materialintervaltimer.data.model.Interval
 import com.timmytruong.materialintervaltimer.data.model.Timer
-import com.timmytruong.materialintervaltimer.utils.providers.DateProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,7 +34,6 @@ object RepositoryModule {
     @Provides
     fun provideTimerRepository(
         timerDao: TimerDao,
-        @BackgroundDispatcher dispatcher: CoroutineDispatcher,
-        date: DateProvider
-    ): TimerRepository = TimerLocalDataSource(timerDao, dispatcher, date)
+        @BackgroundDispatcher dispatcher: CoroutineDispatcher
+    ): TimerRepository = TimerLocalDataSource(timerDao, dispatcher)
 }
